@@ -2,6 +2,12 @@
   "name": "skyux-sample",
   "mode": "easy",
   "compileMode": "aot",
+  "skyuxModules": [
+    "SkyErrorModule"
+  ],
+  "plugins": [
+    "@skyux-sdk/builder-plugin-skyux"
+  ],
   "testSettings": {
     "e2e": {
       "browserSet": "speedy"

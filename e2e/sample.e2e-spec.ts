@@ -6,6 +6,7 @@ import {
 describe('Sample', () => {
   it('should match previous screenshot', (done) => {
     SkyHostBrowser.get('demos/sample');
+    SkyHostBrowser.setWindowBreakpoint('lg');
     expect('.sky-sample-demo').toMatchBaselineScreenshot(done);
   });
 
