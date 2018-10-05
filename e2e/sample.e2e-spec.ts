@@ -5,14 +5,16 @@ import {
 
 describe('Sample', () => {
   it('should match previous screenshot', (done) => {
-    SkyHostBrowser.get('demos/sample');
+    SkyHostBrowser.get('visual/sample');
     SkyHostBrowser.setWindowBreakpoint('lg');
+    SkyHostBrowser.scrollTo('.sky-sample-demo');
     expect('.sky-sample-demo').toMatchBaselineScreenshot(done);
   });
 
   it('should match previous screenshot (screen: xs)', (done) => {
-    SkyHostBrowser.get('demos/sample');
+    SkyHostBrowser.get('visual/sample');
     SkyHostBrowser.setWindowBreakpoint('xs');
+    SkyHostBrowser.scrollTo('.sky-sample-demo');
     expect('.sky-sample-demo').toMatchBaselineScreenshot(done);
   });
 });
