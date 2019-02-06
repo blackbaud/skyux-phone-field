@@ -1,0 +1,44 @@
+<div
+  class="sky-form-group sky-input-group"
+>
+  <div
+    class="sky-input-group-btn sky-input-group-country-btn"
+  >
+    <sky-dropdown
+      [disabled]="disabled"
+      [title]="selectedCountry.name + ' +' + selectedCountry.dialCode"
+    >
+      <sky-dropdown-button>
+        <div
+          [className]="'iti-flag ' + selectedCountry.iso2"
+        >
+        </div>
+      </sky-dropdown-button>
+      <sky-dropdown-menu>
+        <sky-dropdown-item *ngFor="let country of countryData; let i = index"
+          [ngClass]="{
+            'sky-selected-country': i === 0,
+            'sky-default-country': country === defaultCountryData
+          }"
+        >
+          <button
+            type="button"
+            (click)="selectCountry(country.iso2)"
+          >
+            <div
+              [className]="'iti-flag ' + country.iso2"
+            >
+            </div>
+            {{ country.name }}
+            <span
+              class="sky-deemphasized"
+            >
+              +{{ country.dialCode }}
+            </span>
+          </button>
+        </sky-dropdown-item>
+      </sky-dropdown-menu>
+    </sky-dropdown>
+  </div>
+  <ng-content></ng-content>
+</div>
