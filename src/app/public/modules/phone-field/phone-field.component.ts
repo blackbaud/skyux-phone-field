@@ -1,9 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  EventEmitter,
-  Input,
-  Output
+  EventEmitter
 } from '@angular/core';
 
 import 'intl-tel-input';
@@ -21,11 +19,11 @@ import {
 })
 export class SkyPhoneFieldComponent {
 
-  @Input()
-  public disabled: boolean;
+  public countryData: SkyCountryData[];
 
-  @Output()
-  public selectedCountryChanged = new EventEmitter<SkyCountryData>();
+  public defaultCountryData: SkyCountryData;
+
+  public disabled: boolean;
 
   public set selectedCountry(newCountry: SkyCountryData) {
     this._selectedCountry = newCountry;
@@ -55,9 +53,7 @@ export class SkyPhoneFieldComponent {
     return this._selectedCountry;
   }
 
-  public defaultCountryData: SkyCountryData;
-
-  public countryData: SkyCountryData[];
+  public selectedCountryChanged = new EventEmitter<SkyCountryData>();
 
   /**
    * The typings file for the internationalization library does not include the utility
@@ -78,6 +74,14 @@ export class SkyPhoneFieldComponent {
   }
 
   /**
+   * Format's the given phone number based on the currently selected country.
+   * @param phoneNumber The number to format
+   */
+  public formatNumber(phoneNumber: string): string {
+    return this.phoneUtils.formatNumber(phoneNumber, this.selectedCountry.iso2, intlTelInputUtils.numberFormat.NATIONAL);
+  }
+
+  /**
    * Sets the country to validate against based on the county's iso2 code.
    * @param countryCode The International Organization for Standardization's two-letter code
    * for the default country.
@@ -87,25 +91,20 @@ export class SkyPhoneFieldComponent {
   }
 
   /**
-   * Validate's the given phone number based on the currently selected country.
-   * @param phoneNumber The number to validate
-   */
-  public validateNumber(phoneNumber: string): boolean {
-    /**
-     * The typings file for the internationalization library does not include the utility
-     * functions so we must type the window object as "any"
-     * to resolve lint errors.
-     */
-    return this.phoneUtils.isValidNumber(phoneNumber, this.selectedCountry.iso2);
-  }
-
-  /**
    * Sets the default country for the phone field component based on the county's iso2 code.
    * @param countryCode The International Organization for Standardization's two-letter code
    * for the default country.
    */
   public setDefaultCountry(countryCode: string): void {
     this.defaultCountryData = this.countryData.find(country => country.iso2 === countryCode);
+  }
+
+  /**
+   * Validate's the given phone number based on the currently selected country.
+   * @param phoneNumber The number to validate
+   */
+  public validateNumber(phoneNumber: string): boolean {
+    return this.phoneUtils.isValidNumber(phoneNumber, this.selectedCountry.iso2);
   }
 
 }

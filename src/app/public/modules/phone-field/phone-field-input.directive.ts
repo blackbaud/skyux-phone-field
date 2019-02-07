@@ -2,13 +2,15 @@ import {
   Directive,
   forwardRef,
   ElementRef,
+  EventEmitter,
   Input,
   Renderer2,
   HostListener,
   AfterViewInit,
   Injector,
   ChangeDetectorRef,
-  OnInit
+  OnInit,
+  Output
 } from '@angular/core';
 
 import {
@@ -20,6 +22,10 @@ import {
   NgControl,
   FormControl
 } from '@angular/forms';
+
+import {
+  SkyCountryData
+} from './types';
 
 import {
   SkyPhoneFieldComponent
@@ -54,7 +60,7 @@ export class SkyPhoneFieldInputDirective implements OnInit, AfterViewInit,
    * to alias when when the directive name is also an input property,
    * and the directive name doesn't describe the property.
    */
-   // tslint:disable-next-line:no-input-rename
+  // tslint:disable-next-line:no-input-rename
   @Input('skyPhoneFieldInput')
   public skyPhoneFieldComponent: SkyPhoneFieldComponent;
 
@@ -83,12 +89,26 @@ export class SkyPhoneFieldInputDirective implements OnInit, AfterViewInit,
   }
 
   @Input()
-  public skyPhoneFieldNoValidate: boolean = false;
+  public formatModel: boolean = true;
+
+  @Input()
+  public noValidate: boolean = false;
+
+  @Output()
+  public selectedCountryChanged = new EventEmitter<SkyCountryData>();
 
   private set modelValue(value: string) {
     this._modelValue = value;
     this.setInputValue(value);
-    this._onChange(value);
+    if (value) {
+      let formattedValue = value;
+      if (this.formatModel) {
+        formattedValue = this.skyPhoneFieldComponent.formatNumber(value.toString());
+      }
+      this._onChange('+' + this.skyPhoneFieldComponent.selectedCountry.dialCode + ' ' + formattedValue);
+    } else {
+      this._onChange(value);
+    }
     this._validatorChange();
   }
 
@@ -119,9 +139,11 @@ export class SkyPhoneFieldInputDirective implements OnInit, AfterViewInit,
   }
 
   public ngAfterViewInit(): void {
-    this.skyPhoneFieldComponent.selectedCountryChanged.subscribe((country: any) => {
-      this._validatorChange();
+    this.skyPhoneFieldComponent.selectedCountryChanged.subscribe((country: SkyCountryData) => {
+      // Write the value again to cause validation to refire
+      this.writeValue(this.modelValue);
       this.renderer.setAttribute(this.elRef.nativeElement, 'placeholder', country.placeholder);
+      this.selectedCountryChanged.emit(country);
     });
     // This is needed to address a bug in Angular 4, where the value is not changed on the view.
     // See: https://github.com/angular/angular/issues/13792
@@ -186,7 +208,7 @@ export class SkyPhoneFieldInputDirective implements OnInit, AfterViewInit,
       return undefined;
     }
 
-    if (!this.skyPhoneFieldComponent.validateNumber(value) && !this.skyPhoneFieldNoValidate) {
+    if (!this.skyPhoneFieldComponent.validateNumber(value) && !this.noValidate) {
       return {
         'skyPhoneField': {
           invalid: control.value

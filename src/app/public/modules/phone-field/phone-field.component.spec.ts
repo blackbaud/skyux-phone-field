@@ -165,7 +165,7 @@ fdescribe('Phone Field Component', () => {
 
         setInput(nativeElement, '8675555309', fixture);
         expect(nativeElement.querySelector('input').value).toBe('8675555309');
-        expect(component.modelValue).toEqual('8675555309');
+        expect(component.modelValue).toEqual('+93 8675555309');
       }));
 
       it('should handle input change with a string with the an unexpected format', fakeAsync(() => {
@@ -175,7 +175,7 @@ fdescribe('Phone Field Component', () => {
 
         setInput(nativeElement, '867-555-5309', fixture);
         expect(nativeElement.querySelector('input').value).toBe('867-555-5309');
-        expect(component.modelValue).toEqual('867-555-5309');
+        expect(component.modelValue).toEqual('+93 867-555-5309');
       }));
 
     });
@@ -213,7 +213,7 @@ fdescribe('Phone Field Component', () => {
           expect(nativeElement.querySelector('input').value).toBe('123');
 
           expect(component.modelValue)
-            .toBe('123');
+            .toBe('+1 123');
 
           expect(ngModel.valid).toBe(false);
           expect(ngModel.pristine).toBe(false);
@@ -231,7 +231,7 @@ fdescribe('Phone Field Component', () => {
           expect(nativeElement.querySelector('input').value).toBe('1234');
 
           expect(component.modelValue)
-            .toBe('1234');
+            .toBe('+1 1234');
 
           expect(ngModel.valid).toBe(false);
 
@@ -252,7 +252,7 @@ fdescribe('Phone Field Component', () => {
           expect(nativeElement.querySelector('input').value).toBe('867-555-530');
 
           expect(component.modelValue)
-            .toBe('867-555-530');
+            .toBe('+1 867-555-530');
 
           expect(ngModel.valid).toBe(false);
 
@@ -273,7 +273,7 @@ fdescribe('Phone Field Component', () => {
           expect(nativeElement.querySelector('input').value).toBe('867-555-5309');
 
           expect(component.modelValue)
-            .toBe('867-555-5309');
+            .toBe('+1 (867) 555-5309');
 
           expect(ngModel.valid).toBe(true);
 
@@ -299,7 +299,7 @@ fdescribe('Phone Field Component', () => {
           expect(nativeElement.querySelector('input').value).toBe('1234');
 
           expect(component.modelValue)
-            .toBe('1234');
+            .toBe('+1 1234');
 
           expect(ngModel.valid).toBe(false);
 
@@ -339,7 +339,7 @@ fdescribe('Phone Field Component', () => {
           expect(nativeElement.querySelector('input').value).toBe('8675555309');
 
           expect(component.modelValue)
-            .toEqual('8675555309');
+            .toEqual('+1 (867) 555-5309');
 
           expect(ngModel.valid).toBe(true);
         }));
@@ -356,7 +356,7 @@ fdescribe('Phone Field Component', () => {
           expect(nativeElement.querySelector('input').value).toBe('1234');
 
           expect(component.modelValue)
-            .toBe('1234');
+            .toBe('+93 1234');
 
           expect(ngModel.valid).toBe(true);
 
@@ -542,7 +542,7 @@ fdescribe('Phone Field Component', () => {
 
         setInput(nativeElement, '8675555309', fixture);
         expect(nativeElement.querySelector('input').value).toBe('8675555309');
-        expect(component.phoneControl.value).toEqual('8675555309');
+        expect(component.phoneControl.value).toEqual('+93 8675555309');
       }));
 
       it('should handle input change with a string with the an unexpected format', fakeAsync(() => {
@@ -552,7 +552,7 @@ fdescribe('Phone Field Component', () => {
 
         setInput(nativeElement, '867-555-5309', fixture);
         expect(nativeElement.querySelector('input').value).toBe('867-555-5309');
-        expect(component.phoneControl.value).toEqual('867-555-5309');
+        expect(component.phoneControl.value).toEqual('+93 867-555-5309');
       }));
 
     });
@@ -584,7 +584,7 @@ fdescribe('Phone Field Component', () => {
           expect(nativeElement.querySelector('input').value).toBe('123');
 
           expect(component.phoneControl.value)
-            .toBe('123');
+            .toBe('+1 123');
 
           expect(component.phoneControl.valid).toBe(false);
           expect(component.phoneControl.pristine).toBe(false);
@@ -602,7 +602,7 @@ fdescribe('Phone Field Component', () => {
           expect(nativeElement.querySelector('input').value).toBe('1234');
 
           expect(component.phoneControl.value)
-            .toBe('1234');
+            .toBe('+1 1234');
 
           expect(component.phoneControl.valid).toBe(false);
 
@@ -623,7 +623,7 @@ fdescribe('Phone Field Component', () => {
           expect(nativeElement.querySelector('input').value).toBe('867-555-530');
 
           expect(component.phoneControl.value)
-            .toBe('867-555-530');
+            .toBe('+1 867-555-530');
 
           expect(component.phoneControl.valid).toBe(false);
 
@@ -644,7 +644,7 @@ fdescribe('Phone Field Component', () => {
           expect(nativeElement.querySelector('input').value).toBe('867-555-5309');
 
           expect(component.phoneControl.value)
-            .toBe('867-555-5309');
+            .toBe('+1 (867) 555-5309');
 
           expect(component.phoneControl.valid).toBe(true);
 
@@ -670,7 +670,7 @@ fdescribe('Phone Field Component', () => {
           expect(nativeElement.querySelector('input').value).toBe('1234');
 
           expect(component.phoneControl.value)
-            .toBe('1234');
+            .toBe('+1 1234');
 
           expect(component.phoneControl.valid).toBe(false);
 
@@ -710,7 +710,7 @@ fdescribe('Phone Field Component', () => {
           expect(nativeElement.querySelector('input').value).toBe('8675555309');
 
           expect(component.phoneControl.value)
-            .toEqual('8675555309');
+            .toEqual('+1 (867) 555-5309');
 
           expect(component.phoneControl.valid).toBe(true);
         }));
@@ -727,7 +727,7 @@ fdescribe('Phone Field Component', () => {
           expect(nativeElement.querySelector('input').value).toBe('1234');
 
           expect(component.phoneControl.value)
-            .toBe('1234');
+            .toBe('+93 1234');
 
           expect(component.phoneControl.valid).toBe(true);
 
