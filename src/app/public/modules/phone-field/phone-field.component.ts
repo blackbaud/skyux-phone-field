@@ -7,6 +7,10 @@ import {
 require('intl-tel-input/build/js/utils');
 require('intl-tel-input/build/js/intlTelInput');
 
+/**
+ * NOTE: We can not type these due the the current @types/intl-tel-input version having an
+ * undeclared type which causes linting errors.
+ */
 declare var intlTelInputUtils: any;
 declare var intlTelInputGlobals: any;
 
