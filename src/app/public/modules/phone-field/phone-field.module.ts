@@ -1,4 +1,3 @@
-// #region imports
 import {
   NgModule
 } from '@angular/core';
@@ -22,7 +21,6 @@ import {
 import {
   SkyPhoneFieldInputDirective
 } from './phone-field-input.directive';
-// #endregion
 
 @NgModule({
   declarations: [

@@ -8,7 +8,7 @@ import {
   element
 } from 'protractor';
 
-fdescribe('Phone Field', () => {
+describe('Phone Field', () => {
 
   it('should match previous phone field screenshot', (done) => {
     SkyHostBrowser.get('visual/phone-field');
@@ -58,7 +58,7 @@ fdescribe('Phone Field', () => {
     });
   });
 
-  it('should match previous phone field screenshot', (done) => {
+  it('should match previous phone field screenshot with a default country', (done) => {
     SkyHostBrowser.get('visual/phone-field');
     SkyHostBrowser.setWindowBreakpoint('lg');
     expect('#screenshot-phone-field-default').toMatchBaselineScreenshot(done, {
@@ -66,7 +66,7 @@ fdescribe('Phone Field', () => {
     });
   });
 
-  it('should match previous phone field screenshot (screen: xs)', (done) => {
+  it('should match previous phone field screenshot with a default country (screen: xs)', (done) => {
     SkyHostBrowser.get('visual/phone-field');
     SkyHostBrowser.setWindowBreakpoint('xs');
     expect('#screenshot-phone-field-default').toMatchBaselineScreenshot(done, {

@@ -5,6 +5,7 @@ import {
 } from '@angular/core';
 
 import 'intl-tel-input';
+
 require('intl-tel-input/build/js/utils');
 
 import {
