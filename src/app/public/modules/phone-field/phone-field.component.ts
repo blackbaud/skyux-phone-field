@@ -4,9 +4,11 @@ import {
   EventEmitter
 } from '@angular/core';
 
-import 'intl-tel-input';
-
 require('intl-tel-input/build/js/utils');
+require('intl-tel-input/build/js/intlTelInput');
+
+declare var intlTelInputUtils: any;
+declare var intlTelInputGlobals: any;
 
 import {
   SkyCountryData
@@ -30,8 +32,11 @@ export class SkyPhoneFieldComponent {
     this._selectedCountry = newCountry;
 
     if (!this._selectedCountry.placeholder) {
-      this._selectedCountry.placeholder = this.phoneUtils.getExampleNumber(newCountry.iso2, true,
-        intlTelInputUtils.numberType.FIXED_LINE);
+      this._selectedCountry.placeholder = intlTelInputUtils.getExampleNumber(
+        newCountry.iso2,
+        true,
+        intlTelInputUtils.numberType.FIXED_LINE
+      );
     }
 
     this.countryData.splice(this.countryData.indexOf(newCountry), 1);
@@ -56,13 +61,6 @@ export class SkyPhoneFieldComponent {
 
   public selectedCountryChanged = new EventEmitter<SkyCountryData>();
 
-  /**
-   * The typings file for the internationalization library does not include the utility
-   * functions so we must type the window object as "any"
-   * to resolve lint errors.
-   */
-  private phoneUtils: any = (<any>window).intlTelInputUtils;
-
   private _selectedCountry: SkyCountryData;
 
   constructor() {
@@ -70,7 +68,7 @@ export class SkyPhoneFieldComponent {
      * The "slice" here ensures that we get a copy of the array and not the global original. This
      * ensures that multiple instances of the component don't overwrite the original data.
      */
-    this.countryData = window.intlTelInputGlobals.getCountryData().slice(0);
+    this.countryData = intlTelInputGlobals.getCountryData().slice(0);
     this.selectedCountry = this.countryData[0];
   }
 
@@ -79,7 +77,11 @@ export class SkyPhoneFieldComponent {
    * @param phoneNumber The number to format
    */
   public formatNumber(phoneNumber: string): string {
-    return this.phoneUtils.formatNumber(phoneNumber, this.selectedCountry.iso2, intlTelInputUtils.numberFormat.NATIONAL);
+    return intlTelInputUtils.formatNumber(
+      phoneNumber,
+      this.selectedCountry.iso2,
+      intlTelInputUtils.numberFormat.NATIONAL
+    );
   }
 
   /**
@@ -105,7 +107,7 @@ export class SkyPhoneFieldComponent {
    * @param phoneNumber The number to validate
    */
   public validateNumber(phoneNumber: string): boolean {
-    return this.phoneUtils.isValidNumber(phoneNumber, this.selectedCountry.iso2);
+    return intlTelInputUtils.isValidNumber(phoneNumber, this.selectedCountry.iso2);
   }
 
 }
