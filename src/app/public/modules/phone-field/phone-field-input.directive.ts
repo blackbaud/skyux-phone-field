@@ -4,7 +4,6 @@ import {
   ElementRef,
   EventEmitter,
   Input,
-  Renderer2,
   HostListener,
   AfterViewInit,
   Injector,
@@ -28,6 +27,10 @@ import {
 } from './types';
 
 import {
+  SkyPhoneFieldAdapterService
+} from './phone-field-adapter.service';
+
+import {
   SkyPhoneFieldComponent
 } from './phone-field.component';
 
@@ -49,7 +52,8 @@ const SKY_PHONE_FIELD_VALIDATOR = {
   selector: '[skyPhoneFieldInput]',
   providers: [
     SKY_PHONE_FIELD_VALUE_ACCESSOR,
-    SKY_PHONE_FIELD_VALIDATOR
+    SKY_PHONE_FIELD_VALIDATOR,
+    SkyPhoneFieldAdapterService
   ]
 })
 export class SkyPhoneFieldInputDirective implements OnInit, AfterViewInit,
@@ -77,10 +81,7 @@ export class SkyPhoneFieldInputDirective implements OnInit, AfterViewInit,
   @Input()
   public set disabled(value: boolean) {
     this.skyPhoneFieldComponent.disabled = value;
-    this.renderer.setProperty(
-      this.elRef.nativeElement,
-      'disabled',
-      value);
+    this.adapterService.setElementDisabledState(this.elRef.nativeElement, value);
     this._disabled = value;
   }
 
@@ -99,7 +100,7 @@ export class SkyPhoneFieldInputDirective implements OnInit, AfterViewInit,
 
   private set modelValue(value: string) {
     this._modelValue = value;
-    this.setInputValue(value);
+    this.adapterService.setElementValue(this.elRef.nativeElement, value);
     if (value) {
       let formattedValue = value;
       if (this.formatModel) {
@@ -123,18 +124,18 @@ export class SkyPhoneFieldInputDirective implements OnInit, AfterViewInit,
   private _modelValue: string;
 
   public constructor(
+    private adapterService: SkyPhoneFieldAdapterService,
     private changeDetector: ChangeDetectorRef,
     private elRef: ElementRef,
-    private injector: Injector,
-    private renderer: Renderer2
+    private injector: Injector
   ) { }
 
   public ngOnInit(): void {
-    this.renderer.addClass(this.elRef.nativeElement, 'sky-form-control');
+    this.adapterService.addElementClass(this.elRef.nativeElement, 'sky-form-control');
     if (this.defaultCountry) {
       this.skyPhoneFieldComponent.selectCountry(this.defaultCountry);
     }
-    this.renderer.setAttribute(this.elRef.nativeElement, 'placeholder',
+    this.adapterService.setElementPlaceholder(this.elRef.nativeElement,
       this.skyPhoneFieldComponent.selectedCountry.placeholder);
   }
 
@@ -142,7 +143,7 @@ export class SkyPhoneFieldInputDirective implements OnInit, AfterViewInit,
     this.skyPhoneFieldComponent.selectedCountryChanged.subscribe((country: SkyCountryData) => {
       // Write the value again to cause validation to refire
       this.writeValue(this.modelValue);
-      this.renderer.setAttribute(this.elRef.nativeElement, 'placeholder', country.placeholder);
+      this.adapterService.setElementPlaceholder(this.elRef.nativeElement, country.placeholder);
       this.selectedCountryChanged.emit(country);
     });
     // This is needed to address a bug in Angular 4, where the value is not changed on the view.
@@ -217,14 +218,6 @@ export class SkyPhoneFieldInputDirective implements OnInit, AfterViewInit,
     }
 
     return undefined;
-  }
-
-  private setInputValue(value: string): void {
-    this.renderer.setProperty(
-      this.elRef.nativeElement,
-      'value',
-      value ? value : ''
-    );
   }
 
   /*istanbul ignore next */
