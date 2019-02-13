@@ -137,6 +137,8 @@ export class SkyPhoneFieldInputDirective implements OnInit, AfterViewInit,
     }
     this.adapterService.setElementPlaceholder(this.elRef.nativeElement,
       this.skyPhoneFieldComponent.selectedCountry.placeholder);
+
+    this.adapterService.setAriaLabel(this.elRef.nativeElement);
   }
 
   public ngAfterViewInit(): void {

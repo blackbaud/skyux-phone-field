@@ -11,8 +11,16 @@ import {
 } from '@angular/forms';
 
 import {
+  SkyI18nModule
+} from '@skyux/i18n';
+
+import {
   SkyDropdownModule
 } from '@skyux/popovers';
+
+import {
+  SkyPhoneFieldResourcesModule
+} from '../shared';
 
 import {
   SkyPhoneFieldComponent
@@ -30,7 +38,9 @@ import {
   imports: [
     CommonModule,
     FormsModule,
-    SkyDropdownModule
+    SkyDropdownModule,
+    SkyI18nModule,
+    SkyPhoneFieldResourcesModule
   ],
   exports: [
     SkyPhoneFieldComponent,

@@ -105,7 +105,7 @@ fdescribe('Phone Field Component', () => {
         .not.toBeNull();
     });
 
-    xit('should be accessible', async(() => {
+    it('should be accessible', async(() => {
       fixture.detectChanges();
 
       fixture.whenStable().then(() => {
@@ -529,6 +529,14 @@ fdescribe('Phone Field Component', () => {
         expect(nativeElement.querySelector('input').value).toBe('');
 
         expect(nativeElement.querySelector('input')).not.toHaveCssClass('ng-invalid');
+      }));
+
+      it('should be accessible', async(() => {
+        fixture.detectChanges();
+
+        fixture.whenStable().then(() => {
+          expect(fixture.nativeElement).toBeAccessible();
+        });
       }));
 
     });
