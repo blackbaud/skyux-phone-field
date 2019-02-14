@@ -20,6 +20,10 @@
     overflow: visible;
   }
 
+  ::ng-deep .sky-dropdown {
+    display: flex;
+  }
+
 }
 
 .sky-selected-country, .sky-default-country {
