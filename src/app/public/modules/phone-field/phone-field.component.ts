@@ -1,7 +1,8 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  EventEmitter
+  EventEmitter,
+  OnDestroy
 } from '@angular/core';
 
 require('intl-tel-input/build/js/utils');
@@ -24,7 +25,7 @@ import {
   styleUrls: ['./phone-field.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SkyPhoneFieldComponent {
+export class SkyPhoneFieldComponent implements OnDestroy {
 
   public countryData: SkyCountryData[];
 
@@ -74,6 +75,10 @@ export class SkyPhoneFieldComponent {
      */
     this.countryData = intlTelInputGlobals.getCountryData().slice(0);
     this.selectedCountry = this.countryData[0];
+  }
+
+  public ngOnDestroy() {
+    this.selectedCountryChange.complete();
   }
 
   /**
