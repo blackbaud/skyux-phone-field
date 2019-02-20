@@ -56,14 +56,14 @@ export class SkyPhoneFieldComponent {
 
     sortedNewCountries.splice(0, 0, newCountry);
     this.countryData = sortedNewCountries;
-    this.selectedCountryChanged.emit(newCountry);
+    this.selectedCountryChange.emit(newCountry);
   }
 
   public get selectedCountry() {
     return this._selectedCountry;
   }
 
-  public selectedCountryChanged = new EventEmitter<SkyCountryData>();
+  public selectedCountryChange = new EventEmitter<SkyCountryData>();
 
   private _selectedCountry: SkyCountryData;
 
