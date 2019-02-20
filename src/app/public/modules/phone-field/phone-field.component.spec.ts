@@ -31,7 +31,7 @@ import {
   SkyPhoneFieldModule
 } from './phone-field.module';
 
-fdescribe('Phone Field Component', () => {
+describe('Phone Field Component', () => {
 
   function setInput(
     element: HTMLElement,

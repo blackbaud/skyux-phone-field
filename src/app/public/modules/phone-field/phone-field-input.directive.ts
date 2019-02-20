@@ -9,7 +9,8 @@ import {
   Injector,
   ChangeDetectorRef,
   OnInit,
-  Output
+  Output,
+  OnDestroy
 } from '@angular/core';
 
 import {
@@ -21,6 +22,10 @@ import {
   NgControl,
   FormControl
 } from '@angular/forms';
+
+import {
+  Subject
+} from 'rxjs/Subject';
 
 import {
   SkyCountryData
@@ -56,7 +61,7 @@ const SKY_PHONE_FIELD_VALIDATOR = {
     SkyPhoneFieldAdapterService
   ]
 })
-export class SkyPhoneFieldInputDirective implements OnInit, AfterViewInit,
+export class SkyPhoneFieldInputDirective implements OnInit, OnDestroy, AfterViewInit,
   ControlValueAccessor, Validator {
 
   /**
@@ -96,7 +101,7 @@ export class SkyPhoneFieldInputDirective implements OnInit, AfterViewInit,
   public noValidate: boolean = false;
 
   @Output()
-  public selectedCountryChanged = new EventEmitter<SkyCountryData>();
+  public selectedCountryChange = new EventEmitter<SkyCountryData>();
 
   private set modelValue(value: string) {
     this._modelValue = value;
@@ -116,6 +121,8 @@ export class SkyPhoneFieldInputDirective implements OnInit, AfterViewInit,
   private get modelValue(): string {
     return this._modelValue;
   }
+
+  private ngUnsubscribe = new Subject();
 
   private _defaultCountryCode: string;
 
@@ -141,13 +148,20 @@ export class SkyPhoneFieldInputDirective implements OnInit, AfterViewInit,
     this.adapterService.setAriaLabel(this.elRef.nativeElement);
   }
 
+  public ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
+  }
+
   public ngAfterViewInit(): void {
-    this.skyPhoneFieldComponent.selectedCountryChanged.subscribe((country: SkyCountryData) => {
-      // Write the value again to cause validation to refire
-      this.writeValue(this.modelValue);
-      this.adapterService.setElementPlaceholder(this.elRef.nativeElement, country.placeholder);
-      this.selectedCountryChanged.emit(country);
-    });
+    this.skyPhoneFieldComponent.selectedCountryChange
+      .takeUntil(this.ngUnsubscribe)
+      .subscribe((country: SkyCountryData) => {
+        // Write the value again to cause validation to refire
+        this.writeValue(this.modelValue);
+        this.adapterService.setElementPlaceholder(this.elRef.nativeElement, country.placeholder);
+        this.selectedCountryChange.emit(country);
+      });
     // This is needed to address a bug in Angular 4, where the value is not changed on the view.
     // See: https://github.com/angular/angular/issues/13792
     const control = (<NgControl>this.injector.get(NgControl)).control as FormControl;
