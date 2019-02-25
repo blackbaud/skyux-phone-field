@@ -344,7 +344,7 @@ describe('Phone Field Component', () => {
           expect(ngModel.valid).toBe(true);
         }));
 
-        it('should handle noValidate property', fakeAsync(() => {
+        it('should handle skyPhoneFieldNoValidate property', fakeAsync(() => {
           component.noValidate = true;
 
           fixture.detectChanges();

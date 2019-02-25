@@ -98,7 +98,7 @@ export class SkyPhoneFieldInputDirective implements OnInit, OnDestroy, AfterView
   public formatModel: boolean = true;
 
   @Input()
-  public noValidate: boolean = false;
+  public skyPhoneFieldNoValidate: boolean = false;
 
   @Output()
   public selectedCountryChange = new EventEmitter<SkyCountryData>();
@@ -226,7 +226,7 @@ export class SkyPhoneFieldInputDirective implements OnInit, OnDestroy, AfterView
       return undefined;
     }
 
-    if (!this.skyPhoneFieldComponent.validateNumber(value) && !this.noValidate) {
+    if (!this.skyPhoneFieldComponent.validateNumber(value) && !this.skyPhoneFieldNoValidate) {
       return {
         'skyPhoneField': {
           invalid: control.value
