@@ -1,19 +1,31 @@
 import {
   Injectable,
-  Renderer2
+  Renderer2,
+  OnDestroy
 } from '@angular/core';
+
+import {
+  Subject
+} from 'rxjs/Subject';
 
 import {
   SkyLibResourcesService
 } from '@skyux/i18n';
 
 @Injectable()
-export class SkyPhoneFieldAdapterService {
+export class SkyPhoneFieldAdapterService implements OnDestroy {
+
+  private ngUnsubscribe = new Subject();
 
   constructor(
     private renderer: Renderer2,
     private resourcesService: SkyLibResourcesService
   ) { }
+
+  public ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
+  }
 
   public addElementClass(element: HTMLElement, className: string) {
     this.renderer.addClass(element, className);
@@ -41,6 +53,7 @@ export class SkyPhoneFieldAdapterService {
   public setAriaLabel(element: HTMLElement) {
     if (!element.getAttribute('aria-label')) {
       this.resourcesService.getString('skyux_phone_field_default_label')
+        .takeUntil(this.ngUnsubscribe)
         .subscribe((value: string) => {
           this.renderer.setAttribute(
             element,
