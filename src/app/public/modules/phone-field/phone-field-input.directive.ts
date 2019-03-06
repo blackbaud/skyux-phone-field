@@ -148,7 +148,7 @@ export class SkyPhoneFieldInputDirective implements OnInit, OnDestroy, AfterView
     this.adapterService.setAriaLabel(this.elRef.nativeElement);
   }
 
-  public ngOnDestroy() {
+  public ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
     this.selectedCountryChange.complete();

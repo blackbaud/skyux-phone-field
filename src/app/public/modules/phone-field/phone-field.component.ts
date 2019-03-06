@@ -77,7 +77,7 @@ export class SkyPhoneFieldComponent implements OnDestroy {
     this.selectedCountry = this.countryData[0];
   }
 
-  public ngOnDestroy() {
+  public ngOnDestroy(): void {
     this.selectedCountryChange.complete();
   }
 

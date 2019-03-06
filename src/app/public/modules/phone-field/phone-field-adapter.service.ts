@@ -22,27 +22,27 @@ export class SkyPhoneFieldAdapterService implements OnDestroy {
     private resourcesService: SkyLibResourcesService
   ) { }
 
-  public ngOnDestroy() {
+  public ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }
 
-  public addElementClass(element: HTMLElement, className: string) {
+  public addElementClass(element: HTMLElement, className: string): void {
     this.renderer.addClass(element, className);
   }
 
-  public setElementDisabledState(element: HTMLElement, disabled: boolean) {
+  public setElementDisabledState(element: HTMLElement, disabled: boolean): void {
     this.renderer.setProperty(
       element,
       'disabled',
       disabled);
   }
 
-  public setElementPlaceholder(element: HTMLElement, placeholder: string) {
+  public setElementPlaceholder(element: HTMLElement, placeholder: string): void {
     this.renderer.setAttribute(element, 'placeholder', placeholder);
   }
 
-  public setElementValue(element: HTMLElement, value: string) {
+  public setElementValue(element: HTMLElement, value: string): void {
     this.renderer.setProperty(
       element,
       'value',
@@ -50,7 +50,7 @@ export class SkyPhoneFieldAdapterService implements OnDestroy {
     );
   }
 
-  public setAriaLabel(element: HTMLElement) {
+  public setAriaLabel(element: HTMLElement): void {
     if (!element.getAttribute('aria-label')) {
       this.resourcesService.getString('skyux_phone_field_default_label')
         .takeUntil(this.ngUnsubscribe)
