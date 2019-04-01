@@ -11,7 +11,7 @@
 
   ::ng-deep .sky-dropdown-item .iti-flag {
     display: inline-block;
-    margin-right: 5px;
+    margin-right: $sky-margin-half;
   }
 
   ::ng-deep .sky-dropdown-button-content-container {

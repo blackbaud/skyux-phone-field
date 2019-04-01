@@ -34,30 +34,21 @@ export class SkyPhoneFieldComponent implements OnDestroy {
   public disabled: boolean;
 
   public set selectedCountry(newCountry: SkyCountryData) {
-    this._selectedCountry = newCountry;
+    if (this._selectedCountry !== newCountry) {
+      this._selectedCountry = newCountry;
 
-    if (!this._selectedCountry.placeholder) {
-      this._selectedCountry.placeholder = intlTelInputUtils.getExampleNumber(
-        newCountry.iso2,
-        true,
-        intlTelInputUtils.numberType.FIXED_LINE
-      );
+      if (!this._selectedCountry.placeholder) {
+        this._selectedCountry.placeholder = intlTelInputUtils.getExampleNumber(
+          newCountry.iso2,
+          true,
+          intlTelInputUtils.numberType.FIXED_LINE
+        );
+      }
+
+      this.sortCountriesWithSelectedAndDefault(newCountry);
+
+      this.selectedCountryChange.emit(newCountry);
     }
-
-    this.countryData.splice(this.countryData.indexOf(newCountry), 1);
-
-    let sortedNewCountries = this.countryData
-      .sort((a, b) => {
-        if ((a === this.defaultCountryData || a.name < b.name) && b !== this.defaultCountryData) {
-          return -1;
-        } else {
-          return 1;
-        }
-      });
-
-    sortedNewCountries.splice(0, 0, newCountry);
-    this.countryData = sortedNewCountries;
-    this.selectedCountryChange.emit(newCountry);
   }
 
   public get selectedCountry() {
@@ -117,6 +108,22 @@ export class SkyPhoneFieldComponent implements OnDestroy {
    */
   public validateNumber(phoneNumber: string): boolean {
     return intlTelInputUtils.isValidNumber(phoneNumber, this.selectedCountry.iso2);
+  }
+
+  private sortCountriesWithSelectedAndDefault(selectedCountry: SkyCountryData) {
+    this.countryData.splice(this.countryData.indexOf(selectedCountry), 1);
+
+      let sortedNewCountries = this.countryData
+        .sort((a, b) => {
+          if ((a === this.defaultCountryData || a.name < b.name) && b !== this.defaultCountryData) {
+            return -1;
+          } else {
+            return 1;
+          }
+        });
+
+      sortedNewCountries.splice(0, 0, selectedCountry);
+      this.countryData = sortedNewCountries;
   }
 
 }

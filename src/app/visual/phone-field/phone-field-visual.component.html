@@ -8,10 +8,10 @@
   id="screenshot-phone-field"
   style="width: 50%; margin: 10px; padding: 10px;"
 >
-  <sky-phone-field #phoneField>
+  <sky-phone-field>
     <input
       [(ngModel)]="phoneNumber"
-      [skyPhoneFieldInput]="phoneField"
+      skyPhoneFieldInput
     >
   </sky-phone-field>
 </div>
@@ -31,10 +31,10 @@
   style="width: 50%; margin: 10px; padding: 10px;"
   [formGroup]="phoneForm"
 >
-  <sky-phone-field #reactivePhoneField>
+  <sky-phone-field>
     <input
       formControlName="phoneControl"
-      [skyPhoneFieldInput]="reactivePhoneField"
+      skyPhoneFieldInput
       [defaultCountry]="'us'"
       >
   </sky-phone-field>

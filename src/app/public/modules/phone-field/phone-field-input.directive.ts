@@ -10,7 +10,8 @@ import {
   ChangeDetectorRef,
   OnInit,
   Output,
-  OnDestroy
+  OnDestroy,
+  Optional
 } from '@angular/core';
 
 import {
@@ -63,15 +64,6 @@ const SKY_PHONE_FIELD_VALIDATOR = {
 })
 export class SkyPhoneFieldInputDirective implements OnInit, OnDestroy, AfterViewInit,
   ControlValueAccessor, Validator {
-
-  /**
-   * Disabling linting here as per the Angular style guide "Style 05-13" it is acceptable
-   * to alias when when the directive name is also an input property,
-   * and the directive name doesn't describe the property.
-   */
-  // tslint:disable-next-line:no-input-rename
-  @Input('skyPhoneFieldInput')
-  public skyPhoneFieldComponent: SkyPhoneFieldComponent;
 
   @Input()
   public set defaultCountry(value: string) {
@@ -134,7 +126,8 @@ export class SkyPhoneFieldInputDirective implements OnInit, OnDestroy, AfterView
     private adapterService: SkyPhoneFieldAdapterService,
     private changeDetector: ChangeDetectorRef,
     private elRef: ElementRef,
-    private injector: Injector
+    private injector: Injector,
+    @Optional() public skyPhoneFieldComponent: SkyPhoneFieldComponent
   ) { }
 
   public ngOnInit(): void {
