@@ -10,6 +10,10 @@ import {
 } from '@angular/forms';
 
 import {
+  SkyPhoneFieldComponent
+} from '../phone-field.component';
+
+import {
   SkyPhoneFieldInputDirective
 } from '../phone-field-input.directive';
 
@@ -21,6 +25,9 @@ export class PhoneFieldReactiveTestComponent implements OnInit {
 
   @ViewChild(SkyPhoneFieldInputDirective)
   public inputDirective: SkyPhoneFieldInputDirective;
+
+  @ViewChild(SkyPhoneFieldComponent)
+  public phoneFieldComponent: SkyPhoneFieldComponent;
 
   public defaultCountry: string;
 

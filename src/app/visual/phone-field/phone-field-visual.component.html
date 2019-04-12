@@ -31,11 +31,12 @@
   style="width: 50%; margin: 10px; padding: 10px;"
   [formGroup]="phoneForm"
 >
-  <sky-phone-field>
+  <sky-phone-field
+    [defaultCountry]="'us'"
+  >
     <input
       formControlName="phoneControl"
       skyPhoneFieldInput
-      [defaultCountry]="'us'"
       >
   </sky-phone-field>
 </form>

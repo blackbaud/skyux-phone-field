@@ -1,7 +1,7 @@
 import {
   Injectable,
-  Renderer2,
-  OnDestroy
+  OnDestroy,
+  Renderer2
 } from '@angular/core';
 
 import {

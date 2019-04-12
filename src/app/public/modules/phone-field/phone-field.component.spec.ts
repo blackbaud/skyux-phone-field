@@ -16,8 +16,13 @@ import {
 } from '@angular/platform-browser';
 
 import {
-  expect
+  expect,
+  SkyAppTestUtility
 } from '@skyux-sdk/testing';
+
+import {
+  SkyPhoneFieldModule
+} from './phone-field.module';
 
 import {
   PhoneFieldTestComponent
@@ -27,49 +32,29 @@ import {
   PhoneFieldReactiveTestComponent
 } from './fixtures/phone-field-reactive.component.fixture';
 
-import {
-  SkyPhoneFieldModule
-} from './phone-field.module';
-
 describe('Phone Field Component', () => {
 
   function setInput(
     element: HTMLElement,
     text: string,
-    compFixture: ComponentFixture<any>) {
-    let inputEvent = document.createEvent('Event');
-    let params = {
-      bubbles: false,
-      cancelable: false
-    };
-    inputEvent.initEvent('input', params.bubbles, params.cancelable);
-
-    let changeEvent = document.createEvent('Event');
-    changeEvent.initEvent('change', params.bubbles, params.cancelable);
+    compFixture: ComponentFixture<any>): void {
     let inputEl = element.querySelector('input');
     inputEl.value = text;
 
-    inputEl.dispatchEvent(inputEvent);
+    SkyAppTestUtility.fireDomEvent(inputEl, 'input');
     compFixture.detectChanges();
 
-    inputEl.dispatchEvent(changeEvent);
+    SkyAppTestUtility.fireDomEvent(inputEl, 'change');
     compFixture.detectChanges();
     tick();
   }
 
   function blurInput(
     element: HTMLElement,
-    compFixture: ComponentFixture<any>) {
-
-    let inputEvent = document.createEvent('Event');
-    let params = {
-      bubbles: false,
-      cancelable: false
-    };
-    inputEvent.initEvent('blur', params.bubbles, params.cancelable);
+    compFixture: ComponentFixture<any>): void  {
     let inputEl = element.querySelector('input');
 
-    inputEl.dispatchEvent(inputEvent);
+    SkyAppTestUtility.fireDomEvent(inputEl, 'blur');
     compFixture.detectChanges();
     tick();
   }
@@ -122,7 +107,7 @@ describe('Phone Field Component', () => {
         fixture.detectChanges();
 
         expect(nativeElement.querySelector('input').placeholder)
-          .toBe(component.inputDirective.skyPhoneFieldComponent.countryData
+          .toBe(component.phoneFieldComponent.countryData
             .find(country => country.iso2 === 'us').placeholder);
       }));
 
@@ -132,7 +117,7 @@ describe('Phone Field Component', () => {
         fixture.detectChanges();
 
         expect(nativeElement.querySelector('input').placeholder)
-          .toBe(component.inputDirective.skyPhoneFieldComponent.countryData[0].placeholder);
+          .toBe(component.phoneFieldComponent.countryData[0].placeholder);
       }));
 
       it('should handle initializing with number', fakeAsync(() => {
@@ -217,7 +202,7 @@ describe('Phone Field Component', () => {
 
           expect(ngModel.valid).toBe(false);
           expect(ngModel.pristine).toBe(false);
-          expect(ngModel.touched).toBe(false);
+          expect(ngModel.touched).toBe(true);
 
         }));
 
@@ -235,7 +220,7 @@ describe('Phone Field Component', () => {
 
           expect(ngModel.valid).toBe(false);
 
-          expect(ngModel.touched).toBe(false);
+          expect(ngModel.touched).toBe(true);
 
           blurInput(fixture.nativeElement, fixture);
           expect(ngModel.valid).toBe(false);
@@ -256,7 +241,7 @@ describe('Phone Field Component', () => {
 
           expect(ngModel.valid).toBe(false);
 
-          expect(ngModel.touched).toBe(false);
+          expect(ngModel.touched).toBe(true);
 
           blurInput(fixture.nativeElement, fixture);
           expect(ngModel.valid).toBe(false);
@@ -389,8 +374,7 @@ describe('Phone Field Component', () => {
 
       it('should update the placeholder to the new country', () => {
         fixture.detectChanges();
-        let originalCountryData = component.inputDirective.skyPhoneFieldComponent
-          .countryData.slice(0);
+        let originalCountryData = component.phoneFieldComponent.countryData.slice(0);
 
         fixture.debugElement.query(By.css('button.sky-dropdown-button')).nativeElement.click();
         fixture.detectChanges();
@@ -499,7 +483,7 @@ describe('Phone Field Component', () => {
         fixture.detectChanges();
 
         expect(nativeElement.querySelector('input').placeholder)
-          .toBe(component.inputDirective.skyPhoneFieldComponent.countryData
+          .toBe(component.phoneFieldComponent.countryData
             .find(country => country.iso2 === 'us').placeholder);
       }));
 
@@ -509,7 +493,7 @@ describe('Phone Field Component', () => {
         fixture.detectChanges();
 
         expect(nativeElement.querySelector('input').placeholder)
-          .toBe(component.inputDirective.skyPhoneFieldComponent.countryData[0].placeholder);
+          .toBe(component.phoneFieldComponent.countryData[0].placeholder);
       }));
 
       it('should handle initializing with number', fakeAsync(() => {
@@ -597,7 +581,7 @@ describe('Phone Field Component', () => {
 
           expect(component.phoneControl.valid).toBe(false);
           expect(component.phoneControl.pristine).toBe(false);
-          expect(component.phoneControl.touched).toBe(false);
+          expect(component.phoneControl.touched).toBe(true);
 
         }));
 
@@ -615,7 +599,7 @@ describe('Phone Field Component', () => {
 
           expect(component.phoneControl.valid).toBe(false);
 
-          expect(component.phoneControl.touched).toBe(false);
+          expect(component.phoneControl.touched).toBe(true);
 
           blurInput(fixture.nativeElement, fixture);
           expect(component.phoneControl.valid).toBe(false);
@@ -636,7 +620,7 @@ describe('Phone Field Component', () => {
 
           expect(component.phoneControl.valid).toBe(false);
 
-          expect(component.phoneControl.touched).toBe(false);
+          expect(component.phoneControl.touched).toBe(true);
 
           blurInput(fixture.nativeElement, fixture);
           expect(component.phoneControl.valid).toBe(false);
@@ -777,8 +761,7 @@ describe('Phone Field Component', () => {
 
       it('should update the placeholder to the new country', () => {
         fixture.detectChanges();
-        let originalCountryData = component.inputDirective.skyPhoneFieldComponent
-          .countryData.slice(0);
+        let originalCountryData = component.phoneFieldComponent.countryData.slice(0);
 
         fixture.debugElement.query(By.css('button.sky-dropdown-button')).nativeElement.click();
         fixture.detectChanges();

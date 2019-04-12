@@ -4,6 +4,10 @@ import {
 } from '@angular/core';
 
 import {
+  SkyPhoneFieldComponent
+} from '../phone-field.component';
+
+import {
   SkyPhoneFieldInputDirective
 } from '../phone-field-input.directive';
 
@@ -15,6 +19,9 @@ export class PhoneFieldTestComponent {
 
   @ViewChild(SkyPhoneFieldInputDirective)
   public inputDirective: SkyPhoneFieldInputDirective;
+
+  @ViewChild(SkyPhoneFieldComponent)
+  public phoneFieldComponent: SkyPhoneFieldComponent;
 
   public modelValue: string;
 

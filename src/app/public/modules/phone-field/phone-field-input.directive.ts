@@ -1,27 +1,23 @@
 import {
-  Directive,
-  forwardRef,
-  ElementRef,
-  EventEmitter,
-  Input,
-  HostListener,
   AfterViewInit,
-  Injector,
   ChangeDetectorRef,
-  OnInit,
-  Output,
+  Directive,
+  ElementRef,
+  forwardRef,
+  HostListener,
+  Input,
   OnDestroy,
+  OnInit,
   Optional
 } from '@angular/core';
 
 import {
+  AbstractControl,
+  ControlValueAccessor,
   NG_VALUE_ACCESSOR,
   NG_VALIDATORS,
-  ControlValueAccessor,
-  Validator,
-  AbstractControl,
-  NgControl,
-  FormControl
+  ValidationErrors,
+  Validator
 } from '@angular/forms';
 
 import {
@@ -29,16 +25,26 @@ import {
 } from 'rxjs/Subject';
 
 import {
-  SkyCountryData
-} from './types';
+  SkyPhoneFieldComponent
+} from './phone-field.component';
 
 import {
   SkyPhoneFieldAdapterService
 } from './phone-field-adapter.service';
 
 import {
-  SkyPhoneFieldComponent
-} from './phone-field.component';
+  SkyCountryData
+} from './types';
+
+require('intl-tel-input/build/js/utils');
+
+require('intl-tel-input/build/js/intlTelInput');
+
+/**
+ * NOTE: We can not type these due the the current @types/intl-tel-input version having an
+ * undeclared type which causes linting errors.
+ */
+declare var intlTelInputUtils: any;
 
 // tslint:disable:no-forward-ref no-use-before-declare
 const SKY_PHONE_FIELD_VALUE_ACCESSOR = {
@@ -66,18 +72,8 @@ export class SkyPhoneFieldInputDirective implements OnInit, OnDestroy, AfterView
   ControlValueAccessor, Validator {
 
   @Input()
-  public set defaultCountry(value: string) {
-    this.skyPhoneFieldComponent.setDefaultCountry(value);
-    this._defaultCountryCode = value;
-  }
-
-  public get defaultCountry() {
-    return this._defaultCountryCode;
-  }
-
-  @Input()
   public set disabled(value: boolean) {
-    this.skyPhoneFieldComponent.disabled = value;
+    this.phoneFieldComponent.disabled = value;
     this.adapterService.setElementDisabledState(this.elRef.nativeElement, value);
     this._disabled = value;
   }
@@ -92,31 +88,33 @@ export class SkyPhoneFieldInputDirective implements OnInit, OnDestroy, AfterView
   @Input()
   public skyPhoneFieldNoValidate: boolean = false;
 
-  @Output()
-  public selectedCountryChange = new EventEmitter<SkyCountryData>();
-
   private set modelValue(value: string) {
     this._modelValue = value;
+
     this.adapterService.setElementValue(this.elRef.nativeElement, value);
+
     if (value) {
       let formattedValue = value;
+
       if (this.formatModel) {
-        formattedValue = this.skyPhoneFieldComponent.formatNumber(value.toString());
+        formattedValue = this.formatNumber(value.toString());
       }
-      this._onChange('+' + this.skyPhoneFieldComponent.selectedCountry.dialCode + ' ' + formattedValue);
+
+      this.onChange('+' + this.phoneFieldComponent.selectedCountry.dialCode + ' ' +
+        formattedValue);
     } else {
-      this._onChange(value);
+      this.onChange(value);
     }
-    this._validatorChange();
+    this.validatorChange();
   }
 
   private get modelValue(): string {
     return this._modelValue;
   }
 
-  private ngUnsubscribe = new Subject();
+  private control: AbstractControl;
 
-  private _defaultCountryCode: string;
+  private ngUnsubscribe = new Subject();
 
   private _disabled: boolean;
 
@@ -126,47 +124,47 @@ export class SkyPhoneFieldInputDirective implements OnInit, OnDestroy, AfterView
     private adapterService: SkyPhoneFieldAdapterService,
     private changeDetector: ChangeDetectorRef,
     private elRef: ElementRef,
-    private injector: Injector,
-    @Optional() public skyPhoneFieldComponent: SkyPhoneFieldComponent
+    @Optional() private phoneFieldComponent: SkyPhoneFieldComponent
   ) { }
 
   public ngOnInit(): void {
-    this.adapterService.addElementClass(this.elRef.nativeElement, 'sky-form-control');
-    if (this.defaultCountry) {
-      this.skyPhoneFieldComponent.selectCountry(this.defaultCountry);
+    if (!this.phoneFieldComponent) {
+      throw new Error(
+        'You must wrap the `skyPhoneFieldInput` directive within a ' +
+        '`<sky-phone-field>` component!'
+      );
     }
-    this.adapterService.setElementPlaceholder(this.elRef.nativeElement,
-      this.skyPhoneFieldComponent.selectedCountry.placeholder);
 
-    this.adapterService.setAriaLabel(this.elRef.nativeElement);
-  }
+    const element = this.elRef.nativeElement;
 
-  public ngOnDestroy(): void {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
-    this.selectedCountryChange.complete();
+    this.adapterService.addElementClass(element, 'sky-form-control');
+    this.adapterService.setElementPlaceholder(element,
+      this.phoneFieldComponent.selectedCountry.placeholder);
+
+    this.adapterService.setAriaLabel(element);
   }
 
   public ngAfterViewInit(): void {
-    this.skyPhoneFieldComponent.selectedCountryChange
+    this.phoneFieldComponent.selectedCountryChange
       .takeUntil(this.ngUnsubscribe)
       .subscribe((country: SkyCountryData) => {
         // Write the value again to cause validation to refire
         this.writeValue(this.modelValue);
         this.adapterService.setElementPlaceholder(this.elRef.nativeElement, country.placeholder);
-        this.selectedCountryChange.emit(country);
       });
+
     // This is needed to address a bug in Angular 4, where the value is not changed on the view.
     // See: https://github.com/angular/angular/issues/13792
-    const control = (<NgControl>this.injector.get(NgControl)).control as FormControl;
     /* istanbul ignore else */
-    if (control && this.modelValue) {
-      control.setValue(this.modelValue, { emitEvent: false });
-      /* istanbul ignore else */
-      if (this.changeDetector) {
+    if (this.control && this.modelValue) {
+      this.control.setValue(this.modelValue, { emitEvent: false });
         this.changeDetector.detectChanges();
-      }
     }
+  }
+
+  public ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   /**
@@ -174,7 +172,7 @@ export class SkyPhoneFieldInputDirective implements OnInit, OnDestroy, AfterView
    * @param event The change event that was received
    */
   @HostListener('change', ['$event'])
-  public onChange(event: any): void {
+  public onInputChange(event: any): void {
     this.writeValue(event.target.value);
   }
 
@@ -182,8 +180,8 @@ export class SkyPhoneFieldInputDirective implements OnInit, OnDestroy, AfterView
    * Marks reactive form controls as touched on input blur events
    */
   @HostListener('blur')
-  public onBlur(): void {
-    this._onTouched();
+  public onInputBlur(): void {
+    this.onTouched();
   }
 
   /**
@@ -194,11 +192,11 @@ export class SkyPhoneFieldInputDirective implements OnInit, OnDestroy, AfterView
     this.modelValue = value;
   }
 
-  public registerOnChange(fn: (value: any) => any): void { this._onChange = fn; }
+  public registerOnChange(fn: (value: any) => any): void { this.onChange = fn; }
 
-  public registerOnTouched(fn: () => any): void { this._onTouched = fn; }
+  public registerOnTouched(fn: () => any): void { this.onTouched = fn; }
 
-  public registerOnValidatorChange(fn: () => void): void { this._validatorChange = fn; }
+  public registerOnValidatorChange(fn: () => void): void { this.validatorChange = fn; }
 
   /**
    * Sets the disabled state on the input
@@ -212,29 +210,52 @@ export class SkyPhoneFieldInputDirective implements OnInit, OnDestroy, AfterView
    * Validate's the form control's current value
    * @param control the form control for the input
    */
-  public validate(control: AbstractControl): { [key: string]: any } {
+  public validate(control: AbstractControl): ValidationErrors {
+
+    if (!this.control) {
+      this.control = control;
+    }
+
     let value = control.value;
 
     if (!value) {
-      return undefined;
+      return;
     }
 
-    if (!this.skyPhoneFieldComponent.validateNumber(value) && !this.skyPhoneFieldNoValidate) {
+    if (!this.validateNumber(value) && !this.skyPhoneFieldNoValidate) {
+
+      // Mark the invalid control as touched so that the input's invalid CSS styles appear.
+      // (This is only required when the invalid value is set by the FormControl constructor.)
+      this.control.markAsTouched();
+
       return {
         'skyPhoneField': {
-          invalid: control.value
+          invalid: this.control.value
         }
       };
     }
-
-    return undefined;
   }
 
-  /*istanbul ignore next */
-  private _onChange = (_: any) => { };
-  /*istanbul ignore next */
+  private validateNumber(phoneNumber: string): boolean {
+   return intlTelInputUtils.isValidNumber(phoneNumber,
+    this.phoneFieldComponent.selectedCountry.iso2);
+ }
 
-  private _onTouched = () => { };
+  /**
+   * Format's the given phone number based on the currently selected country.
+   * @param phoneNumber The number to format
+   */
+  private formatNumber(phoneNumber: string): string {
+    return intlTelInputUtils.formatNumber(
+      phoneNumber,
+      this.phoneFieldComponent.selectedCountry.iso2,
+      intlTelInputUtils.numberFormat.NATIONAL
+    );
+  }
 
-  private _validatorChange = () => { };
+  private onChange = (_: any) => { };
+
+  private onTouched = () => { };
+
+  private validatorChange = () => { };
 }

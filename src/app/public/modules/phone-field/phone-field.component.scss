@@ -2,8 +2,11 @@
 @import "~@skyux/theme/scss/_compat/mixins";
 @import "~intl-tel-input/build/css/intlTelInput";
 
+::ng-deep .sky-form-control {
+  border-left: none;
+}
 
-.sky-input-group-country-btn {
+.sky-phone-field-country-btn {
 
   ::ng-deep .sky-dropdown-button {
     border-radius: 0;
@@ -26,7 +29,7 @@
 
 }
 
-.sky-selected-country, .sky-default-country {
+.sky-phone-field-country-selected, .sky-phone-field-country-default {
   @include sky-border(light, bottom);
 }
 

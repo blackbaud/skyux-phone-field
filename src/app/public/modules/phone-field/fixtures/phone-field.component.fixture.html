@@ -1,7 +1,8 @@
 <div>
-  <sky-phone-field>
+  <sky-phone-field
+    [defaultCountry]="defaultCountry"
+  >
     <input
-      [defaultCountry]="defaultCountry"
       [disabled]="isDisabled"
       skyPhoneFieldInput
       [skyPhoneFieldNoValidate]="noValidate"
