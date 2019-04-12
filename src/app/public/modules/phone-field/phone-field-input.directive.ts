@@ -83,9 +83,6 @@ export class SkyPhoneFieldInputDirective implements OnInit, OnDestroy, AfterView
   }
 
   @Input()
-  public formatModel: boolean = true;
-
-  @Input()
   public skyPhoneFieldNoValidate: boolean = false;
 
   private set modelValue(value: string) {
@@ -94,14 +91,14 @@ export class SkyPhoneFieldInputDirective implements OnInit, OnDestroy, AfterView
     this.adapterService.setElementValue(this.elRef.nativeElement, value);
 
     if (value) {
-      let formattedValue = value;
+      let formattedValue = this.formatNumber(value.toString());
 
-      if (this.formatModel) {
-        formattedValue = this.formatNumber(value.toString());
+      if (this.phoneFieldComponent.selectedCountry.iso2 !== this.phoneFieldComponent.defaultCountry) {
+        formattedValue = '+' + this.phoneFieldComponent.selectedCountry.dialCode +
+          ' ' + formattedValue;
       }
 
-      this.onChange('+' + this.phoneFieldComponent.selectedCountry.dialCode + ' ' +
-        formattedValue);
+      this.onChange(formattedValue);
     } else {
       this.onChange(value);
     }

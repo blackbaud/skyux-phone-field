@@ -29,6 +29,8 @@ export class PhoneFieldTestComponent {
 
   public defaultCountry: string;
 
+  public showInvalidDirective: boolean = false;
+
   public noValidate: boolean = false;
 
 }

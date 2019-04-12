@@ -31,6 +31,8 @@ export class PhoneFieldReactiveTestComponent implements OnInit {
 
   public defaultCountry: string;
 
+  public showInvalidDirective: boolean = false;
+
   public noValidate: boolean = false;
 
   public phoneForm: FormGroup;

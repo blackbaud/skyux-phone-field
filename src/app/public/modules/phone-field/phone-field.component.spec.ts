@@ -51,7 +51,7 @@ describe('Phone Field Component', () => {
 
   function blurInput(
     element: HTMLElement,
-    compFixture: ComponentFixture<any>): void  {
+    compFixture: ComponentFixture<any>): void {
     let inputEl = element.querySelector('input');
 
     SkyAppTestUtility.fireDomEvent(inputEl, 'blur');
@@ -139,6 +139,15 @@ describe('Phone Field Component', () => {
         expect(nativeElement.querySelector('input')).not.toHaveCssClass('ng-invalid');
       }));
 
+      it('should throw an error if directive is added in isolation', function () {
+        try {
+          component.showInvalidDirective = true;
+          fixture.detectChanges();
+        } catch (err) {
+          expect(err.message).toContain('skyPhoneFieldInput');
+        }
+      });
+
     });
 
     describe('input change', () => {
@@ -198,7 +207,7 @@ describe('Phone Field Component', () => {
           expect(nativeElement.querySelector('input').value).toBe('123');
 
           expect(component.modelValue)
-            .toBe('+1 123');
+            .toBe('123');
 
           expect(ngModel.valid).toBe(false);
           expect(ngModel.pristine).toBe(false);
@@ -206,146 +215,146 @@ describe('Phone Field Component', () => {
 
         }));
 
-        it('should validate properly when invalid number on initialization', fakeAsync(() => {
-          component.modelValue = '1234';
-          component.defaultCountry = 'us';
-          fixture.detectChanges();
-          tick();
-          fixture.detectChanges();
+      it('should validate properly when invalid number on initialization', fakeAsync(() => {
+        component.modelValue = '1234';
+        component.defaultCountry = 'us';
+        fixture.detectChanges();
+        tick();
+        fixture.detectChanges();
 
-          expect(nativeElement.querySelector('input').value).toBe('1234');
+        expect(nativeElement.querySelector('input').value).toBe('1234');
 
-          expect(component.modelValue)
-            .toBe('+1 1234');
+        expect(component.modelValue)
+          .toBe('1234');
 
-          expect(ngModel.valid).toBe(false);
+        expect(ngModel.valid).toBe(false);
 
-          expect(ngModel.touched).toBe(true);
+        expect(ngModel.touched).toBe(true);
 
-          blurInput(fixture.nativeElement, fixture);
-          expect(ngModel.valid).toBe(false);
-          expect(ngModel.touched).toBe(true);
-        }));
+        blurInput(fixture.nativeElement, fixture);
+        expect(ngModel.valid).toBe(false);
+        expect(ngModel.touched).toBe(true);
+      }));
 
-        it('should validate properly when invalid number format on initialization', fakeAsync(() => {
-          component.modelValue = '867-555-530';
-          component.defaultCountry = 'us';
-          fixture.detectChanges();
-          tick();
-          fixture.detectChanges();
+      it('should validate properly when invalid number format on initialization', fakeAsync(() => {
+        component.modelValue = '867-555-530';
+        component.defaultCountry = 'us';
+        fixture.detectChanges();
+        tick();
+        fixture.detectChanges();
 
-          expect(nativeElement.querySelector('input').value).toBe('867-555-530');
+        expect(nativeElement.querySelector('input').value).toBe('867-555-530');
 
-          expect(component.modelValue)
-            .toBe('+1 867-555-530');
+        expect(component.modelValue)
+          .toBe('867-555-530');
 
-          expect(ngModel.valid).toBe(false);
+        expect(ngModel.valid).toBe(false);
 
-          expect(ngModel.touched).toBe(true);
+        expect(ngModel.touched).toBe(true);
 
-          blurInput(fixture.nativeElement, fixture);
-          expect(ngModel.valid).toBe(false);
-          expect(ngModel.touched).toBe(true);
-        }));
+        blurInput(fixture.nativeElement, fixture);
+        expect(ngModel.valid).toBe(false);
+        expect(ngModel.touched).toBe(true);
+      }));
 
-        it('should validate properly when valid number format on initialization', fakeAsync(() => {
-          component.modelValue = '867-555-5309';
-          component.defaultCountry = 'us';
-          fixture.detectChanges();
-          tick();
-          fixture.detectChanges();
+      it('should validate properly when valid number format on initialization', fakeAsync(() => {
+        component.modelValue = '867-555-5309';
+        component.defaultCountry = 'us';
+        fixture.detectChanges();
+        tick();
+        fixture.detectChanges();
 
-          expect(nativeElement.querySelector('input').value).toBe('867-555-5309');
+        expect(nativeElement.querySelector('input').value).toBe('867-555-5309');
 
-          expect(component.modelValue)
-            .toBe('+1 (867) 555-5309');
+        expect(component.modelValue)
+          .toBe('(867) 555-5309');
 
-          expect(ngModel.valid).toBe(true);
+        expect(ngModel.valid).toBe(true);
 
-          expect(ngModel.touched).toBe(false);
+        expect(ngModel.touched).toBe(false);
 
-          blurInput(fixture.nativeElement, fixture);
-          expect(ngModel.valid).toBe(true);
-          expect(ngModel.touched).toBe(true);
-        }));
+        blurInput(fixture.nativeElement, fixture);
+        expect(ngModel.valid).toBe(true);
+        expect(ngModel.touched).toBe(true);
+      }));
 
-        it('should validate properly when invalid number on model change', fakeAsync(() => {
-          component.defaultCountry = 'us';
-          fixture.detectChanges();
-          tick();
-          fixture.detectChanges();
+      it('should validate properly when invalid number on model change', fakeAsync(() => {
+        component.defaultCountry = 'us';
+        fixture.detectChanges();
+        tick();
+        fixture.detectChanges();
 
-          component.modelValue = '1234';
+        component.modelValue = '1234';
 
-          fixture.detectChanges();
-          tick();
-          fixture.detectChanges();
+        fixture.detectChanges();
+        tick();
+        fixture.detectChanges();
 
-          expect(nativeElement.querySelector('input').value).toBe('1234');
+        expect(nativeElement.querySelector('input').value).toBe('1234');
 
-          expect(component.modelValue)
-            .toBe('+1 1234');
+        expect(component.modelValue)
+          .toBe('1234');
 
-          expect(ngModel.valid).toBe(false);
+        expect(ngModel.valid).toBe(false);
 
-        }));
+      }));
 
-        it('should validate properly when input changed to empty string', fakeAsync(() => {
-          component.defaultCountry = 'us';
-          fixture.detectChanges();
-          tick();
-          fixture.detectChanges();
+      it('should validate properly when input changed to empty string', fakeAsync(() => {
+        component.defaultCountry = 'us';
+        fixture.detectChanges();
+        tick();
+        fixture.detectChanges();
 
-          setInput(fixture.nativeElement, '1234', fixture);
+        setInput(fixture.nativeElement, '1234', fixture);
 
-          setInput(fixture.nativeElement, '', fixture);
+        setInput(fixture.nativeElement, '', fixture);
 
-          expect(nativeElement.querySelector('input').value).toBe('');
+        expect(nativeElement.querySelector('input').value).toBe('');
 
-          expect(component.modelValue)
-            .toBe('');
+        expect(component.modelValue)
+          .toBe('');
 
-          expect(ngModel.valid).toBe(true);
-        }));
+        expect(ngModel.valid).toBe(true);
+      }));
 
-        it('should handle invalid and then valid number', fakeAsync(() => {
-          component.defaultCountry = 'us';
-          fixture.detectChanges();
-          tick();
-          fixture.detectChanges();
+      it('should handle invalid and then valid number', fakeAsync(() => {
+        component.defaultCountry = 'us';
+        fixture.detectChanges();
+        tick();
+        fixture.detectChanges();
 
-          setInput(fixture.nativeElement, '1234', fixture);
+        setInput(fixture.nativeElement, '1234', fixture);
 
-          setInput(fixture.nativeElement, '8675555309', fixture);
+        setInput(fixture.nativeElement, '8675555309', fixture);
 
-          fixture.detectChanges();
-          tick();
+        fixture.detectChanges();
+        tick();
 
-          expect(nativeElement.querySelector('input').value).toBe('8675555309');
+        expect(nativeElement.querySelector('input').value).toBe('8675555309');
 
-          expect(component.modelValue)
-            .toEqual('+1 (867) 555-5309');
+        expect(component.modelValue)
+          .toEqual('(867) 555-5309');
 
-          expect(ngModel.valid).toBe(true);
-        }));
+        expect(ngModel.valid).toBe(true);
+      }));
 
-        it('should handle skyPhoneFieldNoValidate property', fakeAsync(() => {
-          component.noValidate = true;
+      it('should handle skyPhoneFieldNoValidate property', fakeAsync(() => {
+        component.noValidate = true;
 
-          fixture.detectChanges();
-          tick();
-          fixture.detectChanges();
+        fixture.detectChanges();
+        tick();
+        fixture.detectChanges();
 
-          setInput(fixture.nativeElement, '1234', fixture);
+        setInput(fixture.nativeElement, '1234', fixture);
 
-          expect(nativeElement.querySelector('input').value).toBe('1234');
+        expect(nativeElement.querySelector('input').value).toBe('1234');
 
-          expect(component.modelValue)
-            .toBe('+93 1234');
+        expect(component.modelValue)
+          .toBe('+93 1234');
 
-          expect(ngModel.valid).toBe(true);
+        expect(ngModel.valid).toBe(true);
 
-        }));
+      }));
     });
 
     describe('disabled state', () => {
@@ -444,6 +453,35 @@ describe('Phone Field Component', () => {
         expect(ngModel.valid).toBe(true);
       }));
 
+      it('should add the country code to non-default country data', fakeAsync(() => {
+        let inputElement = fixture.debugElement.query(By.css('input'));
+        let ngModel = <NgModel>inputElement.injector.get(NgModel);
+
+        component.defaultCountry = 'us';
+        fixture.detectChanges();
+        fixture.detectChanges();
+        tick();
+
+        expect(ngModel.valid).toBe(true);
+
+        fixture.debugElement.query(By.css('button.sky-dropdown-button')).nativeElement.click();
+        fixture.detectChanges();
+        tick();
+
+        fixture.debugElement.queryAll(By.css('.sky-dropdown-item button'))[2].nativeElement.click();
+        fixture.detectChanges();
+        tick();
+
+        component.modelValue = '024569874';
+        fixture.detectChanges();
+        tick();
+        fixture.detectChanges();
+        tick();
+
+        expect(ngModel.value).toBe('+355 024 569 874');
+        expect(ngModel.valid).toBe(true);
+      }));
+
     });
 
   });
@@ -524,6 +562,15 @@ describe('Phone Field Component', () => {
         });
       });
 
+      it('should throw an error if directive is added in isolation', function () {
+        try {
+          component.showInvalidDirective = true;
+          fixture.detectChanges();
+        } catch (err) {
+          expect(err.message).toContain('skyPhoneFieldInput');
+        }
+      });
+
     });
 
     describe('input change', () => {
@@ -577,7 +624,7 @@ describe('Phone Field Component', () => {
           expect(nativeElement.querySelector('input').value).toBe('123');
 
           expect(component.phoneControl.value)
-            .toBe('+1 123');
+            .toBe('123');
 
           expect(component.phoneControl.valid).toBe(false);
           expect(component.phoneControl.pristine).toBe(false);
@@ -585,146 +632,146 @@ describe('Phone Field Component', () => {
 
         }));
 
-        it('should validate properly when invalid number on initialization', fakeAsync(() => {
-          component.initialValue = '1234';
-          component.defaultCountry = 'us';
-          fixture.detectChanges();
-          tick();
-          fixture.detectChanges();
+      it('should validate properly when invalid number on initialization', fakeAsync(() => {
+        component.initialValue = '1234';
+        component.defaultCountry = 'us';
+        fixture.detectChanges();
+        tick();
+        fixture.detectChanges();
 
-          expect(nativeElement.querySelector('input').value).toBe('1234');
+        expect(nativeElement.querySelector('input').value).toBe('1234');
 
-          expect(component.phoneControl.value)
-            .toBe('+1 1234');
+        expect(component.phoneControl.value)
+          .toBe('1234');
 
-          expect(component.phoneControl.valid).toBe(false);
+        expect(component.phoneControl.valid).toBe(false);
 
-          expect(component.phoneControl.touched).toBe(true);
+        expect(component.phoneControl.touched).toBe(true);
 
-          blurInput(fixture.nativeElement, fixture);
-          expect(component.phoneControl.valid).toBe(false);
-          expect(component.phoneControl.touched).toBe(true);
-        }));
+        blurInput(fixture.nativeElement, fixture);
+        expect(component.phoneControl.valid).toBe(false);
+        expect(component.phoneControl.touched).toBe(true);
+      }));
 
-        it('should validate properly when invalid number format on initialization', fakeAsync(() => {
-          component.initialValue = '867-555-530';
-          component.defaultCountry = 'us';
-          fixture.detectChanges();
-          tick();
-          fixture.detectChanges();
+      it('should validate properly when invalid number format on initialization', fakeAsync(() => {
+        component.initialValue = '867-555-530';
+        component.defaultCountry = 'us';
+        fixture.detectChanges();
+        tick();
+        fixture.detectChanges();
 
-          expect(nativeElement.querySelector('input').value).toBe('867-555-530');
+        expect(nativeElement.querySelector('input').value).toBe('867-555-530');
 
-          expect(component.phoneControl.value)
-            .toBe('+1 867-555-530');
+        expect(component.phoneControl.value)
+          .toBe('867-555-530');
 
-          expect(component.phoneControl.valid).toBe(false);
+        expect(component.phoneControl.valid).toBe(false);
 
-          expect(component.phoneControl.touched).toBe(true);
+        expect(component.phoneControl.touched).toBe(true);
 
-          blurInput(fixture.nativeElement, fixture);
-          expect(component.phoneControl.valid).toBe(false);
-          expect(component.phoneControl.touched).toBe(true);
-        }));
+        blurInput(fixture.nativeElement, fixture);
+        expect(component.phoneControl.valid).toBe(false);
+        expect(component.phoneControl.touched).toBe(true);
+      }));
 
-        it('should validate properly when valid number format on initialization', fakeAsync(() => {
-          component.initialValue = '867-555-5309';
-          component.defaultCountry = 'us';
-          fixture.detectChanges();
-          tick();
-          fixture.detectChanges();
+      it('should validate properly when valid number format on initialization', fakeAsync(() => {
+        component.initialValue = '867-555-5309';
+        component.defaultCountry = 'us';
+        fixture.detectChanges();
+        tick();
+        fixture.detectChanges();
 
-          expect(nativeElement.querySelector('input').value).toBe('867-555-5309');
+        expect(nativeElement.querySelector('input').value).toBe('867-555-5309');
 
-          expect(component.phoneControl.value)
-            .toBe('+1 (867) 555-5309');
+        expect(component.phoneControl.value)
+          .toBe('(867) 555-5309');
 
-          expect(component.phoneControl.valid).toBe(true);
+        expect(component.phoneControl.valid).toBe(true);
 
-          expect(component.phoneControl.touched).toBe(false);
+        expect(component.phoneControl.touched).toBe(false);
 
-          blurInput(fixture.nativeElement, fixture);
-          expect(component.phoneControl.valid).toBe(true);
-          expect(component.phoneControl.touched).toBe(true);
-        }));
+        blurInput(fixture.nativeElement, fixture);
+        expect(component.phoneControl.valid).toBe(true);
+        expect(component.phoneControl.touched).toBe(true);
+      }));
 
-        it('should validate properly when invalid number on model change', fakeAsync(() => {
-          component.defaultCountry = 'us';
-          fixture.detectChanges();
-          tick();
-          fixture.detectChanges();
+      it('should validate properly when invalid number on model change', fakeAsync(() => {
+        component.defaultCountry = 'us';
+        fixture.detectChanges();
+        tick();
+        fixture.detectChanges();
 
-          component.phoneControl.setValue('1234');
+        component.phoneControl.setValue('1234');
 
-          fixture.detectChanges();
-          tick();
-          fixture.detectChanges();
+        fixture.detectChanges();
+        tick();
+        fixture.detectChanges();
 
-          expect(nativeElement.querySelector('input').value).toBe('1234');
+        expect(nativeElement.querySelector('input').value).toBe('1234');
 
-          expect(component.phoneControl.value)
-            .toBe('+1 1234');
+        expect(component.phoneControl.value)
+          .toBe('1234');
 
-          expect(component.phoneControl.valid).toBe(false);
+        expect(component.phoneControl.valid).toBe(false);
 
-        }));
+      }));
 
-        it('should validate properly when input changed to empty string', fakeAsync(() => {
-          component.defaultCountry = 'us';
-          fixture.detectChanges();
-          tick();
-          fixture.detectChanges();
+      it('should validate properly when input changed to empty string', fakeAsync(() => {
+        component.defaultCountry = 'us';
+        fixture.detectChanges();
+        tick();
+        fixture.detectChanges();
 
-          setInput(fixture.nativeElement, '1234', fixture);
+        setInput(fixture.nativeElement, '1234', fixture);
 
-          setInput(fixture.nativeElement, '', fixture);
+        setInput(fixture.nativeElement, '', fixture);
 
-          expect(nativeElement.querySelector('input').value).toBe('');
+        expect(nativeElement.querySelector('input').value).toBe('');
 
-          expect(component.phoneControl.value)
-            .toBe('');
+        expect(component.phoneControl.value)
+          .toBe('');
 
-          expect(component.phoneControl.valid).toBe(true);
-        }));
+        expect(component.phoneControl.valid).toBe(true);
+      }));
 
-        it('should handle invalid and then valid number', fakeAsync(() => {
-          component.defaultCountry = 'us';
-          fixture.detectChanges();
-          tick();
-          fixture.detectChanges();
+      it('should handle invalid and then valid number', fakeAsync(() => {
+        component.defaultCountry = 'us';
+        fixture.detectChanges();
+        tick();
+        fixture.detectChanges();
 
-          setInput(fixture.nativeElement, '1234', fixture);
+        setInput(fixture.nativeElement, '1234', fixture);
 
-          setInput(fixture.nativeElement, '8675555309', fixture);
+        setInput(fixture.nativeElement, '8675555309', fixture);
 
-          fixture.detectChanges();
-          tick();
+        fixture.detectChanges();
+        tick();
 
-          expect(nativeElement.querySelector('input').value).toBe('8675555309');
+        expect(nativeElement.querySelector('input').value).toBe('8675555309');
 
-          expect(component.phoneControl.value)
-            .toEqual('+1 (867) 555-5309');
+        expect(component.phoneControl.value)
+          .toEqual('(867) 555-5309');
 
-          expect(component.phoneControl.valid).toBe(true);
-        }));
+        expect(component.phoneControl.valid).toBe(true);
+      }));
 
-        it('should handle noValidate property', fakeAsync(() => {
-          component.noValidate = true;
+      it('should handle noValidate property', fakeAsync(() => {
+        component.noValidate = true;
 
-          fixture.detectChanges();
-          tick();
-          fixture.detectChanges();
+        fixture.detectChanges();
+        tick();
+        fixture.detectChanges();
 
-          setInput(fixture.nativeElement, '1234', fixture);
+        setInput(fixture.nativeElement, '1234', fixture);
 
-          expect(nativeElement.querySelector('input').value).toBe('1234');
+        expect(nativeElement.querySelector('input').value).toBe('1234');
 
-          expect(component.phoneControl.value)
-            .toBe('+93 1234');
+        expect(component.phoneControl.value)
+          .toBe('+93 1234');
 
-          expect(component.phoneControl.valid).toBe(true);
+        expect(component.phoneControl.valid).toBe(true);
 
-        }));
+      }));
     });
 
     describe('disabled state', () => {
@@ -822,6 +869,30 @@ describe('Phone Field Component', () => {
         fixture.detectChanges();
         tick();
 
+        expect(component.phoneControl.valid).toBe(true);
+      }));
+
+      it('should add the country code to non-default country data', fakeAsync(() => {
+        component.defaultCountry = 'us';
+        fixture.detectChanges();
+        fixture.detectChanges();
+        tick();
+
+        fixture.debugElement.query(By.css('button.sky-dropdown-button')).nativeElement.click();
+        fixture.detectChanges();
+        tick();
+
+        fixture.debugElement.queryAll(By.css('.sky-dropdown-item button'))[2].nativeElement.click();
+        fixture.detectChanges();
+        tick();
+
+        component.phoneControl.setValue('024569874');
+        fixture.detectChanges();
+        tick();
+        fixture.detectChanges();
+        tick();
+
+        expect(component.phoneControl.value).toBe('+355 024 569 874');
         expect(component.phoneControl.valid).toBe(true);
       }));
 

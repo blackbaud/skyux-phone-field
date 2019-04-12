@@ -9,4 +9,11 @@
       [(ngModel)]="modelValue"
       >
   </sky-phone-field>
+
+  <div *ngIf="showInvalidDirective">
+    <input
+      type="text"
+      skyPhoneFieldInput
+    />
+  </div>
 </div>
