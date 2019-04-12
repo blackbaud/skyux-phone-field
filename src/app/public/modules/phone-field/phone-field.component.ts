@@ -33,8 +33,12 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
 
   @Input()
   public set defaultCountry(value: string) {
-    this._defaultCountry = value;
-    this.defaultCountryData = this.countryData.find(country => country.iso2 === value);
+    if (value !== this._defaultCountry) {
+      this._defaultCountry = value;
+
+      this.defaultCountryData = this.countryData.find(country => country.iso2 === value);
+      this.sortCountriesWithSelectedAndDefault(this.selectedCountry);
+    }
   }
 
   public get defaultCountry(): string {
@@ -76,19 +80,18 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
 
   private _selectedCountry: SkyCountryData;
 
-  constructor() { }
-
-  public ngOnInit(): void {
+  constructor() {
     /**
      * The "slice" here ensures that we get a copy of the array and not the global original. This
      * ensures that multiple instances of the component don't overwrite the original data.
      */
     this.countryData = intlTelInputGlobals.getCountryData().slice(0);
+    this.selectedCountry = this.countryData[0];
+  }
 
+  public ngOnInit(): void {
     if (this.defaultCountry) {
       this.selectedCountry = this.defaultCountryData;
-    } else {
-      this.selectedCountry = this.countryData[0];
     }
   }
 
