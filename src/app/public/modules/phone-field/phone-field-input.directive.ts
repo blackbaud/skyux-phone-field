@@ -33,7 +33,7 @@ import {
 } from './phone-field-adapter.service';
 
 import {
-  SkyCountryData
+  SkyPhoneFieldCountry
 } from './types';
 
 require('intl-tel-input/build/js/utils');
@@ -136,7 +136,7 @@ export class SkyPhoneFieldInputDirective implements OnInit, OnDestroy, AfterView
 
     this.adapterService.addElementClass(element, 'sky-form-control');
     this.adapterService.setElementPlaceholder(element,
-      this.phoneFieldComponent.selectedCountry.placeholder);
+      this.phoneFieldComponent.selectedCountry.exampleNumber);
 
     this.adapterService.setAriaLabel(element);
   }
@@ -144,10 +144,10 @@ export class SkyPhoneFieldInputDirective implements OnInit, OnDestroy, AfterView
   public ngAfterViewInit(): void {
     this.phoneFieldComponent.selectedCountryChange
       .takeUntil(this.ngUnsubscribe)
-      .subscribe((country: SkyCountryData) => {
+      .subscribe((country: SkyPhoneFieldCountry) => {
         // Write the value again to cause validation to refire
         this.writeValue(this.modelValue);
-        this.adapterService.setElementPlaceholder(this.elRef.nativeElement, country.placeholder);
+        this.adapterService.setElementPlaceholder(this.elRef.nativeElement, country.exampleNumber);
       });
 
     // This is needed to address a bug in Angular 4, where the value is not changed on the view.
@@ -155,7 +155,7 @@ export class SkyPhoneFieldInputDirective implements OnInit, OnDestroy, AfterView
     /* istanbul ignore else */
     if (this.control && this.modelValue) {
       this.control.setValue(this.modelValue, { emitEvent: false });
-        this.changeDetector.detectChanges();
+      this.changeDetector.detectChanges();
     }
   }
 
@@ -213,29 +213,34 @@ export class SkyPhoneFieldInputDirective implements OnInit, OnDestroy, AfterView
       this.control = control;
     }
 
-    let value = control.value;
+    if (this.skyPhoneFieldNoValidate) {
+      return;
+    }
+
+    const value = control.value;
 
     if (!value) {
       return;
     }
 
-    if (!this.validateNumber(value) && !this.skyPhoneFieldNoValidate) {
+    if (!this.validateNumber(value)) {
 
       // Mark the invalid control as touched so that the input's invalid CSS styles appear.
       // (This is only required when the invalid value is set by the FormControl constructor.)
-      this.control.markAsTouched();
+      control.markAsTouched();
 
       return {
         'skyPhoneField': {
-          invalid: this.control.value
+          invalid: value
         }
       };
     }
   }
 
   private validateNumber(phoneNumber: string): boolean {
-   return intlTelInputUtils.isValidNumber(phoneNumber,
-    this.phoneFieldComponent.selectedCountry.iso2);
+    const iso = this.phoneFieldComponent.selectedCountry.iso2;
+
+    return intlTelInputUtils.isValidNumber(phoneNumber, iso);
  }
 
   /**

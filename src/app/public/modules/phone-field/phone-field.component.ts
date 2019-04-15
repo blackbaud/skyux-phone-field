@@ -20,7 +20,7 @@ declare var intlTelInputUtils: any;
 declare var intlTelInputGlobals: any;
 
 import {
-  SkyCountryData
+  SkyPhoneFieldCountry
 } from './types';
 
 @Component({
@@ -46,18 +46,18 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
   }
 
   @Output()
-  public selectedCountryChange = new EventEmitter<SkyCountryData>();
+  public selectedCountryChange = new EventEmitter<SkyPhoneFieldCountry>();
 
-  public countryData: SkyCountryData[];
+  public countryData: SkyPhoneFieldCountry[];
 
   public disabled = false;
 
-  public set selectedCountry(newCountry: SkyCountryData) {
+  public set selectedCountry(newCountry: SkyPhoneFieldCountry) {
     if (this._selectedCountry !== newCountry) {
       this._selectedCountry = newCountry;
 
-      if (!this._selectedCountry.placeholder) {
-        this._selectedCountry.placeholder = intlTelInputUtils.getExampleNumber(
+      if (!this._selectedCountry.exampleNumber) {
+        this._selectedCountry.exampleNumber = intlTelInputUtils.getExampleNumber(
           newCountry.iso2,
           true,
           intlTelInputUtils.numberType.FIXED_LINE
@@ -70,15 +70,15 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
     }
   }
 
-  public get selectedCountry(): SkyCountryData {
+  public get selectedCountry(): SkyPhoneFieldCountry {
     return this._selectedCountry;
   }
 
-  private defaultCountryData: SkyCountryData;
+  private defaultCountryData: SkyPhoneFieldCountry;
 
   private _defaultCountry: string;
 
-  private _selectedCountry: SkyCountryData;
+  private _selectedCountry: SkyPhoneFieldCountry;
 
   constructor() {
     /**
@@ -86,11 +86,14 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
      * ensures that multiple instances of the component don't overwrite the original data.
      */
     this.countryData = intlTelInputGlobals.getCountryData().slice(0);
-    this.selectedCountry = this.countryData[0];
+    this.defaultCountryData = this.countryData.find(country => country.iso2 === 'us');
+    this.selectedCountry = this.defaultCountryData;
   }
 
   public ngOnInit(): void {
-    if (this.defaultCountry) {
+    if (!this.defaultCountry) {
+      this.defaultCountry = 'us';
+    } else {
       this.selectedCountry = this.defaultCountryData;
     }
   }
@@ -104,11 +107,11 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
    * @param countryCode The International Organization for Standardization's two-letter code
    * for the default country.
    */
-  public selectCountry(countryCode: string): void {
+  public onCountrySelected(countryCode: string): void {
     this.selectedCountry = this.countryData.find(countryInfo => countryInfo.iso2 === countryCode);
   }
 
-  private sortCountriesWithSelectedAndDefault(selectedCountry: SkyCountryData): void {
+  private sortCountriesWithSelectedAndDefault(selectedCountry: SkyPhoneFieldCountry): void {
     this.countryData.splice(this.countryData.indexOf(selectedCountry), 1);
 
       let sortedNewCountries = this.countryData

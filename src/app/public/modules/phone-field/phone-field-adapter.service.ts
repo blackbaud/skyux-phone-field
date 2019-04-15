@@ -35,7 +35,8 @@ export class SkyPhoneFieldAdapterService implements OnDestroy {
     this.renderer.setProperty(
       element,
       'disabled',
-      disabled);
+      disabled
+    );
   }
 
   public setElementPlaceholder(element: HTMLElement, placeholder: string): void {
@@ -43,11 +44,13 @@ export class SkyPhoneFieldAdapterService implements OnDestroy {
   }
 
   public setElementValue(element: HTMLElement, value: string): void {
-    this.renderer.setProperty(
-      element,
-      'value',
-      value ? value : ''
-    );
+    if (value) {
+      this.renderer.setProperty(
+        element,
+        'value',
+        value
+      );
+    }
   }
 
   public setAriaLabel(element: HTMLElement): void {

@@ -1,1 +1,1 @@
-export * from './country-data';
+export * from './country';

@@ -108,7 +108,7 @@ describe('Phone Field Component', () => {
 
         expect(nativeElement.querySelector('input').placeholder)
           .toBe(component.phoneFieldComponent.countryData
-            .find(country => country.iso2 === 'us').placeholder);
+            .find(country => country.iso2 === 'us').exampleNumber);
       }));
 
       it('should initialize without a default country', fakeAsync(() => {
@@ -117,7 +117,7 @@ describe('Phone Field Component', () => {
         fixture.detectChanges();
 
         expect(nativeElement.querySelector('input').placeholder)
-          .toBe(component.phoneFieldComponent.countryData[0].placeholder);
+          .toBe(component.phoneFieldComponent.countryData[0].exampleNumber);
       }));
 
       it('should handle initializing with number', fakeAsync(() => {
@@ -159,7 +159,7 @@ describe('Phone Field Component', () => {
 
         setInput(nativeElement, '8675555309', fixture);
         expect(nativeElement.querySelector('input').value).toBe('8675555309');
-        expect(component.modelValue).toEqual('+93 8675555309');
+        expect(component.modelValue).toEqual('(867) 555-5309');
       }));
 
       it('should handle input change with a string with the an unexpected format', fakeAsync(() => {
@@ -167,9 +167,9 @@ describe('Phone Field Component', () => {
         tick();
         fixture.detectChanges();
 
-        setInput(nativeElement, '867-555-5309', fixture);
-        expect(nativeElement.querySelector('input').value).toBe('867-555-5309');
-        expect(component.modelValue).toEqual('+93 867-555-5309');
+        setInput(nativeElement, '86755-5-309', fixture);
+        expect(nativeElement.querySelector('input').value).toBe('86755-5-309');
+        expect(component.modelValue).toEqual('86755-5-309');
       }));
 
     });
@@ -350,7 +350,7 @@ describe('Phone Field Component', () => {
         expect(nativeElement.querySelector('input').value).toBe('1234');
 
         expect(component.modelValue)
-          .toBe('+93 1234');
+          .toBe('1234');
 
         expect(ngModel.valid).toBe(true);
 
@@ -392,7 +392,7 @@ describe('Phone Field Component', () => {
         fixture.detectChanges();
 
         expect(nativeElement.querySelector('input').placeholder)
-          .toBe(originalCountryData[2].placeholder);
+          .toBe(originalCountryData[2].exampleNumber);
       });
 
       it('should revalidate after the country is changed', fakeAsync(() => {
@@ -522,7 +522,7 @@ describe('Phone Field Component', () => {
 
         expect(nativeElement.querySelector('input').placeholder)
           .toBe(component.phoneFieldComponent.countryData
-            .find(country => country.iso2 === 'us').placeholder);
+            .find(country => country.iso2 === 'us').exampleNumber);
       }));
 
       it('should initialize without a default country', fakeAsync(() => {
@@ -531,7 +531,7 @@ describe('Phone Field Component', () => {
         fixture.detectChanges();
 
         expect(nativeElement.querySelector('input').placeholder)
-          .toBe(component.phoneFieldComponent.countryData[0].placeholder);
+          .toBe(component.phoneFieldComponent.countryData[0].exampleNumber);
       }));
 
       it('should handle initializing with number', fakeAsync(() => {
@@ -582,7 +582,7 @@ describe('Phone Field Component', () => {
 
         setInput(nativeElement, '8675555309', fixture);
         expect(nativeElement.querySelector('input').value).toBe('8675555309');
-        expect(component.phoneControl.value).toEqual('+93 8675555309');
+        expect(component.phoneControl.value).toEqual('(867) 555-5309');
       }));
 
       it('should handle input change with a string with the an unexpected format', fakeAsync(() => {
@@ -590,9 +590,9 @@ describe('Phone Field Component', () => {
         tick();
         fixture.detectChanges();
 
-        setInput(nativeElement, '867-555-5309', fixture);
-        expect(nativeElement.querySelector('input').value).toBe('867-555-5309');
-        expect(component.phoneControl.value).toEqual('+93 867-555-5309');
+        setInput(nativeElement, '86755-5-309', fixture);
+        expect(nativeElement.querySelector('input').value).toBe('86755-5-309');
+        expect(component.phoneControl.value).toEqual('86755-5-309');
       }));
 
     });
@@ -767,7 +767,7 @@ describe('Phone Field Component', () => {
         expect(nativeElement.querySelector('input').value).toBe('1234');
 
         expect(component.phoneControl.value)
-          .toBe('+93 1234');
+          .toBe('1234');
 
         expect(component.phoneControl.valid).toBe(true);
 
@@ -817,7 +817,7 @@ describe('Phone Field Component', () => {
         fixture.detectChanges();
 
         expect(nativeElement.querySelector('input').placeholder)
-          .toBe(originalCountryData[2].placeholder);
+          .toBe(originalCountryData[2].exampleNumber);
       });
 
       it('should revalidate after the country is changed', fakeAsync(() => {
