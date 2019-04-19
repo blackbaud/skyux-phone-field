@@ -1,11 +1,11 @@
 <div
-  class="sky-form-group sky-input-group"
+  class="sky-form-group sky-input-group sky-phone-field"
 >
   <div
     class="sky-input-group-btn sky-phone-field-country-btn"
   >
     <sky-dropdown
-      [disabled]="disabled"
+      [disabled]="countrySelectDisabled"
       [label]="'skyux_phone_field_dropdown_label' | skyLibResources"
       [title]="selectedCountry.name + ' +' + selectedCountry.dialCode"
     >
@@ -16,7 +16,7 @@
         </div>
       </sky-dropdown-button>
       <sky-dropdown-menu>
-        <sky-dropdown-item *ngFor="let country of countryData; let i = index"
+        <sky-dropdown-item *ngFor="let country of countries; let i = index"
           [ngClass]="{
             'sky-phone-field-country-selected': i === 0,
             'sky-phone-field-country-default': country.iso2 === defaultCountry

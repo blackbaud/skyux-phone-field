@@ -73,7 +73,7 @@ export class SkyPhoneFieldInputDirective implements OnInit, OnDestroy, AfterView
 
   @Input()
   public set disabled(value: boolean) {
-    this.phoneFieldComponent.disabled = value;
+    this.phoneFieldComponent.countrySelectDisabled = value;
     this.adapterService.setElementDisabledState(this.elRef.nativeElement, value);
     this._disabled = value;
   }

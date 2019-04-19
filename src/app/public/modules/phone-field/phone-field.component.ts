@@ -36,7 +36,7 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
     if (value !== this._defaultCountry) {
       this._defaultCountry = value;
 
-      this.defaultCountryData = this.countryData.find(country => country.iso2 === value);
+      this.defaultCountryData = this.countries.find(country => country.iso2 === value);
       this.sortCountriesWithSelectedAndDefault(this.selectedCountry);
     }
   }
@@ -48,9 +48,9 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
   @Output()
   public selectedCountryChange = new EventEmitter<SkyPhoneFieldCountry>();
 
-  public countryData: SkyPhoneFieldCountry[];
+  public countries: SkyPhoneFieldCountry[];
 
-  public disabled = false;
+  public countrySelectDisabled = false;
 
   public set selectedCountry(newCountry: SkyPhoneFieldCountry) {
     if (this._selectedCountry !== newCountry) {
@@ -85,8 +85,8 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
      * The "slice" here ensures that we get a copy of the array and not the global original. This
      * ensures that multiple instances of the component don't overwrite the original data.
      */
-    this.countryData = intlTelInputGlobals.getCountryData().slice(0);
-    this.defaultCountryData = this.countryData.find(country => country.iso2 === 'us');
+    this.countries = intlTelInputGlobals.getCountryData().slice(0);
+    this.defaultCountryData = this.countries.find(country => country.iso2 === 'us');
     this.selectedCountry = this.defaultCountryData;
   }
 
@@ -108,13 +108,13 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
    * for the default country.
    */
   public onCountrySelected(countryCode: string): void {
-    this.selectedCountry = this.countryData.find(countryInfo => countryInfo.iso2 === countryCode);
+    this.selectedCountry = this.countries.find(countryInfo => countryInfo.iso2 === countryCode);
   }
 
   private sortCountriesWithSelectedAndDefault(selectedCountry: SkyPhoneFieldCountry): void {
-    this.countryData.splice(this.countryData.indexOf(selectedCountry), 1);
+    this.countries.splice(this.countries.indexOf(selectedCountry), 1);
 
-      let sortedNewCountries = this.countryData
+      let sortedNewCountries = this.countries
         .sort((a, b) => {
           if ((a === this.defaultCountryData || a.name < b.name) && b !== this.defaultCountryData) {
             return -1;
@@ -124,7 +124,7 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
         });
 
       sortedNewCountries.splice(0, 0, selectedCountry);
-      this.countryData = sortedNewCountries;
+      this.countries = sortedNewCountries;
   }
 
 }
