@@ -8,20 +8,12 @@ import {
   Input
 } from '@angular/core';
 
-require('intl-tel-input/build/js/utils');
-
-require('intl-tel-input/build/js/intlTelInput');
-
-/**
- * NOTE: We can not type these due the the current @types/intl-tel-input version having an
- * undeclared type which causes linting errors.
- */
-declare var intlTelInputUtils: any;
-declare var intlTelInputGlobals: any;
+// import 'intl-tel-input';
 
 import {
   SkyPhoneFieldCountry
 } from './types';
+import { PhoneNumberUtil, PhoneNumberType, PhoneNumberFormat } from 'google-libphonenumber';
 
 @Component({
   selector: 'sky-phone-field',
@@ -57,11 +49,10 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
       this._selectedCountry = newCountry;
 
       if (!this._selectedCountry.exampleNumber) {
-        this._selectedCountry.exampleNumber = intlTelInputUtils.getExampleNumber(
-          newCountry.iso2,
-          true,
-          intlTelInputUtils.numberType.FIXED_LINE
-        );
+        const numberObj = this.phoneUtils.getExampleNumberForType(newCountry.iso2,
+          PhoneNumberType.FIXED_LINE);
+        this._selectedCountry.exampleNumber = this.phoneUtils.format(numberObj,
+          PhoneNumberFormat.NATIONAL);
       }
 
       this.sortCountriesWithSelectedAndDefault(newCountry);
@@ -76,6 +67,8 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
 
   private defaultCountryData: SkyPhoneFieldCountry;
 
+  private phoneUtils = PhoneNumberUtil.getInstance();
+
   private _defaultCountry: string;
 
   private _selectedCountry: SkyPhoneFieldCountry;
@@ -85,7 +78,22 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
      * The "slice" here ensures that we get a copy of the array and not the global original. This
      * ensures that multiple instances of the component don't overwrite the original data.
      */
-    this.countries = intlTelInputGlobals.getCountryData().slice(0);
+    this.countries = [
+    {
+      name: 'Australia',
+      iso2: 'au',
+      dialCode: '61'
+    },
+    {
+      name: 'Austria (Österreich)',
+      iso2: 'at',
+      dialCode: '43'
+    },
+    {
+      name: 'United States',
+      iso2: 'us',
+      dialCode: '1'
+    }];
     this.defaultCountryData = this.countries.find(country => country.iso2 === 'us');
     this.selectedCountry = this.defaultCountryData;
   }
