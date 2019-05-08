@@ -255,6 +255,8 @@ export class SkyPhoneFieldInputDirective implements OnInit, OnDestroy, AfterView
           return phoneNumber;
       }
     } catch (e) {
+      /* sanity check */
+      /* istanbul ignore next */
       return phoneNumber;
     }
   }
