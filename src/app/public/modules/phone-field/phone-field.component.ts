@@ -15,6 +15,8 @@ import {
 } from './types';
 import { PhoneNumberUtil, PhoneNumberType, PhoneNumberFormat } from 'google-libphonenumber';
 
+import 'intl-tel-input';
+
 @Component({
   selector: 'sky-phone-field',
   templateUrl: './phone-field.component.html',
@@ -78,22 +80,7 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
      * The "slice" here ensures that we get a copy of the array and not the global original. This
      * ensures that multiple instances of the component don't overwrite the original data.
      */
-    this.countries = [
-    {
-      name: 'Australia',
-      iso2: 'au',
-      dialCode: '61'
-    },
-    {
-      name: 'Austria (Österreich)',
-      iso2: 'at',
-      dialCode: '43'
-    },
-    {
-      name: 'United States',
-      iso2: 'us',
-      dialCode: '1'
-    }];
+    this.countries = (window as any).intlTelInputGlobals.getCountryData().slice(0);
     this.defaultCountryData = this.countries.find(country => country.iso2 === 'us');
     this.selectedCountry = this.defaultCountryData;
   }
