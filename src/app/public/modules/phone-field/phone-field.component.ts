@@ -8,14 +8,17 @@ import {
   Input
 } from '@angular/core';
 
-// import 'intl-tel-input';
+import {
+  PhoneNumberFormat,
+  PhoneNumberType,
+  PhoneNumberUtil
+} from 'google-libphonenumber';
+
+import 'intl-tel-input';
 
 import {
   SkyPhoneFieldCountry
 } from './types';
-import { PhoneNumberUtil, PhoneNumberType, PhoneNumberFormat } from 'google-libphonenumber';
-
-import 'intl-tel-input';
 
 @Component({
   selector: 'sky-phone-field',
@@ -79,6 +82,9 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
     /**
      * The "slice" here ensures that we get a copy of the array and not the global original. This
      * ensures that multiple instances of the component don't overwrite the original data.
+     *
+     * We must type the window object as any here as the intl-tel-input library adds its object
+     * to the main window object.
      */
     this.countries = (window as any).intlTelInputGlobals.getCountryData().slice(0);
     this.defaultCountryData = this.countries.find(country => country.iso2 === 'us');
