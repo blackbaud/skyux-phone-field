@@ -34,11 +34,13 @@
     "@skyux/popovers": "^3.0.0"
   },
   "dependencies": {
-    "intl-tel-input": "14.0.8"
+    "intl-tel-input": "14.0.8",
+    "google-libphonenumber": "3.2.2",
+    "@types/google-libphonenumber": "7.4.17"
   },
   "devDependencies": {
-    "@blackbaud/skyux": "2.48.0",
-    "@blackbaud/skyux-builder": "1.33.1",
+    "@blackbaud/skyux": "2.49.1",
+    "@blackbaud/skyux-builder": "1.34.1",
     "@skyux-sdk/builder-plugin-skyux": "1.0.0"
   }
 }
