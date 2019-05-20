@@ -19,6 +19,7 @@ import 'intl-tel-input';
 import {
   SkyPhoneFieldCountry
 } from './types';
+import { SkyAutocompleteSelectionChange } from '@skyux/lookup';
 
 @Component({
   selector: 'sky-phone-field',
@@ -48,6 +49,10 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
   public countries: SkyPhoneFieldCountry[];
 
   public countrySelectDisabled = false;
+
+  public countrySearchShown = false;
+
+  public propList = ['name', 'iso2'];
 
   public set selectedCountry(newCountry: SkyPhoneFieldCountry) {
     if (this._selectedCountry !== newCountry) {
@@ -108,8 +113,29 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
    * @param countryCode The International Organization for Standardization's two-letter code
    * for the default country.
    */
-  public onCountrySelected(countryCode: string): void {
-    this.selectedCountry = this.countries.find(countryInfo => countryInfo.iso2 === countryCode);
+  public onCountrySelected(newCountry: SkyAutocompleteSelectionChange): void {
+    if (newCountry.selectedItem) {
+      this.selectedCountry = this.countries.find(countryInfo => countryInfo.iso2 ===
+        newCountry.selectedItem.iso2);
+      this.countrySearchShown = false;
+    }
+  }
+
+  public searchForCountry(searchText: string) {
+
+    if (searchText.length <= 1) {
+      return;
+    }
+
+    if (searchText.length === 2) {
+      this.countries.find(country => {
+        return country.iso2 === searchText;
+      });
+    }
+  }
+
+  public toggleCountrySearch() {
+    this.countrySearchShown = !this.countrySearchShown;
   }
 
   private sortCountriesWithSelectedAndDefault(selectedCountry: SkyPhoneFieldCountry): void {

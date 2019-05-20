@@ -11,8 +11,16 @@ import {
 } from '@angular/forms';
 
 import {
+  SkyIconModule
+} from '@skyux/indicators';
+
+import {
   SkyI18nModule
 } from '@skyux/i18n';
+
+import {
+  SkyAutocompleteModule
+} from '@skyux/lookup';
 
 import {
   SkyDropdownModule
@@ -40,7 +48,9 @@ import {
     FormsModule,
     SkyDropdownModule,
     SkyI18nModule,
-    SkyPhoneFieldResourcesModule
+    SkyPhoneFieldResourcesModule,
+    SkyIconModule,
+    SkyAutocompleteModule
   ],
   exports: [
     SkyPhoneFieldComponent,
