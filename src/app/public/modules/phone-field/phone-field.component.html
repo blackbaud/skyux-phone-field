@@ -5,45 +5,9 @@
     <div
       class="sky-input-group-btn sky-phone-field-country-btn"
     >
-      <!-- <sky-dropdown
-        [disabled]="countrySelectDisabled"
-        [label]="'skyux_phone_field_dropdown_label' | skyLibResources"
-        [title]="selectedCountry.name + ' +' + selectedCountry.dialCode"
-      >
-        <sky-dropdown-button>
-          <div
-            [className]="'iti-flag ' + selectedCountry.iso2"
-          >
-          </div>
-        </sky-dropdown-button>
-        <sky-dropdown-menu>
-          <sky-dropdown-item *ngFor="let country of countries; let i = index"
-            [ngClass]="{
-              'sky-phone-field-country-selected': i === 0,
-              'sky-phone-field-country-default': country.iso2 === defaultCountry
-            }"
-          >
-            <button
-              type="button"
-              (click)="onCountrySelected(country.iso2)"
-            >
-              <div
-                [className]="'iti-flag ' + country.iso2"
-              >
-              </div>
-              {{ country.name }}
-              <span
-                class="sky-deemphasized"
-              >
-                +{{ country.dialCode }}
-              </span>
-            </button>
-          </sky-dropdown-item>
-        </sky-dropdown-menu>
-      </sky-dropdown> -->
       <button
         class="sky-btn sky-btn-default"
-        (click)="toggleCountrySearch()"
+        (click)="toggleCountrySearch(true)"
       >
         <div
           [className]="'iti-flag ' + selectedCountry.iso2"
@@ -56,8 +20,8 @@
   <ng-container *ngIf="countrySearchShown">
     <sky-autocomplete
       class="sky-phone-field-country-search"
-      [propertiesToSearch]="propList"
       [data]="countries"
+      [propertiesToSearch]="['name', 'iso2']"
       [searchResultTemplate]="countrySearchResultTemplate"
       [searchTextMinimumCharacters]="2"
       (selectionChange)="onCountrySelected($event)"
@@ -65,9 +29,11 @@
       <input
         skyAutocomplete
         id="my-autocomplete-template-driven"
-        type="text"
         name="selectedCountry"
-        [(ngModel)]="selectedCountry">
+        type="text"
+        [(ngModel)]="selectedCountry"
+        #countrySearchInput
+      >
     </sky-autocomplete>
     <div
       class="sky-search-item-dismiss"
@@ -76,7 +42,7 @@
       <button
         class="sky-btn sky-btn-default sky-phone-field-search-btn-dismiss"
         type="button"
-        (click)="toggleCountrySearch()"
+        (click)="toggleCountrySearch(false)"
       >
         <sky-icon
           icon="chevron-circle-left"
