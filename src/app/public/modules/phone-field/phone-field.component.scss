@@ -14,6 +14,11 @@
 
 }
 
+.sky-phone-field-container {
+  width: 100%;
+  display: flex;
+}
+
 .sky-phone-field-country-search {
   flex-grow: 1;
 
@@ -30,8 +35,7 @@
 }
 
 .sky-phone-field-search-btn-dismiss {
-  border-left: none;
-  border-radius: 0;
+  border-color: transparent;
 }
 
 .sky-phone-field-country-selected, .sky-phone-field-country-default {

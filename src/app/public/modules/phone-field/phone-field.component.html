@@ -1,7 +1,12 @@
 <div
   class="sky-form-group sky-input-group sky-phone-field"
 >
-  <ng-container *ngIf="!countrySearchShown">
+  <ng-container *ngIf="phoneInputShown">
+    <span
+      class="sky-phone-field-container"
+      [@phoneInputAnimation]
+      (@phoneInputAnimation.done)="phoneInputAnimationEnd($event)"
+    >
     <div
       class="sky-input-group-btn sky-phone-field-country-btn"
     >
@@ -16,41 +21,54 @@
       </button>
     </div>
     <ng-content></ng-content>
+  </span>
   </ng-container>
   <ng-container *ngIf="countrySearchShown">
-    <sky-autocomplete
-      class="sky-phone-field-country-search"
-      [data]="countries"
-      [propertiesToSearch]="['name', 'iso2']"
-      [searchResultTemplate]="countrySearchResultTemplate"
-      [searchTextMinimumCharacters]="2"
-      (selectionChange)="onCountrySelected($event)"
+    <span
+      class="sky-phone-field-container"
+      [@countrySearchAnimation]
+      (@countrySearchAnimation.done)="countrySearchAnimationEnd($event)"
+
     >
-      <input
-        skyAutocomplete
-        id="my-autocomplete-template-driven"
-        name="selectedCountry"
-        type="text"
-        [(ngModel)]="selectedCountry"
-        #countrySearchInput
+      <form
+        class="sky-phone-field-country-search"
+        novalidate
+        [formGroup]="countrySearchForm"
       >
-    </sky-autocomplete>
-    <div
-      class="sky-search-item-dismiss"
-    >
-      <!-- ADD TITLE BACK -->
-      <button
-        class="sky-btn sky-btn-default sky-phone-field-search-btn-dismiss"
-        type="button"
-        (click)="toggleCountrySearch(false)"
-      >
-        <sky-icon
-          icon="chevron-circle-left"
-          size="lg"
+        <sky-autocomplete
+          [data]="countries"
+          [propertiesToSearch]="['name', 'iso2']"
+          [searchResultTemplate]="countrySearchResultTemplate"
+          [searchTextMinimumCharacters]="2"
+          (selectionChange)="onCountrySelected($event)"
         >
-        </sky-icon>
-      </button>
-    </div>
+          <input
+            skyAutocomplete
+            id="my-autocomplete-template-driven"
+            name="selectedCountry"
+            type="text"
+            formControlName="countrySearch"
+            #countrySearchInput
+          >
+        </sky-autocomplete>
+      </form>
+      <div
+        class="sky-search-item-dismiss"
+      >
+        <!-- ADD TITLE BACK -->
+        <button
+          class="sky-btn sky-phone-field-search-btn-dismiss"
+          type="button"
+          (click)="toggleCountrySearch(false)"
+        >
+          <sky-icon
+            icon="chevron-circle-left"
+            size="lg"
+          >
+          </sky-icon>
+        </button>
+      </div>
+    </span>
   </ng-container>
 </div>
 

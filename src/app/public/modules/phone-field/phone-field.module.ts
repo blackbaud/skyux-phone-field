@@ -7,7 +7,7 @@ import {
 } from '@angular/common';
 
 import {
-  FormsModule
+  FormsModule, ReactiveFormsModule
 } from '@angular/forms';
 
 import {
@@ -37,6 +37,7 @@ import {
 import {
   SkyPhoneFieldInputDirective
 } from './phone-field-input.directive';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -44,8 +45,10 @@ import {
     SkyPhoneFieldInputDirective
   ],
   imports: [
+    BrowserAnimationsModule,
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     SkyDropdownModule,
     SkyI18nModule,
     SkyPhoneFieldResourcesModule,

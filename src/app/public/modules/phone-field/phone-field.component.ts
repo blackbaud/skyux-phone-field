@@ -6,14 +6,16 @@ import {
   OnInit,
   Output,
   Input,
-  QueryList,
-  ViewChildren,
-  AfterViewInit,
-  ElementRef
+  ViewChild,
+  ElementRef,
+  trigger,
+  transition,
+  style,
+  animate
 } from '@angular/core';
 
 import {
-  SkyAutocompleteSelectionChange
+  SkyAutocompleteSelectionChange, SkyAutocompleteInputDirective
 } from '@skyux/lookup';
 
 import {
@@ -28,13 +30,60 @@ import {
   SkyPhoneFieldCountry
 } from './types';
 
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup
+} from '@angular/forms';
+import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
+
 @Component({
   selector: 'sky-phone-field',
   templateUrl: './phone-field.component.html',
   styleUrls: ['./phone-field.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [
+    trigger(
+      'countrySearchAnimation', [
+        transition(':enter', [
+          style({
+            opacity: 0,
+            width: 0
+          }),
+          animate('450ms ease-in', style({
+            opacity: 1,
+            width: '*'
+          }))
+        ]),
+        transition(':leave', [
+          animate('450ms ease-in', style({
+            opacity: 0,
+            width: 0
+          }))
+        ])
+      ]
+    ),
+    trigger(
+      'phoneInputAnimation', [
+        transition(':enter', [
+          style({
+            opacity: 0
+          }),
+          animate('150ms ease-in', style({
+            opacity: 1
+          }))
+        ]),
+        transition(':leave', [
+          animate('150ms ease-in', style({
+            opacity: 0
+          }))
+        ])
+      ]
+    )
+  ]
 })
-export class SkyPhoneFieldComponent implements OnDestroy, OnInit, AfterViewInit {
+export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
 
   @Input()
   public set defaultCountry(value: string) {
@@ -58,9 +107,13 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit, AfterViewInit 
   public countrySelectDisabled = false;
 
   public countrySearchShown = false;
+  public phoneInputShown = true;
 
-  @ViewChildren('countrySearchInput')
-  public countrySearchInput: QueryList<ElementRef>;
+  @ViewChild('countrySearchInput')
+  public countrySearchInput: ElementRef;
+
+  @ViewChild(SkyAutocompleteInputDirective)
+  public countrySearchAutocompleteDirective: SkyAutocompleteInputDirective;
 
   public set selectedCountry(newCountry: SkyPhoneFieldCountry) {
     if (newCountry && this._selectedCountry !== newCountry) {
@@ -87,11 +140,15 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit, AfterViewInit 
 
   private phoneUtils = PhoneNumberUtil.getInstance();
 
+  public countrySearchForm: FormGroup;
+
   private _defaultCountry: string;
 
   private _selectedCountry: SkyPhoneFieldCountry;
 
-  constructor() {
+  constructor(
+    private formBuilder: FormBuilder
+  ) {
     /**
      * The "slice" here ensures that we get a copy of the array and not the global original. This
      * ensures that multiple instances of the component don't overwrite the original data.
@@ -102,6 +159,10 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit, AfterViewInit 
     this.countries = (window as any).intlTelInputGlobals.getCountryData().slice(0);
     this.defaultCountryData = this.countries.find(country => country.iso2 === 'us');
     this.selectedCountry = this.defaultCountryData;
+
+    this.countrySearchForm = this.formBuilder.group({
+      countrySearch: new FormControl(this.selectedCountry)
+    });
   }
 
   public ngOnInit(): void {
@@ -110,12 +171,27 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit, AfterViewInit 
     } else {
       this.selectedCountry = this.defaultCountryData;
     }
-  }
 
-  public ngAfterViewInit(): void {
-    this.countrySearchInput.changes.subscribe(input => {
-      if (input.length > 0) {
-        input.first.nativeElement.focus();
+    let blurSubscription: Subscription;
+
+    this.countrySearchForm.get('countrySearch').valueChanges.subscribe(newValue => {
+      if (newValue) {
+        this.selectedCountry = newValue;
+
+        /**
+         * Sanity check. The blur event should fire before any new value is set based on a click.
+         * However, this is here to ensure this behavior.
+         */
+        if (blurSubscription) {
+          blurSubscription.unsubscribe();
+        }
+      } else {
+        blurSubscription = Observable
+          .fromEvent(this.countrySearchInput.nativeElement, 'blur')
+          .take(1)
+          .subscribe(() => {
+            this.countrySearchForm.get('countrySearch').setValue(this.selectedCountry);
+          });
       }
     });
   }
@@ -138,23 +214,43 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit, AfterViewInit 
   }
 
   public toggleCountrySearch(showSearch: boolean): void {
-    this.countrySearchShown = showSearch;
+    if (showSearch) {
+      this.phoneInputShown = false;
+    } else {
+      this.countrySearchShown = false;
+    }
+  }
+
+  public countrySearchAnimationEnd() {
+    if (!this.countrySearchShown) {
+      this.phoneInputShown = true;
+    } else {
+      this.countrySearchInput.nativeElement.focus();
+      this.countrySearchInput.nativeElement.select();
+      this.countrySearchAutocompleteDirective.textChanges.emit({ value: this.selectedCountry.name });
+    }
+  }
+
+  public phoneInputAnimationEnd() {
+    if (!this.phoneInputShown) {
+      this.countrySearchShown = true;
+    }
   }
 
   private sortCountriesWithSelectedAndDefault(selectedCountry: SkyPhoneFieldCountry): void {
     this.countries.splice(this.countries.indexOf(selectedCountry), 1);
 
-      let sortedNewCountries = this.countries
-        .sort((a, b) => {
-          if ((a === this.defaultCountryData || a.name < b.name) && b !== this.defaultCountryData) {
-            return -1;
-          } else {
-            return 1;
-          }
-        });
+    let sortedNewCountries = this.countries
+      .sort((a, b) => {
+        if ((a === this.defaultCountryData || a.name < b.name) && b !== this.defaultCountryData) {
+          return -1;
+        } else {
+          return 1;
+        }
+      });
 
-      sortedNewCountries.splice(0, 0, selectedCountry);
-      this.countries = sortedNewCountries;
+    sortedNewCountries.splice(0, 0, selectedCountry);
+    this.countries = sortedNewCountries;
   }
 
 }
