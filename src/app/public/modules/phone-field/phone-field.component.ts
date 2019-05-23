@@ -1,21 +1,28 @@
 import {
+  animate,
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
   EventEmitter,
+  Input,
   OnDestroy,
   OnInit,
   Output,
-  Input,
-  ViewChild,
-  ElementRef,
-  trigger,
-  transition,
   style,
-  animate
+  transition,
+  trigger,
+  ViewChild
 } from '@angular/core';
 
 import {
-  SkyAutocompleteSelectionChange, SkyAutocompleteInputDirective
+  FormBuilder,
+  FormControl,
+  FormGroup
+} from '@angular/forms';
+
+import {
+  SkyAutocompleteInputDirective,
+  SkyAutocompleteSelectionChange
 } from '@skyux/lookup';
 
 import {
@@ -27,23 +34,31 @@ import {
 import 'intl-tel-input';
 
 import {
+  Observable
+} from 'rxjs/Observable';
+
+import {
+  Subscription
+} from 'rxjs/Subscription';
+
+import {
   SkyPhoneFieldCountry
 } from './types';
 
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup
-} from '@angular/forms';
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
-
+/**
+ * NOTE: The no-op animation is here in order to block the input's "fade in" animation
+ * from firing on initial load. For more information on this technique you can see
+ * https://www.bennadel.com/blog/3417-using-no-op-transitions-to-prevent-animation-during-the-initial-render-of-ngfor-in-angular-5-2-6.htm
+ */
 @Component({
   selector: 'sky-phone-field',
   templateUrl: './phone-field.component.html',
   styleUrls: ['./phone-field.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
+    trigger('initalLoad', [
+      transition(':enter', [])
+    ]),
     trigger(
       'countrySearchAnimation', [
         transition(':enter', [
@@ -51,13 +66,13 @@ import { Subscription } from 'rxjs/Subscription';
             opacity: 0,
             width: 0
           }),
-          animate('300ms ease-in', style({
+          animate('200ms ease-in', style({
             opacity: 1,
             width: '*'
           }))
         ]),
         transition(':leave', [
-          animate('300ms ease-in', style({
+          animate('200ms ease-in', style({
             opacity: 0,
             width: 0
           }))

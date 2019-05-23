@@ -1,11 +1,15 @@
 <div
   class="sky-form-group sky-input-group sky-phone-field"
+  [@initalLoad]
 >
   <div
     class="sky-input-group-btn sky-phone-field-country-btn"
   >
     <button
+      attr.title="{{ 'skyux_phone_field_country_select_label' | skyAppResources }} {{ 'skyux_phone_field_country_selected_label' | skyAppResources:selectedCountry.name }}"
+      attr.aria-label="{{ 'skyux_phone_field_country_select_label' | skyAppResources }} {{ 'skyux_phone_field_country_selected_label' | skyAppResources:selectedCountry.name }}"
       class="sky-btn sky-btn-default"
+      [disabled]="countrySelectDisabled"
       (click)="toggleCountrySearch(true)"
     >
       <div
@@ -31,8 +35,8 @@
 
     >
       <form
-        class="sky-phone-field-country-search"
         novalidate
+        class="sky-phone-field-country-search"
         [formGroup]="countrySearchForm"
       >
         <sky-autocomplete
@@ -44,10 +48,10 @@
         >
           <input
             skyAutocomplete
+            formControlName="countrySearch"
             id="my-autocomplete-template-driven"
             name="selectedCountry"
             type="text"
-            formControlName="countrySearch"
             #countrySearchInput
           >
         </sky-autocomplete>
@@ -59,6 +63,7 @@
         <button
           class="sky-btn sky-phone-field-search-btn-dismiss"
           type="button"
+          [attr.title]="'skyux_phone_field_country_search_dismiss' | skyLibResources"
           (click)="toggleCountrySearch(false)"
         >
           <sky-icon
@@ -76,7 +81,6 @@
   let-item="item"
   #countrySearchResultTemplate
 >
-
   <div
     [className]="'iti-flag ' + item.iso2"
   >

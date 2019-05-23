@@ -11,6 +11,10 @@ import {
 } from '@angular/forms';
 
 import {
+  BrowserAnimationsModule
+} from '@angular/platform-browser/animations';
+
+import {
   SkyIconModule
 } from '@skyux/indicators';
 
@@ -37,7 +41,6 @@ import {
 import {
   SkyPhoneFieldInputDirective
 } from './phone-field-input.directive';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
