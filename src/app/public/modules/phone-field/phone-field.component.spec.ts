@@ -55,9 +55,9 @@ describe('Phone Field Component', () => {
 
   function setCountry(countryName: string, compFixture: ComponentFixture<any>) {
     compFixture.debugElement.query(By.css('.sky-phone-field-country-btn .sky-btn-default'))
-          .nativeElement.click();
+      .nativeElement.click();
 
-          compFixture.detectChanges();
+    compFixture.detectChanges();
     tick();
     compFixture.detectChanges();
     tick();
@@ -449,6 +449,36 @@ describe('Phone Field Component', () => {
     });
 
     describe('country selector', () => {
+
+      it('should focus the autocomplete when it is shown', fakeAsync(() => {
+        fixture.detectChanges();
+        fixture.debugElement.query(By.css('.sky-phone-field-country-btn .sky-btn-default'))
+          .nativeElement.click();
+
+        fixture.detectChanges();
+        tick();
+        fixture.detectChanges();
+        tick();
+
+        expect(document.activeElement === nativeElement.querySelector('input'))
+          .toBeTruthy();
+      }));
+
+      it('should select the autocomplete text when it is shown', fakeAsync(() => {
+        fixture.detectChanges();
+        fixture.debugElement.query(By.css('.sky-phone-field-country-btn .sky-btn-default'))
+          .nativeElement.click();
+
+        fixture.detectChanges();
+        tick();
+        fixture.detectChanges();
+        tick();
+
+        let autocompleteInput: HTMLInputElement = nativeElement.querySelector('input') as HTMLInputElement;
+
+        expect(autocompleteInput.selectionStart).toBe(0);
+        expect(autocompleteInput.selectionEnd).toBe(13);
+      }));
 
       it('should update the placeholder to the new country', fakeAsync(() => {
         fixture.detectChanges();
@@ -917,7 +947,36 @@ describe('Phone Field Component', () => {
 
     describe('country selector', () => {
 
-      // tslint:disable-next-line:no-focused-tests
+      it('should focus the autocomplete when it is shown', fakeAsync(() => {
+        fixture.detectChanges();
+        fixture.debugElement.query(By.css('.sky-phone-field-country-btn .sky-btn-default'))
+          .nativeElement.click();
+
+        fixture.detectChanges();
+        tick();
+        fixture.detectChanges();
+        tick();
+
+        expect(document.activeElement === nativeElement.querySelector('input'))
+          .toBeTruthy();
+      }));
+
+      it('should select the autocomplete text when it is shown', fakeAsync(() => {
+        fixture.detectChanges();
+        fixture.debugElement.query(By.css('.sky-phone-field-country-btn .sky-btn-default'))
+          .nativeElement.click();
+
+        fixture.detectChanges();
+        tick();
+        fixture.detectChanges();
+        tick();
+
+        let autocompleteInput: HTMLInputElement = nativeElement.querySelector('input') as HTMLInputElement;
+
+        expect(autocompleteInput.selectionStart).toBe(0);
+        expect(autocompleteInput.selectionEnd).toBe(13);
+      }));
+
       it('should update the placeholder to the new country', fakeAsync(() => {
         fixture.detectChanges();
         let originalCountryData = component.phoneFieldComponent.countries.slice(0);
