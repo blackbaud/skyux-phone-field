@@ -1,25 +1,25 @@
 <div
   class="sky-form-group sky-input-group sky-phone-field"
 >
+  <div
+    class="sky-input-group-btn sky-phone-field-country-btn"
+  >
+    <button
+      class="sky-btn sky-btn-default"
+      (click)="toggleCountrySearch(true)"
+    >
+      <div
+        [className]="'iti-flag ' + selectedCountry.iso2"
+      >
+      </div>
+    </button>
+  </div>
   <ng-container *ngIf="phoneInputShown">
     <span
       class="sky-phone-field-container"
       [@phoneInputAnimation]
       (@phoneInputAnimation.done)="phoneInputAnimationEnd($event)"
     >
-    <div
-      class="sky-input-group-btn sky-phone-field-country-btn"
-    >
-      <button
-        class="sky-btn sky-btn-default"
-        (click)="toggleCountrySearch(true)"
-      >
-        <div
-          [className]="'iti-flag ' + selectedCountry.iso2"
-        >
-        </div>
-      </button>
-    </div>
     <ng-content></ng-content>
   </span>
   </ng-container>

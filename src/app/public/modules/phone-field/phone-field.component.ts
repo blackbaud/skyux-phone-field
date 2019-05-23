@@ -51,13 +51,13 @@ import { Subscription } from 'rxjs/Subscription';
             opacity: 0,
             width: 0
           }),
-          animate('450ms ease-in', style({
+          animate('300ms ease-in', style({
             opacity: 1,
             width: '*'
           }))
         ]),
         transition(':leave', [
-          animate('450ms ease-in', style({
+          animate('300ms ease-in', style({
             opacity: 0,
             width: 0
           }))
