@@ -34,14 +34,6 @@ import {
 import 'intl-tel-input';
 
 import {
-  Observable
-} from 'rxjs/Observable';
-
-import {
-  Subscription
-} from 'rxjs/Subscription';
-
-import {
   SkyPhoneFieldCountry
 } from './types';
 
@@ -176,7 +168,7 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
     this.selectedCountry = this.defaultCountryData;
 
     this.countrySearchForm = this.formBuilder.group({
-      countrySearch: new FormControl(this.selectedCountry)
+      countrySearch: new FormControl()
     });
   }
 
@@ -187,26 +179,9 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
       this.selectedCountry = this.defaultCountryData;
     }
 
-    let blurSubscription: Subscription;
-
     this.countrySearchForm.get('countrySearch').valueChanges.subscribe(newValue => {
       if (newValue) {
         this.selectedCountry = newValue;
-
-        /**
-         * Sanity check. The blur event should fire before any new value is set based on a click.
-         * However, this is here to ensure this behavior.
-         */
-        if (blurSubscription) {
-          blurSubscription.unsubscribe();
-        }
-      } else {
-        blurSubscription = Observable
-          .fromEvent(this.countrySearchInput.nativeElement, 'blur')
-          .take(1)
-          .subscribe(() => {
-            this.countrySearchForm.get('countrySearch').setValue(this.selectedCountry);
-          });
       }
     });
   }
@@ -233,6 +208,8 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
       this.phoneInputShown = false;
     } else {
       this.countrySearchShown = false;
+
+      this.countrySearchForm.get('countrySearch').setValue(undefined);
     }
   }
 
@@ -241,8 +218,6 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
       this.phoneInputShown = true;
     } else {
       this.countrySearchInput.nativeElement.focus();
-      this.countrySearchInput.nativeElement.select();
-      this.countrySearchAutocompleteDirective.textChanges.emit({ value: this.selectedCountry.name });
     }
   }
 
