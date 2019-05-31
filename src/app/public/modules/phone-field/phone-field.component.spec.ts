@@ -464,54 +464,6 @@ describe('Phone Field Component', () => {
           .toBeTruthy();
       }));
 
-      it('should reset the selected country when blurred on an empty state', fakeAsync(() => {
-        fixture.detectChanges();
-        fixture.debugElement.query(By.css('.sky-phone-field-country-btn .sky-btn-default'))
-          .nativeElement.click();
-
-          fixture.detectChanges();
-        tick();
-        fixture.detectChanges();
-        tick();
-
-        let countrySearchInput: HTMLInputElement = fixture.debugElement.query(By.css('input'))
-          .nativeElement;
-        countrySearchInput.value = '';
-
-        SkyAppTestUtility.fireDomEvent(countrySearchInput, 'keyup');
-
-        fixture.detectChanges();
-        tick();
-        fixture.detectChanges();
-        tick();
-
-        SkyAppTestUtility.fireDomEvent(countrySearchInput, 'blur');
-
-        fixture.detectChanges();
-        tick();
-        fixture.detectChanges();
-        tick();
-
-        expect(countrySearchInput.value)
-          .toBe('United States');
-      }));
-
-      it('should select the autocomplete text when it is shown', fakeAsync(() => {
-        fixture.detectChanges();
-        fixture.debugElement.query(By.css('.sky-phone-field-country-btn .sky-btn-default'))
-          .nativeElement.click();
-
-        fixture.detectChanges();
-        tick();
-        fixture.detectChanges();
-        tick();
-
-        let autocompleteInput: HTMLInputElement = nativeElement.querySelector('input') as HTMLInputElement;
-
-        expect(autocompleteInput.selectionStart).toBe(0);
-        expect(autocompleteInput.selectionEnd).toBe(13);
-      }));
-
       it('should update the placeholder to the new country', fakeAsync(() => {
         fixture.detectChanges();
         let originalCountryData = component.phoneFieldComponent.countries.slice(0);
@@ -991,54 +943,6 @@ describe('Phone Field Component', () => {
 
         expect(document.activeElement === nativeElement.querySelector('input'))
           .toBeTruthy();
-      }));
-
-      it('should reset the selected country when blurred on an empty state', fakeAsync(() => {
-        fixture.detectChanges();
-        fixture.debugElement.query(By.css('.sky-phone-field-country-btn .sky-btn-default'))
-          .nativeElement.click();
-
-          fixture.detectChanges();
-        tick();
-        fixture.detectChanges();
-        tick();
-
-        let countrySearchInput: HTMLInputElement = fixture.debugElement.query(By.css('input'))
-          .nativeElement;
-        countrySearchInput.value = '';
-
-        SkyAppTestUtility.fireDomEvent(countrySearchInput, 'keyup');
-
-        fixture.detectChanges();
-        tick();
-        fixture.detectChanges();
-        tick();
-
-        SkyAppTestUtility.fireDomEvent(countrySearchInput, 'blur');
-
-        fixture.detectChanges();
-        tick();
-        fixture.detectChanges();
-        tick();
-
-        expect(countrySearchInput.value)
-          .toBe('United States');
-      }));
-
-      it('should select the autocomplete text when it is shown', fakeAsync(() => {
-        fixture.detectChanges();
-        fixture.debugElement.query(By.css('.sky-phone-field-country-btn .sky-btn-default'))
-          .nativeElement.click();
-
-        fixture.detectChanges();
-        tick();
-        fixture.detectChanges();
-        tick();
-
-        let autocompleteInput: HTMLInputElement = nativeElement.querySelector('input') as HTMLInputElement;
-
-        expect(autocompleteInput.selectionStart).toBe(0);
-        expect(autocompleteInput.selectionEnd).toBe(13);
       }));
 
       it('should update the placeholder to the new country', fakeAsync(() => {
