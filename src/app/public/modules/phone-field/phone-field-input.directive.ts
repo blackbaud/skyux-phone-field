@@ -59,8 +59,7 @@ const SKY_PHONE_FIELD_VALIDATOR = {
   selector: '[skyPhoneFieldInput]',
   providers: [
     SKY_PHONE_FIELD_VALUE_ACCESSOR,
-    SKY_PHONE_FIELD_VALIDATOR,
-    SkyPhoneFieldAdapterService
+    SKY_PHONE_FIELD_VALIDATOR
   ]
 })
 export class SkyPhoneFieldInputDirective implements OnInit, OnDestroy, AfterViewInit,

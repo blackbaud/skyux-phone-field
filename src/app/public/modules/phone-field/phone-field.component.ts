@@ -34,6 +34,10 @@ import {
 import 'intl-tel-input';
 
 import {
+  SkyPhoneFieldAdapterService
+} from './phone-field-adapter.service';
+
+import {
   SkyPhoneFieldCountry
 } from './types';
 
@@ -47,6 +51,9 @@ import {
   templateUrl: './phone-field.component.html',
   styleUrls: ['./phone-field.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    SkyPhoneFieldAdapterService
+  ],
   animations: [
     trigger('initalLoad', [
       transition(':enter', [])
@@ -114,7 +121,10 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
   public countrySelectDisabled = false;
 
   public countrySearchShown = false;
+
   public phoneInputShown = true;
+
+  public countrySearchForm: FormGroup;
 
   @ViewChild('countrySearchInput')
   public countrySearchInput: ElementRef;
@@ -147,14 +157,15 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
 
   private phoneUtils = PhoneNumberUtil.getInstance();
 
-  public countrySearchForm: FormGroup;
+  private intialLoad = true;
 
   private _defaultCountry: string;
 
   private _selectedCountry: SkyPhoneFieldCountry;
 
   constructor(
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private adapterService: SkyPhoneFieldAdapterService
   ) {
     /**
      * The "slice" here ensures that we get a copy of the array and not the global original. This
@@ -217,13 +228,19 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
     if (!this.countrySearchShown) {
       this.phoneInputShown = true;
     } else {
-      this.countrySearchInput.nativeElement.focus();
+      this.adapterService.focusElement(this.countrySearchInput.nativeElement);
     }
   }
 
   public phoneInputAnimationEnd() {
     if (!this.phoneInputShown) {
       this.countrySearchShown = true;
+    } else {
+      if (this.intialLoad) {
+        this.intialLoad = false;
+      } else {
+        this.adapterService.focusPhoneInput();
+      }
     }
   }
 

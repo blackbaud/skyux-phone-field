@@ -67,4 +67,12 @@ export class SkyPhoneFieldAdapterService implements OnDestroy {
     }
   }
 
+  public focusElement(element: HTMLElement) {
+    element.focus();
+  }
+
+  public focusPhoneInput() {
+    this.focusElement(document.querySelector('.sky-phone-field-container input'));
+  }
+
 }
