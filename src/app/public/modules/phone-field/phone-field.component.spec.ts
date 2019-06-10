@@ -621,6 +621,17 @@ describe('Phone Field Component', () => {
             .find(country => country.iso2 === 'us').exampleNumber);
       }));
 
+      it('should initialize the default country correctly with capitalized code', fakeAsync(() => {
+        component.defaultCountry = 'AU';
+        fixture.detectChanges();
+        tick();
+        fixture.detectChanges();
+
+        expect(nativeElement.querySelector('input').placeholder)
+          .toBe(component.phoneFieldComponent.countries
+            .find(country => country.iso2 === 'au').exampleNumber);
+      }));
+
       it('should initialize without a default country', fakeAsync(() => {
         fixture.detectChanges();
         tick();
