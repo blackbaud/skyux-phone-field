@@ -7,6 +7,10 @@
     "_description": "Label for dismissing country search input",
     "message": "Dismiss country search"
   },
+  "skyux_phone_field_country_search_label": {
+    "_description": "Accessibility label for the  country search input",
+    "message": "Dismiss country search"
+  },
   "skyux_phone_field_country_search_placeholder": {
     "_description": "Placeholder for country search autocomplete",
     "message": "Search for a country"

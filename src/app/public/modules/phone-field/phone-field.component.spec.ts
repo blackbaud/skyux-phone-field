@@ -464,6 +464,22 @@ describe('Phone Field Component', () => {
           .toBeTruthy();
       }));
 
+      it('should be accessible when country search is shown', (done) => {
+        fixture.detectChanges();
+        fixture.debugElement.query(By.css('.sky-phone-field-country-btn .sky-btn-default'))
+          .nativeElement.click();
+
+        fixture.detectChanges();
+        fixture.whenStable().then(() => {
+
+          fixture.detectChanges();
+          fixture.whenStable().then(() => {
+            expect(fixture.nativeElement).toBeAccessible();
+            done();
+          });
+        });
+      });
+
       it('should update the placeholder to the new country', fakeAsync(() => {
         fixture.detectChanges();
         let originalCountryData = component.phoneFieldComponent.countries.slice(0);
@@ -944,6 +960,22 @@ describe('Phone Field Component', () => {
         expect(document.activeElement === nativeElement.querySelector('input'))
           .toBeTruthy();
       }));
+
+      it('should be accessible when country search is shown', (done) => {
+        fixture.detectChanges();
+        fixture.debugElement.query(By.css('.sky-phone-field-country-btn .sky-btn-default'))
+          .nativeElement.click();
+
+        fixture.detectChanges();
+        fixture.whenStable().then(() => {
+
+          fixture.detectChanges();
+          fixture.whenStable().then(() => {
+            expect(fixture.nativeElement).toBeAccessible();
+            done();
+          });
+        });
+      });
 
       it('should update the placeholder to the new country', fakeAsync(() => {
         fixture.detectChanges();

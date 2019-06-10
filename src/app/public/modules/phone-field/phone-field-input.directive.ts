@@ -114,9 +114,9 @@ export class SkyPhoneFieldInputDirective implements OnInit, OnDestroy, AfterView
   private _modelValue: string;
 
   public constructor(
-    private adapterService: SkyPhoneFieldAdapterService,
     private changeDetector: ChangeDetectorRef,
     private elRef: ElementRef,
+    @Optional() private adapterService: SkyPhoneFieldAdapterService,
     @Optional() private phoneFieldComponent: SkyPhoneFieldComponent
   ) { }
 

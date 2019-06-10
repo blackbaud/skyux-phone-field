@@ -6,9 +6,10 @@
     class="sky-input-group-btn sky-phone-field-country-btn"
   >
     <button
-      attr.title="{{ 'skyux_phone_field_country_select_label' | skyAppResources }} {{ 'skyux_phone_field_country_selected_label' | skyAppResources:selectedCountry.name }}"
-      attr.aria-label="{{ 'skyux_phone_field_country_select_label' | skyAppResources }} {{ 'skyux_phone_field_country_selected_label' | skyAppResources:selectedCountry.name }}"
+      aria-live="polite"
       class="sky-btn sky-btn-default"
+      [attr.title]="('skyux_phone_field_country_select_label' | skyAppResources) + ' ' + ('skyux_phone_field_country_selected_label' | skyAppResources:selectedCountry.name)"
+      [attr.aria-label]="('skyux_phone_field_country_select_label' | skyAppResources) + ' ' + ('skyux_phone_field_country_selected_label' | skyAppResources:selectedCountry.name)"
       [disabled]="countrySelectDisabled"
       (click)="toggleCountrySearch(true)"
     >
@@ -48,6 +49,7 @@
         >
           <input
             skyAutocomplete
+            [attr.aria-label]="'skyux_phone_field_country_search_label' | skyAppResources"
             formControlName="countrySearch"
             id="my-autocomplete-template-driven"
             name="selectedCountry"
