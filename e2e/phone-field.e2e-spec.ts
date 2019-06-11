@@ -50,11 +50,11 @@ describe('Phone Field', () => {
   it('should match previous phone field screenshot when dropdown is open', (done) => {
     SkyHostBrowser.get('visual/phone-field');
     SkyHostBrowser.setWindowBreakpoint('lg');
-    let dropdownElement = element(by.css('#screenshot-phone-field .sky-dropdown-button'));
-    dropdownElement.click();
+    let countrySearchBtn = element(by.css('#screenshot-phone-field .sky-phone-field-country-btn .sky-btn-default'));
+    countrySearchBtn.click();
     SkyHostBrowser.moveCursorOffScreen();
-    expect('.sky-popover-container.sky-popover-placement-fullscreen').toMatchBaselineScreenshot(done, {
-      screenshotName: 'phone-field-dropdown'
+    expect('#screenshot-phone-field').toMatchBaselineScreenshot(done, {
+      screenshotName: 'phone-field-country-search'
     });
   });
 
@@ -71,20 +71,6 @@ describe('Phone Field', () => {
     SkyHostBrowser.setWindowBreakpoint('xs');
     expect('#screenshot-phone-field-default').toMatchBaselineScreenshot(done, {
       screenshotName: 'phone-field-default-xs'
-    });
-  });
-
-  it('should match previous phone field screenshot when dropdown is open with default', (done) => {
-    SkyHostBrowser.get('visual/phone-field');
-    SkyHostBrowser.setWindowBreakpoint('lg');
-    let dropdownElement = element(by.css('#screenshot-phone-field-default .sky-dropdown-button'));
-    dropdownElement.click();
-    let dropdownItemElement = element(by.css('#screenshot-phone-field-default .iti-flag.al'));
-    dropdownItemElement.click();
-    dropdownElement.click();
-    SkyHostBrowser.moveCursorOffScreen();
-    expect('.sky-popover-container.sky-popover-placement-fullscreen').toMatchBaselineScreenshot(done, {
-      screenshotName: 'phone-field-default-dropdown'
     });
   });
 });
