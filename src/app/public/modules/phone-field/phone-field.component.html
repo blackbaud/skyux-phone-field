@@ -1,6 +1,6 @@
 <div
   class="sky-form-group sky-input-group sky-phone-field"
-  [@initalLoad]
+  [@blockAnimationOnLoad]
 >
   <div
     class="sky-input-group-btn sky-phone-field-country-btn"
@@ -49,11 +49,11 @@
         >
           <input
             skyAutocomplete
-            [attr.aria-label]="'skyux_phone_field_country_search_label' | skyAppResources"
             formControlName="countrySearch"
             id="my-autocomplete-template-driven"
             name="selectedCountry"
             type="text"
+            [attr.aria-label]="'skyux_phone_field_country_search_label' | skyAppResources"
             [placeholder]="'skyux_phone_field_country_search_placeholder' | skyAppResources"
             #countrySearchInput
           >

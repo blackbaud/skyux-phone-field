@@ -7,7 +7,8 @@ import {
 } from '@angular/common';
 
 import {
-  FormsModule, ReactiveFormsModule
+  FormsModule,
+  ReactiveFormsModule
 } from '@angular/forms';
 
 import {

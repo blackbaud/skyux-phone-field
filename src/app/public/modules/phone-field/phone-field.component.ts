@@ -55,7 +55,7 @@ import {
     SkyPhoneFieldAdapterService
   ],
   animations: [
-    trigger('initalLoad', [
+    trigger('blockAnimationOnLoad', [
       transition(':enter', [])
     ]),
     trigger(
