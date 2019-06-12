@@ -1,6 +1,6 @@
 # 3.0.1 (2019-06-12)
 
-- Fixed phone field component to import animations from the correct location. [#14](https://github.com/blackbaud/skyux-phone-field/pull/14)
+- Fixed the phone field component to import animations from the correct location. [#14](https://github.com/blackbaud/skyux-phone-field/pull/14)
 
 # 3.0.0 (2019-06-12)
 
