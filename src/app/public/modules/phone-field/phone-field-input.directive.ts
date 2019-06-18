@@ -87,8 +87,8 @@ export class SkyPhoneFieldInputDirective implements OnInit, OnDestroy, AfterView
     if (value) {
       let formattedValue = this.formatNumber(value.toString());
 
-      if (this.phoneFieldComponent.selectedCountry.iso2 !== this.phoneFieldComponent.defaultCountry) {
-        formattedValue = '+' + this.phoneFieldComponent.selectedCountry.dialCode +
+      if (this.phoneFieldComponent.selectedCountry.iso2 !== this.phoneFieldComponent.defaultCountry && !value.startsWith('+')) {
+        formattedValue = this.phoneFieldComponent.selectedCountry.dialCode +
           ' ' + formattedValue;
       }
 
@@ -177,11 +177,23 @@ export class SkyPhoneFieldInputDirective implements OnInit, OnDestroy, AfterView
     this.onTouched();
   }
 
+  @HostListener('input', ['$event'])
+  public onInputTyping(event: any): void {
+    const value = event.target.value;
+    if (value && value.length <= 4 && value.startsWith('+')) {
+      if (this.phoneFieldComponent.setCountryByDialCode(value)) {
+        // We set the model value for validation when countries change. This ensures we don't
+        // overule things when the country changes via dial code input.
+        this.modelValue = value;
+      }
+    }
+  }
+
   /**
    * Writes the new value for reactive forms
    * @param value The new value for the input
    */
-  public writeValue(value: any): void {
+  public writeValue(value: string): void {
     this.modelValue = value;
   }
 
@@ -234,11 +246,15 @@ export class SkyPhoneFieldInputDirective implements OnInit, OnDestroy, AfterView
   }
 
   private validateNumber(phoneNumber: string): boolean {
-    const numberObj = this.phoneUtils.parseAndKeepRawInput(phoneNumber,
-      this.phoneFieldComponent.selectedCountry.iso2);
+    try {
+      const numberObj = this.phoneUtils.parseAndKeepRawInput(phoneNumber,
+        this.phoneFieldComponent.selectedCountry.iso2);
 
-    return this.phoneUtils.isValidNumber(numberObj);
- }
+      return this.phoneUtils.isValidNumber(numberObj);
+    } catch (e) {
+      return false;
+    }
+  }
 
   /**
    * Format's the given phone number based on the currently selected country.
@@ -249,9 +265,9 @@ export class SkyPhoneFieldInputDirective implements OnInit, OnDestroy, AfterView
       const numberObj = this.phoneUtils.parseAndKeepRawInput(phoneNumber,
         this.phoneFieldComponent.selectedCountry.iso2);
       if (this.phoneUtils.isPossibleNumber(numberObj)) {
-          return this.phoneUtils.format(numberObj, PhoneNumberFormat.NATIONAL);
+        return this.phoneUtils.format(numberObj, PhoneNumberFormat.NATIONAL);
       } else {
-          return phoneNumber;
+        return phoneNumber;
       }
     } catch (e) {
       /* sanity check */

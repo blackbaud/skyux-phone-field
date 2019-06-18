@@ -14,7 +14,8 @@ import {
   OnDestroy,
   OnInit,
   Output,
-  ViewChild
+  ViewChild,
+  ChangeDetectorRef
 } from '@angular/core';
 
 import {
@@ -169,16 +170,21 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private adapterService: SkyPhoneFieldAdapterService
+    private adapterService: SkyPhoneFieldAdapterService,
+    private changeDetector: ChangeDetectorRef
   ) {
     /**
-     * The "slice" here ensures that we get a copy of the array and not the global original. This
-     * ensures that multiple instances of the component don't overwrite the original data.
+     * The json functions here ensures that we get a copy of the array and not the global original.
+     * This ensures that multiple instances of the component don't overwrite the original data.
      *
      * We must type the window object as any here as the intl-tel-input library adds its object
      * to the main window object.
      */
-    this.countries = (window as any).intlTelInputGlobals.getCountryData().slice(0);
+    this.countries = JSON.parse(JSON.stringify((window as any)
+      .intlTelInputGlobals.getCountryData()));
+    for (let country of this.countries) {
+      country.dialCode = '+' + country.dialCode;
+    }
     this.defaultCountryData = this.countries.find(country => country.iso2 === 'us');
     this.selectedCountry = this.defaultCountryData;
 
@@ -246,6 +252,19 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
         this.adapterService.focusPhoneInput();
       }
     }
+  }
+
+  public setCountryByDialCode(dialCode: string): boolean {
+    const newCountry = this.defaultCountryData = this.countries
+      .find(country => country.dialCode === dialCode && country.priority === 0);
+
+    if (newCountry) {
+      this.selectedCountry = newCountry;
+      this.changeDetector.markForCheck();
+      return true;
+    }
+
+    return false;
   }
 
   private sortCountriesWithSelectedAndDefault(selectedCountry: SkyPhoneFieldCountry): void {
