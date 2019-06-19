@@ -180,12 +180,10 @@ export class SkyPhoneFieldInputDirective implements OnInit, OnDestroy, AfterView
   @HostListener('input', ['$event'])
   public onInputTyping(event: any): void {
     const value = event.target.value;
-    if (value && value.length <= 4 && value.startsWith('+')) {
-      if (this.phoneFieldComponent.setCountryByDialCode(value)) {
-        // We set the model value for validation when countries change. This ensures we don't
-        // overule things when the country changes via dial code input.
-        this.modelValue = value;
-      }
+    if (this.phoneFieldComponent.setCountryByDialCode(value)) {
+      // We set the model value for validation when countries change. This ensures we don't
+      // overule things when the country changes via dial code input.
+      this.modelValue = value;
     }
   }
 
@@ -195,6 +193,8 @@ export class SkyPhoneFieldInputDirective implements OnInit, OnDestroy, AfterView
    */
   public writeValue(value: string): void {
     this.modelValue = value;
+
+    this.phoneFieldComponent.setCountryByDialCode(value);
   }
 
   public registerOnChange(fn: (value: any) => any): void { this.onChange = fn; }

@@ -516,6 +516,134 @@ describe('Phone Field Component', () => {
         });
       }));
 
+      it('should change to a new country based on a passed in dial code on a model change',
+        fakeAsync(() => {
+          fixture.detectChanges();
+          let inputElement = fixture.debugElement.query(By.css('input'));
+          let ngModel = <NgModel>inputElement.injector.get(NgModel);
+
+          component.defaultCountry = 'us';
+          fixture.detectChanges();
+          component.modelValue = '8675555309';
+          fixture.detectChanges();
+          tick();
+          fixture.detectChanges();
+          tick();
+
+          expect(ngModel.valid).toBe(true);
+          expect(ngModel.errors).toBeNull();
+
+          component.modelValue = '+3558675555309';
+          fixture.detectChanges();
+          tick();
+          fixture.detectChanges();
+          tick();
+
+          expect(component.phoneFieldComponent.selectedCountry.iso2).toBe('al');
+          expect(ngModel.valid).toBe(false);
+          expect(ngModel.errors).toEqual({
+            'skyPhoneField': {
+              invalid: '+3558675555309'
+            }
+          });
+        }));
+
+      it('should change to a new country based on a passed in dial code on a input change',
+        fakeAsync(() => {
+          fixture.detectChanges();
+          let inputElement = fixture.debugElement.query(By.css('input'));
+          let ngModel = <NgModel>inputElement.injector.get(NgModel);
+
+          component.defaultCountry = 'us';
+          fixture.detectChanges();
+          component.modelValue = '8675555309';
+          fixture.detectChanges();
+          tick();
+          fixture.detectChanges();
+          tick();
+
+          expect(ngModel.valid).toBe(true);
+          expect(ngModel.errors).toBeNull();
+
+          setInput(nativeElement, '+3558675555309', fixture);
+          fixture.detectChanges();
+          tick();
+          fixture.detectChanges();
+          tick();
+
+          expect(component.phoneFieldComponent.selectedCountry.iso2).toBe('al');
+          expect(ngModel.valid).toBe(false);
+          expect(ngModel.errors).toEqual({
+            'skyPhoneField': {
+              invalid: '+3558675555309'
+            }
+          });
+        }));
+
+      it('should not change to a new country when the dial code is not found',
+        fakeAsync(() => {
+          fixture.detectChanges();
+          let inputElement = fixture.debugElement.query(By.css('input'));
+          let ngModel = <NgModel>inputElement.injector.get(NgModel);
+
+          component.defaultCountry = 'us';
+          fixture.detectChanges();
+          component.modelValue = '8675555309';
+          fixture.detectChanges();
+          tick();
+          fixture.detectChanges();
+          tick();
+
+          expect(ngModel.valid).toBe(true);
+          expect(ngModel.errors).toBeNull();
+
+          setInput(nativeElement, '+1118675555309', fixture);
+          fixture.detectChanges();
+          tick();
+          fixture.detectChanges();
+          tick();
+
+          expect(component.phoneFieldComponent.selectedCountry.iso2).toBe('us');
+          expect(ngModel.valid).toBe(false);
+          expect(ngModel.errors).toEqual({
+            'skyPhoneField': {
+              invalid: '+1118675555309'
+            }
+          });
+        }));
+
+      it('should change to a new country and not error when only the dial code is given',
+        fakeAsync(() => {
+          fixture.detectChanges();
+          let inputElement = fixture.debugElement.query(By.css('input'));
+          let ngModel = <NgModel>inputElement.injector.get(NgModel);
+
+          component.defaultCountry = 'us';
+          fixture.detectChanges();
+          component.modelValue = '8675555309';
+          fixture.detectChanges();
+          tick();
+          fixture.detectChanges();
+          tick();
+
+          expect(ngModel.valid).toBe(true);
+          expect(ngModel.errors).toBeNull();
+
+          setInput(nativeElement, '+61', fixture);
+          fixture.detectChanges();
+          tick();
+          fixture.detectChanges();
+          tick();
+
+          expect(component.phoneFieldComponent.selectedCountry.iso2).toBe('au');
+          expect(ngModel.valid).toBe(false);
+          expect(ngModel.errors).toEqual({
+            'skyPhoneField': {
+              invalid: '+61'
+            }
+          });
+        }));
+
       it('should validate correctly after country is changed', fakeAsync(() => {
         fixture.detectChanges();
         let inputElement = fixture.debugElement.query(By.css('input'));
@@ -1020,6 +1148,123 @@ describe('Phone Field Component', () => {
           }
         });
       }));
+
+      it('should change to a new country based on a passed in dial code on a model change',
+        fakeAsync(() => {
+          fixture.detectChanges();
+          component.defaultCountry = 'us';
+          fixture.detectChanges();
+          component.phoneControl.setValue('8675555309');
+          fixture.detectChanges();
+          tick();
+          fixture.detectChanges();
+          tick();
+
+          expect(component.phoneControl.valid).toBe(true);
+          expect(component.phoneControl.errors).toBeNull();
+
+          component.phoneControl.setValue('+3558675555309');
+          fixture.detectChanges();
+          tick();
+          fixture.detectChanges();
+          tick();
+
+          expect(component.phoneFieldComponent.selectedCountry.iso2).toBe('al');
+          expect(component.phoneControl.valid).toBe(false);
+          expect(component.phoneControl.errors).toEqual({
+            'skyPhoneField': {
+              invalid: '+3558675555309'
+            }
+          });
+        }));
+
+      it('should change to a new country based on a passed in dial code on a input change',
+        fakeAsync(() => {
+          fixture.detectChanges();
+          component.defaultCountry = 'us';
+          fixture.detectChanges();
+          component.phoneControl.setValue('8675555309');
+          fixture.detectChanges();
+          tick();
+          fixture.detectChanges();
+          tick();
+
+          expect(component.phoneControl.valid).toBe(true);
+          expect(component.phoneControl.errors).toBeNull();
+
+          setInput(nativeElement, '+3558675555309', fixture);
+          fixture.detectChanges();
+          tick();
+          fixture.detectChanges();
+          tick();
+
+          expect(component.phoneFieldComponent.selectedCountry.iso2).toBe('al');
+          expect(component.phoneControl.valid).toBe(false);
+          expect(component.phoneControl.errors).toEqual({
+            'skyPhoneField': {
+              invalid: '+3558675555309'
+            }
+          });
+        }));
+
+      it('should not change to a new country when the dial code is not found',
+        fakeAsync(() => {
+          fixture.detectChanges();
+          component.defaultCountry = 'us';
+          fixture.detectChanges();
+          component.phoneControl.setValue('8675555309');
+          fixture.detectChanges();
+          tick();
+          fixture.detectChanges();
+          tick();
+
+          expect(component.phoneControl.valid).toBe(true);
+          expect(component.phoneControl.errors).toBeNull();
+
+          setInput(nativeElement, '+1118675555309', fixture);
+          fixture.detectChanges();
+          tick();
+          fixture.detectChanges();
+          tick();
+
+          expect(component.phoneFieldComponent.selectedCountry.iso2).toBe('us');
+          expect(component.phoneControl.valid).toBe(false);
+          expect(component.phoneControl.errors).toEqual({
+            'skyPhoneField': {
+              invalid: '+1118675555309'
+            }
+          });
+        }));
+
+      it('should change to a new country and not error when only the dial code is given',
+        fakeAsync(() => {
+          fixture.detectChanges();
+
+          component.defaultCountry = 'us';
+          fixture.detectChanges();
+          component.phoneControl.setValue('8675555309');
+          fixture.detectChanges();
+          tick();
+          fixture.detectChanges();
+          tick();
+
+          expect(component.phoneControl.valid).toBe(true);
+          expect(component.phoneControl.errors).toBeNull();
+
+          setInput(nativeElement, '+61', fixture);
+          fixture.detectChanges();
+          tick();
+          fixture.detectChanges();
+          tick();
+
+          expect(component.phoneFieldComponent.selectedCountry.iso2).toBe('au');
+          expect(component.phoneControl.valid).toBe(false);
+          expect(component.phoneControl.errors).toEqual({
+            'skyPhoneField': {
+              invalid: '+61'
+            }
+          });
+        }));
 
       it('should validate correctly after country is changed', fakeAsync(() => {
         fixture.detectChanges();

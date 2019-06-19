@@ -164,6 +164,8 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
 
   private intialLoad = true;
 
+  private longestDialCodeLength = 0;
+
   private _defaultCountry: string;
 
   private _selectedCountry: SkyPhoneFieldCountry;
@@ -184,6 +186,10 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
       .intlTelInputGlobals.getCountryData()));
     for (let country of this.countries) {
       country.dialCode = '+' + country.dialCode;
+
+      if (country.dialCode.length > this.longestDialCodeLength) {
+        this.longestDialCodeLength = country.dialCode.length;
+      }
     }
     this.defaultCountryData = this.countries.find(country => country.iso2 === 'us');
     this.selectedCountry = this.defaultCountryData;
@@ -254,9 +260,23 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
     }
   }
 
-  public setCountryByDialCode(dialCode: string): boolean {
-    const newCountry = this.defaultCountryData = this.countries
-      .find(country => country.dialCode === dialCode && country.priority === 0);
+  public setCountryByDialCode(phoneNumber: string): boolean {
+    if (!phoneNumber || !phoneNumber.startsWith('+')) {
+      return false;
+    }
+
+    let newCountry: SkyPhoneFieldCountry;
+
+    for (let i = 1; i < (this.longestDialCodeLength + 1); i++) {
+      let dialCode = phoneNumber.substring(0, i);
+
+      let foundCountry = this.countries
+        .find(country => country.dialCode === dialCode && country.priority === 0);
+
+      if (foundCountry && foundCountry !== this.selectedCountry) {
+        newCountry = foundCountry;
+      }
+    }
 
     if (newCountry) {
       this.selectedCountry = newCountry;
