@@ -511,7 +511,7 @@ describe('Phone Field Component', () => {
         expect(ngModel.valid).toBe(false);
         expect(ngModel.errors).toEqual({
           'skyPhoneField': {
-            invalid: '+355 8675555309'
+            invalid: '(867) 555-5309'
           }
         });
       }));
@@ -665,7 +665,7 @@ describe('Phone Field Component', () => {
         expect(ngModel.valid).toBe(false);
         expect(ngModel.errors).toEqual({
           'skyPhoneField': {
-            invalid: '+355 8675555309'
+            invalid: '(867) 555-5309'
           }
         });
 
@@ -1144,7 +1144,7 @@ describe('Phone Field Component', () => {
         expect(component.phoneControl.valid).toBe(false);
         expect(component.phoneControl.errors).toEqual({
           'skyPhoneField': {
-            invalid: '+355 8675555309'
+            invalid: '(867) 555-5309'
           }
         });
       }));
@@ -1284,7 +1284,7 @@ describe('Phone Field Component', () => {
         expect(component.phoneControl.valid).toBe(false);
         expect(component.phoneControl.errors).toEqual({
           'skyPhoneField': {
-            invalid: '+355 8675555309'
+            invalid: '(867) 555-5309'
           }
         });
 

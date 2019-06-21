@@ -141,8 +141,7 @@ export class SkyPhoneFieldInputDirective implements OnInit, OnDestroy, AfterView
     this.phoneFieldComponent.selectedCountryChange
       .takeUntil(this.ngUnsubscribe)
       .subscribe((country: SkyPhoneFieldCountry) => {
-        // Write the value again to cause validation to refire
-        this.writeValue(this.modelValue);
+        this.control.updateValueAndValidity();
         this.adapterService.setElementPlaceholder(this.elRef.nativeElement, country.exampleNumber);
       });
 
@@ -180,11 +179,8 @@ export class SkyPhoneFieldInputDirective implements OnInit, OnDestroy, AfterView
   @HostListener('input', ['$event'])
   public onInputTyping(event: any): void {
     const value = event.target.value;
-    if (this.phoneFieldComponent.setCountryByDialCode(value)) {
-      // We set the model value for validation when countries change. This ensures we don't
-      // overule things when the country changes via dial code input.
-      this.modelValue = value;
-    }
+
+    this.phoneFieldComponent.setCountryByDialCode(value);
   }
 
   /**
