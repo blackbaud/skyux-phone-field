@@ -35,6 +35,7 @@ import {
 import {
   PhoneFieldReactiveTestComponent
 } from './fixtures/phone-field-reactive.component.fixture';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 describe('Phone Field Component', () => {
 
@@ -47,6 +48,19 @@ describe('Phone Field Component', () => {
 
     SkyAppTestUtility.fireDomEvent(inputEl, 'input');
     compFixture.detectChanges();
+
+    SkyAppTestUtility.fireDomEvent(inputEl, 'change');
+    compFixture.detectChanges();
+    tick();
+  }
+
+  // NOTE: This is very specified for a specific test to test this edge case
+  function setInputChangeOnly(
+    element: HTMLElement,
+    text: string,
+    compFixture: ComponentFixture<any>): void {
+    let inputEl = element.querySelector('input');
+    inputEl.value = text;
 
     SkyAppTestUtility.fireDomEvent(inputEl, 'change');
     compFixture.detectChanges();
@@ -112,6 +126,9 @@ describe('Phone Field Component', () => {
       fixture = TestBed.createComponent(PhoneFieldTestComponent);
       nativeElement = fixture.nativeElement as HTMLElement;
       component = fixture.componentInstance;
+
+      spyOn(BehaviorSubject.prototype, 'debounceTime')
+      .and.callFake(function(this: Observable<any>, dueTime: number) { return this; });
     });
 
     it('should create the component with the appropriate styles', () => {
@@ -188,6 +205,20 @@ describe('Phone Field Component', () => {
       it('should handle input change with a string with the expected format', fakeAsync(() => {
         fixture.detectChanges();
         tick();
+        fixture.detectChanges();
+
+        setInput(nativeElement, '8675555309', fixture);
+        expect(nativeElement.querySelector('input').value).toBe('8675555309');
+        expect(component.modelValue).toEqual('(867) 555-5309');
+      }));
+
+      it('should handle input change with a string with the expected format after initially only haveing a change event', fakeAsync(() => {
+        fixture.detectChanges();
+        tick();
+        fixture.detectChanges();
+
+        setInputChangeOnly(nativeElement, '5554564587', fixture);
+
         fixture.detectChanges();
 
         setInput(nativeElement, '8675555309', fixture);
@@ -730,6 +761,9 @@ describe('Phone Field Component', () => {
       fixture = TestBed.createComponent(PhoneFieldReactiveTestComponent);
       nativeElement = fixture.nativeElement as HTMLElement;
       component = fixture.componentInstance;
+
+      spyOn(BehaviorSubject.prototype, 'debounceTime')
+      .and.callFake(function(this: Observable<any>, dueTime: number) { return this; });
     });
 
     afterEach(() => {
@@ -813,6 +847,20 @@ describe('Phone Field Component', () => {
       it('should handle input change with a string with the expected format', fakeAsync(() => {
         fixture.detectChanges();
         tick();
+        fixture.detectChanges();
+
+        setInput(nativeElement, '8675555309', fixture);
+        expect(nativeElement.querySelector('input').value).toBe('8675555309');
+        expect(component.phoneControl.value).toEqual('(867) 555-5309');
+      }));
+
+      it('should handle input change with a string with the expected format after initially only haveing a change event', fakeAsync(() => {
+        fixture.detectChanges();
+        tick();
+        fixture.detectChanges();
+
+        setInputChangeOnly(nativeElement, '5554564587', fixture);
+
         fixture.detectChanges();
 
         setInput(nativeElement, '8675555309', fixture);

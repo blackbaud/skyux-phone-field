@@ -21,8 +21,9 @@ import {
 } from '@angular/forms';
 
 import {
+  BehaviorSubject,
   Subject
-} from 'rxjs/Subject';
+} from 'rxjs';
 
 import {
   PhoneNumberFormat,
@@ -40,7 +41,6 @@ import {
 import {
   SkyPhoneFieldCountry
 } from './types';
-
 // tslint:disable:no-forward-ref no-use-before-declare
 const SKY_PHONE_FIELD_VALUE_ACCESSOR = {
   provide: NG_VALUE_ACCESSOR,
@@ -105,6 +105,8 @@ export class SkyPhoneFieldInputDirective implements OnInit, OnDestroy, AfterView
 
   private control: AbstractControl;
 
+  private textChanges: BehaviorSubject<string>;
+
   private ngUnsubscribe = new Subject();
 
   private phoneUtils = PhoneNumberUtil.getInstance();
@@ -165,7 +167,11 @@ export class SkyPhoneFieldInputDirective implements OnInit, OnDestroy, AfterView
    */
   @HostListener('change', ['$event'])
   public onInputChange(event: any): void {
-    this.writeValue(event.target.value);
+    if (!this.textChanges) {
+      this.setupTextChangeSubscription(event.target.value);
+    } else {
+      this.textChanges.next(event.target.value);
+    }
   }
 
   /**
@@ -178,9 +184,11 @@ export class SkyPhoneFieldInputDirective implements OnInit, OnDestroy, AfterView
 
   @HostListener('input', ['$event'])
   public onInputTyping(event: any): void {
-    const value = event.target.value;
-
-    this.phoneFieldComponent.setCountryByDialCode(value);
+    if (!this.textChanges) {
+      this.setupTextChangeSubscription(event.target.value);
+    } else {
+      this.textChanges.next(event.target.value);
+    }
   }
 
   /**
@@ -239,6 +247,17 @@ export class SkyPhoneFieldInputDirective implements OnInit, OnDestroy, AfterView
         }
       };
     }
+  }
+
+  private setupTextChangeSubscription(text: string) {
+    this.textChanges = new BehaviorSubject(text);
+
+    this.textChanges
+      .debounceTime(500)
+      .takeUntil(this.ngUnsubscribe)
+      .subscribe((newValue) => {
+        this.writeValue(newValue);
+      });
   }
 
   private validateNumber(phoneNumber: string): boolean {
