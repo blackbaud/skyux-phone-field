@@ -87,11 +87,6 @@ export class SkyPhoneFieldInputDirective implements OnInit, OnDestroy, AfterView
     if (value) {
       let formattedValue = this.formatNumber(value.toString());
 
-      if (this.phoneFieldComponent.selectedCountry.iso2 !== this.phoneFieldComponent.defaultCountry && !value.startsWith('+')) {
-        formattedValue = this.phoneFieldComponent.selectedCountry.dialCode +
-          ' ' + formattedValue;
-      }
-
       this.onChange(formattedValue);
     } else {
       this.onChange(value);
@@ -143,7 +138,7 @@ export class SkyPhoneFieldInputDirective implements OnInit, OnDestroy, AfterView
     this.phoneFieldComponent.selectedCountryChange
       .takeUntil(this.ngUnsubscribe)
       .subscribe((country: SkyPhoneFieldCountry) => {
-        this.control.updateValueAndValidity();
+        this.modelValue = this.elRef.nativeElement.value;
         this.adapterService.setElementPlaceholder(this.elRef.nativeElement, country.exampleNumber);
       });
 
@@ -196,9 +191,9 @@ export class SkyPhoneFieldInputDirective implements OnInit, OnDestroy, AfterView
    * @param value The new value for the input
    */
   public writeValue(value: string): void {
-    this.modelValue = value;
-
     this.phoneFieldComponent.setCountryByDialCode(value);
+
+    this.modelValue = value;
   }
 
   public registerOnChange(fn: (value: any) => any): void { this.onChange = fn; }
@@ -280,7 +275,11 @@ export class SkyPhoneFieldInputDirective implements OnInit, OnDestroy, AfterView
       const numberObj = this.phoneUtils.parseAndKeepRawInput(phoneNumber,
         this.phoneFieldComponent.selectedCountry.iso2);
       if (this.phoneUtils.isPossibleNumber(numberObj)) {
-        return this.phoneUtils.format(numberObj, PhoneNumberFormat.NATIONAL);
+        if (this.phoneFieldComponent.selectedCountry.iso2 !== this.phoneFieldComponent.defaultCountry) {
+          return this.phoneUtils.format(numberObj, PhoneNumberFormat.INTERNATIONAL);
+        } else {
+          return this.phoneUtils.format(numberObj, PhoneNumberFormat.NATIONAL);
+        }
       } else {
         return phoneNumber;
       }

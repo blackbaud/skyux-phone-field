@@ -542,7 +542,7 @@ describe('Phone Field Component', () => {
         expect(ngModel.valid).toBe(false);
         expect(ngModel.errors).toEqual({
           'skyPhoneField': {
-            invalid: '(867) 555-5309'
+            invalid: '8675555309'
           }
         });
       }));
@@ -696,7 +696,7 @@ describe('Phone Field Component', () => {
         expect(ngModel.valid).toBe(false);
         expect(ngModel.errors).toEqual({
           'skyPhoneField': {
-            invalid: '(867) 555-5309'
+            invalid: '8675555309'
           }
         });
 
@@ -731,7 +731,7 @@ describe('Phone Field Component', () => {
         fixture.detectChanges();
         tick();
 
-        expect(ngModel.value).toBe('+355 024 569 874');
+        expect(ngModel.value).toBe('+355 24 569 874');
         expect(ngModel.valid).toBe(true);
         expect(ngModel.errors).toBeNull();
       }));
@@ -1192,7 +1192,7 @@ describe('Phone Field Component', () => {
         expect(component.phoneControl.valid).toBe(false);
         expect(component.phoneControl.errors).toEqual({
           'skyPhoneField': {
-            invalid: '(867) 555-5309'
+            invalid: '8675555309'
           }
         });
       }));
@@ -1332,7 +1332,7 @@ describe('Phone Field Component', () => {
         expect(component.phoneControl.valid).toBe(false);
         expect(component.phoneControl.errors).toEqual({
           'skyPhoneField': {
-            invalid: '(867) 555-5309'
+            invalid: '8675555309'
           }
         });
 
@@ -1361,7 +1361,7 @@ describe('Phone Field Component', () => {
         fixture.detectChanges();
         tick();
 
-        expect(component.phoneControl.value).toBe('+355 024 569 874');
+        expect(component.phoneControl.value).toBe('+355 24 569 874');
         expect(component.phoneControl.valid).toBe(true);
         expect(component.phoneControl.errors).toBeNull();
       }));
