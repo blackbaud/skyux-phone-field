@@ -1,3 +1,7 @@
+# 3.1.1 (2019-10-07)
+
+- Fixed the phone field component to not trigger `ngSubmit` events when the country selector button is clicked. [#26](https://github.com/blackbaud/skyux-phone-field/pull/26)
+
 # 3.1.0 (2019-07-24)
 
 - Added the ability for the phone field component to automatically switch countries based on a given dial code. [#16](https://github.com/blackbaud/skyux-phone-field/pull/16)
