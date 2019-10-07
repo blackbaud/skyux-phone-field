@@ -1,6 +1,6 @@
 # 3.1.1 (2019-10-07)
 
-- Fixed the phone field component to not trigger `ngSubmit` events when the country selector button is clicked. [#26](https://github.com/blackbaud/skyux-phone-field/pull/26)
+- Fixed the phone field component to prevent `ngSubmit` events when users select the country selector button. [#26](https://github.com/blackbaud/skyux-phone-field/pull/26)
 
 # 3.1.0 (2019-07-24)
 
