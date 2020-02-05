@@ -773,6 +773,17 @@ describe('Phone Field Component', () => {
         expect(nativeElement.querySelector('input')).not.toHaveCssClass('ng-invalid');
       }));
 
+      it('should not auto-focus when added/removed to the DOM via an ngIf', fakeAsync(() => {
+        detectChangesAndTick(fixture);
+        component.showPhoneField = false;
+        detectChangesAndTick(fixture);
+        component.showPhoneField = true;
+        detectChangesAndTick(fixture);
+        const phoneInput = getPhoneFieldInput(fixture);
+
+        expect(document.activeElement === phoneInput).toEqual(false);
+      }));
+
       it('should be accessible', (done) => {
         fixture.detectChanges();
 

@@ -35,6 +35,8 @@ export class PhoneFieldReactiveTestComponent implements OnInit {
 
   public showInvalidDirective: boolean = false;
 
+  public showPhoneField: boolean = true;
+
   public showSecondaryPhoneField: boolean = false;
 
   @ViewChild(SkyPhoneFieldInputDirective)
