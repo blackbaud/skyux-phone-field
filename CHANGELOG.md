@@ -1,6 +1,6 @@
 # 3.1.2 (2020-02-06)
 
-- Fixed the phone field component to prevent autofocusing on phone field input when added dynamicaly to the page. [#32](https://github.com/blackbaud/skyux-phone-field/pull/32)
+- Fixed the phone field component to prevent autofocusing on phone field input when added to the page. [#32](https://github.com/blackbaud/skyux-phone-field/pull/32)
 
 # 3.1.1 (2019-10-07)
 
