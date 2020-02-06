@@ -28,39 +28,39 @@ export class SkyPhoneFieldAdapterService implements OnDestroy {
     this.ngUnsubscribe.complete();
   }
 
-  public addElementClass(element: HTMLElement, className: string): void {
-    this.renderer.addClass(element, className);
+  public addElementClass(elementRef: ElementRef, className: string): void {
+    this.renderer.addClass(elementRef.nativeElement, className);
   }
 
-  public setElementDisabledState(element: HTMLElement, disabled: boolean): void {
+  public setElementDisabledState(elementRef: ElementRef, disabled: boolean): void {
     this.renderer.setProperty(
-      element,
+      elementRef.nativeElement,
       'disabled',
       disabled
     );
   }
 
-  public setElementPlaceholder(element: HTMLElement, placeholder: string): void {
-    this.renderer.setAttribute(element, 'placeholder', placeholder);
+  public setElementPlaceholder(elementRef: ElementRef, placeholder: string): void {
+    this.renderer.setAttribute(elementRef.nativeElement, 'placeholder', placeholder);
   }
 
-  public setElementValue(element: HTMLElement, value: string): void {
+  public setElementValue(elementRef: ElementRef, value: string): void {
     if (value) {
       this.renderer.setProperty(
-        element,
+        elementRef.nativeElement,
         'value',
         value
       );
     }
   }
 
-  public setAriaLabel(element: HTMLElement): void {
-    if (!element.getAttribute('aria-label')) {
+  public setAriaLabel(element: ElementRef): void {
+    if (!element.nativeElement.getAttribute('aria-label')) {
       this.resourcesService.getString('skyux_phone_field_default_label')
         .takeUntil(this.ngUnsubscribe)
         .subscribe((value: string) => {
           this.renderer.setAttribute(
-            element,
+            element.nativeElement,
             'aria-label',
             value
           );
