@@ -247,7 +247,7 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
     if (!this.countrySearchShown) {
       this.phoneInputShown = true;
     } else {
-      this.adapterService.focusElement(this.countrySearchInput.nativeElement);
+      this.adapterService.focusElement(this.countrySearchInput);
     }
   }
 
@@ -256,7 +256,7 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
       this.countrySearchShown = true;
     } else {
       if (this.phoneInputAnimationTriggered) {
-        this.adapterService.focusPhoneInput(this.elementRef.nativeElement);
+        this.adapterService.focusPhoneInput(this.elementRef);
         this.phoneInputAnimationTriggered = false;
       }
     }

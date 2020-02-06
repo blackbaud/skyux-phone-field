@@ -1,7 +1,8 @@
 import {
   Injectable,
   OnDestroy,
-  Renderer2
+  Renderer2,
+  ElementRef
 } from '@angular/core';
 
 import {
@@ -67,12 +68,13 @@ export class SkyPhoneFieldAdapterService implements OnDestroy {
     }
   }
 
-  public focusElement(element: HTMLElement): void {
-    element.focus();
+  public focusElement(element: ElementRef): void {
+    element.nativeElement.focus();
   }
 
-  public focusPhoneInput(element: HTMLElement): void {
-    this.focusElement(element.querySelector('.sky-phone-field-container input') as HTMLElement);
+  public focusPhoneInput(element: ElementRef): void {
+    const input = element.nativeElement.querySelector('.sky-phone-field-container input');
+    this.focusElement(input);
   }
 
 }
