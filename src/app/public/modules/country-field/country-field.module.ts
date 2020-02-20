@@ -27,7 +27,6 @@ import {
   SkyCountryFieldComponent
 } from './country-field.component';
 
-
 @NgModule({
   declarations: [
     SkyCountryFieldComponent

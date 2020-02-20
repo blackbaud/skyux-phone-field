@@ -211,7 +211,7 @@
 //         expect(component.modelValue).toEqual('(867) 555-5309');
 //       }));
 
-//       it('should handle input change with a string with the expected format after initially only haveing a change event', fakeAsync(() => {
+//     it('should handle input change with a string with the expected format after initially only haveing a change event', fakeAsync(() => {
 //         detectChangesAndTick(fixture);
 
 //         setInputChangeOnly(nativeElement, '5554564587', fixture);
@@ -814,7 +814,7 @@
 //         expect(component.phoneControl.value).toEqual('(867) 555-5309');
 //       }));
 
-//       it('should handle input change with a string with the expected format after initially only haveing a change event', fakeAsync(() => {
+//     it('should handle input change with a string with the expected format after initially only haveing a change event', fakeAsync(() => {
 //         detectChangesAndTick(fixture);
 
 //         setInputChangeOnly(nativeElement, '5554564587', fixture);
