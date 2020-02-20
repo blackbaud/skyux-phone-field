@@ -1,0 +1,50 @@
+<div
+  class="sky-form-group sky-input-group"
+>
+  <span
+    class="sky-country-field-container"
+  >
+    <form
+      novalidate
+      class="sky-country-field-country-search"
+      [formGroup]="countrySearchForm"
+    >
+      <sky-autocomplete
+        [data]="countries"
+        [propertiesToSearch]="['name', 'iso2', 'dialCode']"
+        [searchResultTemplate]="countrySearchResultTemplate"
+        [searchTextMinimumCharacters]="2"
+        (selectionChange)="onCountrySelected($event)"
+      >
+        <div
+          class="sky-form-control sky-country-field-input"
+          [ngClass]="{
+            'sky-field-status-active': isInputFocused
+          }"
+        >
+          <div
+            [className]="'sky-country-field-flag iti-flag ' + selectedCountry.iso2"
+          ></div>
+          <textarea
+            skyAutocomplete
+            formControlName="countrySearch"
+            name="selectedCountry"
+            [attr.aria-label]="'skyux_phone_field_country_search_label' | skyLibResources"
+            [placeholder]="'skyux_phone_field_country_search_placeholder' | skyLibResources" #countrySearchInput
+          ></textarea>
+        </div>
+      </sky-autocomplete>
+    </form>
+  </span>
+</div>
+
+<ng-template
+  let-item="item"
+  #countrySearchResultTemplate
+>
+  <div
+    [className]="'iti-flag ' + item.iso2"
+  >
+  </div>
+  {{ item.name }}
+</ng-template>

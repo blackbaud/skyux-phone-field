@@ -11,12 +11,14 @@ import {
 } from '@skyux/router';
 
 import {
+  SkyCountrySelectModule,
   SkyPhoneFieldModule
 } from './public';
 
 @NgModule({
   exports: [
     SkyAppLinkModule,
+    SkyCountrySelectModule,
     SkyPhoneFieldModule,
     NoopAnimationsModule
   ]
