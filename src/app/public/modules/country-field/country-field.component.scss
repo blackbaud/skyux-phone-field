@@ -15,12 +15,12 @@
   cursor: text;
   display: flex;
   background-color: $sky-color-white;
-  padding-left: 3px;
+  padding-left: 12px;
 
   .sky-country-field-flag {
     margin-bottom: auto;
     margin-top: auto;
-    margin-right: $sky-margin-half;
+    margin-right: $sky-margin;
   }
 
   textarea {
