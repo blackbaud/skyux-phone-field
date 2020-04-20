@@ -36,8 +36,7 @@
       (@countrySearchAnimation.done)="countrySearchAnimationEnd()"
 
     >
-      <form
-        novalidate
+      <div
         class="sky-phone-field-country-search"
         [formGroup]="countrySearchForm"
       >
@@ -51,7 +50,6 @@
           <input
             skyAutocomplete
             formControlName="countrySearch"
-            id="my-autocomplete-template-driven"
             name="selectedCountry"
             type="text"
             [attr.aria-label]="'skyux_phone_field_country_search_label' | skyLibResources"
@@ -59,7 +57,7 @@
             #countrySearchInput
           >
         </sky-autocomplete>
-      </form>
+      </div>
       <div
         class="sky-search-item-dismiss"
       >

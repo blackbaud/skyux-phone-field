@@ -20,10 +20,5 @@
     "unit": {
       "browserSet": "paranoid"
     }
-  },
-  "app": {
-    "styles": [
-      "@skyux/theme/css/sky.css"
-    ]
   }
 }

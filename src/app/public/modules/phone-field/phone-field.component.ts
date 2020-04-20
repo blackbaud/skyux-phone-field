@@ -240,6 +240,8 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
 
       this.countrySearchForm.get('countrySearch').setValue(undefined);
     }
+
+    this.changeDetector.markForCheck();
   }
 
   public countrySearchAnimationEnd() {
@@ -248,6 +250,8 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
     } else {
       this.adapterService.focusElement(this.countrySearchInput);
     }
+
+    this.changeDetector.markForCheck();
   }
 
   public phoneInputAnimationEnd() {
@@ -259,6 +263,8 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
         this.phoneInputAnimationTriggered = false;
       }
     }
+
+    this.changeDetector.markForCheck();
   }
 
   public setCountryByDialCode(phoneNumber: string): boolean {
