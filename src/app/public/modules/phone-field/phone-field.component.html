@@ -24,7 +24,7 @@
     <span
       class="sky-phone-field-container"
       [@phoneInputAnimation]
-      (@phoneInputAnimation.done)="phoneInputAnimationEnd($event)"
+      (@phoneInputAnimation.done)="phoneInputAnimationEnd()"
     >
       <ng-content></ng-content>
     </span>
@@ -33,7 +33,7 @@
     <span
       class="sky-phone-field-container"
       [@countrySearchAnimation]
-      (@countrySearchAnimation.done)="countrySearchAnimationEnd($event)"
+      (@countrySearchAnimation.done)="countrySearchAnimationEnd()"
 
     >
       <form

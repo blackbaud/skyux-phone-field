@@ -21,17 +21,6 @@
 
 .sky-phone-field-country-search {
   flex-grow: 1;
-
-  ::ng-deep .sky-dropdown-item .iti-flag {
-    display: inline-block;
-    margin-right: $sky-margin-half;
-  }
-
-  ::ng-deep .sky-dropdown-button-content-container {
-    height: 100%;
-    margin: auto 0;
-    overflow: visible;
-  }
 }
 
 .sky-phone-field-search-btn-dismiss {

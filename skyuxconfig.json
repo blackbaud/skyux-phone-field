@@ -6,6 +6,13 @@
   "plugins": [
     "@skyux-sdk/builder-plugin-skyux"
   ],
+  "librarySettings": {
+    "whitelistedNonPeerDependencies": [
+      "@types/google-libphonenumber",
+      "google-libphonenumber",
+      "intl-tel-input"
+    ]
+  },
   "testSettings": {
     "e2e": {
       "browserSet": "speedy"
