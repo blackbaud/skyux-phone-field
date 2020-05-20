@@ -8,10 +8,6 @@ import {
 } from '@skyux/docs-tools';
 
 import {
-  NoopAnimationsModule
-} from '@angular/platform-browser/animations';
-
-import {
   SkyAppLinkModule
 } from '@skyux/router';
 
@@ -23,8 +19,7 @@ import {
   exports: [
     SkyAppLinkModule,
     SkyDocsToolsModule,
-    SkyPhoneFieldModule,
-    NoopAnimationsModule
+    SkyPhoneFieldModule
   ],
   providers: [
     {
