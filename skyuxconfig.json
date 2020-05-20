@@ -14,9 +14,21 @@
       "browserSet": "paranoid"
     }
   },
+  "host": {
+    "url": "https://developer.blackbaud.com"
+  },
+  "omnibar": {
+    "experimental": true
+  },
+  "params": {
+    "svcid": {
+      "value": "skyux"
+    }
+  },
   "app": {
     "styles": [
-      "@skyux/theme/css/sky.css"
+      "@skyux/theme/css/sky.css",
+      "@skyux/docs-tools/css/docs-tools.css"
     ]
   }
 }
