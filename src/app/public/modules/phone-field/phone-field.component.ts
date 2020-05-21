@@ -7,6 +7,7 @@ import {
 
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
@@ -15,7 +16,7 @@ import {
   OnInit,
   Output,
   ViewChild,
-  ChangeDetectorRef
+  ViewEncapsulation
 } from '@angular/core';
 
 import {
@@ -53,6 +54,7 @@ import {
   selector: 'sky-phone-field',
   templateUrl: './phone-field.component.html',
   styleUrls: ['./phone-field.component.scss'],
+  encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     SkyPhoneFieldAdapterService
