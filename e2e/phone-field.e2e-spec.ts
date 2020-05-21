@@ -50,8 +50,16 @@ describe('Phone Field', () => {
   it('should match previous phone field screenshot when dropdown is open', (done) => {
     SkyHostBrowser.get('visual/phone-field');
     SkyHostBrowser.setWindowBreakpoint('lg');
-    let countrySearchBtn = element(by.css('#screenshot-phone-field .sky-phone-field-country-btn .sky-btn-default'));
+
+    const countrySearchBtn = element(by.css(
+      '#screenshot-phone-field .sky-phone-field-country-btn .sky-btn-default'
+    ));
     countrySearchBtn.click();
+
+    const inputElement = element(by.css('#screenshot-phone-field .sky-form-control'));
+    inputElement.click();
+    inputElement.sendKeys('arg');
+
     SkyHostBrowser.moveCursorOffScreen();
     expect('#screenshot-phone-field').toMatchBaselineScreenshot(done, {
       screenshotName: 'phone-field-country-search'
