@@ -6,6 +6,13 @@
   "plugins": [
     "@skyux-sdk/builder-plugin-skyux"
   ],
+  "librarySettings": {
+    "whitelistedNonPeerDependencies": [
+      "@types/google-libphonenumber",
+      "google-libphonenumber",
+      "intl-tel-input"
+    ]
+  },
   "testSettings": {
     "e2e": {
       "browserSet": "speedy"
@@ -15,11 +22,12 @@
     }
   },
   "host": {
-    "url": "https://developer.blackbaud.com"
+    "url": "https://developer.blackbaud.com",
+    "frameOptions": {
+      "none": true
+    }
   },
-  "omnibar": {
-    "experimental": true
-  },
+  "omnibar": {},
   "params": {
     "svcid": {
       "value": "skyux"
