@@ -1,3 +1,7 @@
+# 4.0.1 (2020-06-11)
+
+- Updated the phone field component's `aria-label` property to be easier to understand. [#42](https://github.com/blackbaud/skyux-phone-field/pull/42)
+
 # 4.0.0 (2020-05-21)
 
 ### New features
