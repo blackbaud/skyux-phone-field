@@ -112,6 +112,7 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
       this.defaultCountryData = this.countries
         .find(country => country.iso2 === this._defaultCountry);
       this.sortCountriesWithSelectedAndDefault(this.selectedCountry);
+      this.selectedCountry = this.defaultCountryData;
     }
   }
 
