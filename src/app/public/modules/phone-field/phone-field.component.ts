@@ -104,6 +104,12 @@ import {
 })
 export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
 
+  /**
+   * Specifies the International Organization for Standardization Alpha 2 country code
+   * for the default country. The country selector button displays a flag icon for this
+   * default country until users select a different country.
+   * @default us
+   */
   @Input()
   public set defaultCountry(value: string) {
     if (value !== this._defaultCountry) {
@@ -118,6 +124,11 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
   public get defaultCountry(): string {
     return this._defaultCountry;
   }
+
+  /**
+   * Emits a `SkyPhoneFieldCountry` object when the selected country in the country search
+   * input changes.
+   */
 
   @Output()
   public selectedCountryChange = new EventEmitter<SkyPhoneFieldCountry>();
