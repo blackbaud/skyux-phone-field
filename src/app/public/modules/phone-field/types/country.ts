@@ -18,6 +18,12 @@ export interface SkyPhoneFieldCountry {
    */
   exampleNumber?: string;
   // NOTE: We intentionally don't document these properties as they are internal use properties
+  /**
+   * @internal
+   */
   priority?: number;
+  /**
+   * @internal
+   */
   areaCodes?: string[];
 }

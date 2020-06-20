@@ -105,9 +105,10 @@ import {
 export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
 
   /**
-   * Specifies the International Organization for Standardization Alpha 2 country code
-   * for the default country. The country selector button displays a flag icon for this
-   * default country until users select a different country.
+   * Specifies the
+   * [International Organization for Standardization Alpha 2](https://www.nationsonline.org/oneworld/country_code_list.htm)
+   * country code for the default country. The country selector button displays a flag
+   * icon for this default country until users select a different country.
    * @default us
    */
   @Input()

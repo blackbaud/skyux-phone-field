@@ -69,7 +69,9 @@ const SKY_PHONE_FIELD_VALIDATOR = {
  * displays a sample of the correct phone number format. When users select the country
  * selector button, they expose the country search input, which is
  * [an autocomplete input](https://developer.blackbaud.com/skyux/components/autocomplete)
- * that allows them to select different countries.
+ * that allows them to select different countries. When users enter `+` followed by an
+ * international dial code in the phone number input, the country automatically switches
+ * to the country associated with the dial code.
  */
 @Directive({
   selector: '[skyPhoneFieldInput]',
@@ -83,6 +85,7 @@ export class SkyPhoneFieldInputDirective implements OnInit, OnDestroy, AfterView
 
   /**
    * Indicates whether to disable the phone field.
+   * @default false
    */
   @Input()
   public set disabled(value: boolean) {
@@ -100,6 +103,7 @@ export class SkyPhoneFieldInputDirective implements OnInit, OnDestroy, AfterView
    * phone numbers are driven through the `ngModel` attribute that you specify on an
    * `input` element or on a `FormControl` in a reactive form. To prevent validation,
    * set this property to `true`.
+   * @default false
    */
   @Input()
   public skyPhoneFieldNoValidate: boolean = false;
