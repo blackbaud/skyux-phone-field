@@ -72,6 +72,7 @@ const SKY_PHONE_FIELD_VALIDATOR = {
  * that allows them to select different countries. When users enter `+` followed by an
  * international dial code in the phone number input, the country automatically switches
  * to the country associated with the dial code.
+ * @required
  */
 @Directive({
   selector: '[skyPhoneFieldInput]',
