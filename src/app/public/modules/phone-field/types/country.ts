@@ -1,6 +1,7 @@
 export interface SkyPhoneFieldCountry {
   /**
    * Specifies the name of the country.
+   * @required
    */
   name: string;
   /**
@@ -17,7 +18,6 @@ export interface SkyPhoneFieldCountry {
   /**
    * Specifies a placeholder value to demonstrate the country's number format. This
    * value is `undefined` until a country is selected to validate against.
-   * @required
    */
   exampleNumber?: string;
   // NOTE: We intentionally don't document these properties as they are internal use properties
