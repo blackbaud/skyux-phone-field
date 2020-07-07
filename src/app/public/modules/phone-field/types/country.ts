@@ -5,8 +5,9 @@ export interface SkyPhoneFieldCountry {
    */
   name: string;
   /**
-   * Specifies the country's [International Organization for Standardization Alpha 2]
-   * (https://www.nationsonline.org/oneworld/country_code_list.htm) country code.
+   * Specifies the country's
+   * [International Organization for Standardization Alpha 2](https://www.nationsonline.org/oneworld/country_code_list.htm)
+   * country code.
    * @required
    */
   iso2: string;
