@@ -132,8 +132,10 @@ export class SkyPhoneFieldInputDirective implements OnInit, OnDestroy, AfterView
     }
 
     this.adapterService.addElementClass(this.elRef, 'sky-form-control');
-    this.adapterService.setElementPlaceholder(this.elRef,
-      this.phoneFieldComponent.selectedCountry.exampleNumber);
+    if (this.phoneFieldComponent.selectedCountry) {
+      this.adapterService.setElementPlaceholder(this.elRef,
+        this.phoneFieldComponent.selectedCountry.exampleNumber);
+    }
 
     this.adapterService.setAriaLabel(this.elRef);
   }
@@ -234,7 +236,7 @@ export class SkyPhoneFieldInputDirective implements OnInit, OnDestroy, AfterView
       return;
     }
 
-    if (!this.validateNumber(value)) {
+    if (this.phoneFieldComponent.selectedCountry && !this.validateNumber(value)) {
 
       // Mark the invalid control as touched so that the input's invalid CSS styles appear.
       // (This is only required when the invalid value is set by the FormControl constructor.)
