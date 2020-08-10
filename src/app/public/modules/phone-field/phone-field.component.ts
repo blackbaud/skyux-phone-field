@@ -147,6 +147,9 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
   })
   public countrySearchInput: ElementRef;
 
+  /**
+   * Specifies the currently selected country to validate against.
+   */
   @Input()
   public set selectedCountry(newCountry: SkyPhoneFieldCountry) {
     if (newCountry && (!this._selectedCountry || this._selectedCountry.iso2 !== newCountry.iso2)) {
