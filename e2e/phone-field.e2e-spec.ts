@@ -56,7 +56,7 @@ describe('Phone Field', () => {
     ));
     countrySearchBtn.click();
 
-    const inputElement = element(by.css('#screenshot-phone-field .sky-form-control'));
+    const inputElement = element(by.css('#screenshot-phone-field textarea.sky-form-control'));
     inputElement.click();
     inputElement.sendKeys('arg');
 
