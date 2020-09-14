@@ -47,10 +47,6 @@ import {
   SkyPhoneFieldCountry
 } from './types/country';
 
-import {
-  SkyPhoneFieldNumberReturnFormat
-} from './types/number-return-format';
-
 // tslint:disable:no-forward-ref no-use-before-declare
 const SKY_PHONE_FIELD_VALUE_ACCESSOR = {
   provide: NG_VALUE_ACCESSOR,
