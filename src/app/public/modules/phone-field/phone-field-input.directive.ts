@@ -47,6 +47,10 @@ import {
   SkyPhoneFieldCountry
 } from './types/country';
 
+import {
+  SkyPhoneFieldNumberReturnFormat
+} from './types/number-return-format';
+
 // tslint:disable:no-forward-ref no-use-before-declare
 const SKY_PHONE_FIELD_VALUE_ACCESSOR = {
   provide: NG_VALUE_ACCESSOR,
@@ -306,11 +310,20 @@ export class SkyPhoneFieldInputDirective implements OnInit, OnDestroy, AfterView
       const numberObj = this.phoneUtils.parseAndKeepRawInput(phoneNumber,
         this.phoneFieldComponent.selectedCountry.iso2);
       if (this.phoneUtils.isPossibleNumber(numberObj)) {
-        if (this.phoneFieldComponent.selectedCountry.iso2 !== this.phoneFieldComponent.defaultCountry) {
-          return this.phoneUtils.format(numberObj, PhoneNumberFormat.INTERNATIONAL);
-        } else {
-          return this.phoneUtils.format(numberObj, PhoneNumberFormat.NATIONAL);
+        switch (this.phoneFieldComponent.returnFormat) {
+          case 'international':
+            return this.phoneUtils.format(numberObj, PhoneNumberFormat.INTERNATIONAL);
+          case 'national':
+            return this.phoneUtils.format(numberObj, PhoneNumberFormat.NATIONAL);
+          case 'reactive':
+          default:
+            if (this.phoneFieldComponent.selectedCountry.iso2 !== this.phoneFieldComponent.defaultCountry) {
+              return this.phoneUtils.format(numberObj, PhoneNumberFormat.INTERNATIONAL);
+            } else {
+              return this.phoneUtils.format(numberObj, PhoneNumberFormat.NATIONAL);
+            }
         }
+
       } else {
         return phoneNumber;
       }
