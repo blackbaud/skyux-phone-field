@@ -2,13 +2,13 @@
 @import "~@skyux/theme/scss/_compat/mixins";
 @import "~intl-tel-input/build/css/intlTelInput";
 
-.sky-phone-field-country-btn + ::ng-deep .sky-form-control {
+.sky-phone-field-country-btn + .sky-form-control {
   border-left: none;
 }
 
 .sky-phone-field-country-btn {
 
-  ::ng-deep .sky-btn {
+  .sky-btn {
     border-radius: 0;
   }
 
@@ -25,6 +25,10 @@
 
 .sky-phone-field-search-btn-dismiss {
   border-color: transparent;
+
+  .sky-phone-field-search-close-icon-modern {
+    display: none;
+  }
 }
 
 .sky-phone-field-country-selected, .sky-phone-field-country-default {
@@ -35,6 +39,41 @@
   .sky-phone-field-flag {
     display: inline-block;
     margin-right: $sky-margin-half;
+  }
+}
+
+.sky-theme-modern {
+  .sky-input-box {
+    .sky-country-field-input {
+      background-color: transparent;
+    }
+
+    .sky-input-group-btn.sky-phone-field-country-btn .sky-btn {
+      padding: 0 17px 0 18px;
+    }
+
+    .sky-phone-field-search-btn-dismiss {
+      background-color: transparent;
+      margin-top: -22px;
+      height: 53px;
+      width: 53px;
+      margin-right: 1px;
+      padding: 0;
+      z-index: 2;
+      position: relative;
+
+      &:not(:active):not(:focus):not(:hover) {
+        border: none;
+      }
+
+      .sky-phone-field-search-close-icon-default {
+        display: none;
+      }
+
+      .sky-phone-field-search-close-icon-modern {
+        display: inline;
+      }
+    }
   }
 }
 

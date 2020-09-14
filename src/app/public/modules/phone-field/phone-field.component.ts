@@ -1,5 +1,7 @@
 import {
   animate,
+  AnimationEvent,
+  state,
   style,
   transition,
   trigger
@@ -9,12 +11,14 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  ElementRef,
   EventEmitter,
   Input,
   OnDestroy,
   OnInit,
+  Optional,
   Output,
+  SkipSelf,
+  TemplateRef,
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
@@ -26,8 +30,16 @@ import {
 } from '@angular/forms';
 
 import {
+  SkyInputBoxHostService
+} from '@skyux/forms';
+
+import {
   SkyCountryFieldCountry
 } from '@skyux/lookup';
+
+import {
+  SkyThemeService
+} from '@skyux/theme';
 
 import {
   PhoneNumberFormat,
@@ -55,7 +67,11 @@ import {
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
-    SkyPhoneFieldAdapterService
+    SkyPhoneFieldAdapterService,
+    {
+      provide: SkyInputBoxHostService,
+      useValue: undefined
+    }
   ],
   animations: [
     trigger('blockAnimationOnLoad', [
@@ -63,38 +79,33 @@ import {
     ]),
     trigger(
       'countrySearchAnimation', [
-        transition(':enter', [
-          style({
-            opacity: 0,
-            width: 0
-          }),
-          animate('200ms ease-in', style({
-            opacity: 1,
-            width: '*'
-          }))
-        ]),
-        transition(':leave', [
-          animate('200ms ease-in', style({
-            opacity: 0,
-            width: 0
-          }))
+        state('open', style({
+          display: 'flex',
+          opacity: 1,
+          width: '*'
+        })),
+        state('closed', style({
+          display: 'none',
+          opacity: 0,
+          width: 0
+        })),
+        transition('open <=> closed', [
+          animate('200ms ease-in')
         ])
       ]
     ),
     trigger(
       'phoneInputAnimation', [
-        transition(':enter', [
-          style({
-            opacity: 0
-          }),
-          animate('150ms ease-in', style({
-            opacity: 1
-          }))
-        ]),
-        transition(':leave', [
-          animate('150ms ease-in', style({
-            opacity: 0
-          }))
+        state('open', style({
+          display: 'block',
+          opacity: 1
+        })),
+        state('closed', style({
+          display: 'none',
+          opacity: 0
+        })),
+        transition('open <=> closed', [
+          animate('150ms ease-in')
         ])
       ]
     )
@@ -141,12 +152,6 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
 
   public countrySearchForm: FormGroup;
 
-  @ViewChild('countrySearchInput', {
-    read: ElementRef,
-    static: false
-  })
-  public countrySearchInput: ElementRef;
-
   /**
    * Specifies the currently selected country to validate against.
    */
@@ -170,6 +175,18 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
     return this._selectedCountry;
   }
 
+  @ViewChild('inputTemplateRef', {
+    read: TemplateRef,
+    static: true
+  })
+  private inputTemplateRef: TemplateRef<any>;
+
+  @ViewChild('countryBtnTemplateRef', {
+    read: TemplateRef,
+    static: true
+  })
+  private countryBtnTemplateRef: TemplateRef<any>;
+
   private defaultCountryData: SkyPhoneFieldCountry;
 
   private phoneInputAnimationTriggered = false;
@@ -186,7 +203,8 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
     private formBuilder: FormBuilder,
     private adapterService: SkyPhoneFieldAdapterService,
     private changeDetector: ChangeDetectorRef,
-    private elementRef: ElementRef
+    @Optional() public themeSvc?: SkyThemeService,
+    @Optional() @SkipSelf() public inputBoxHostSvc?: SkyInputBoxHostService
   ) {
     /**
      * The json functions here ensures that we get a copy of the array and not the global original.
@@ -211,10 +229,18 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
   }
 
   public ngOnInit(): void {
-
     // The timeout here is needed to avoid a change before checked error when a user specifies
     // a selected country on intialization of the component.
     setTimeout(() => {
+      if (this.inputBoxHostSvc) {
+        this.inputBoxHostSvc.populate(
+          {
+            inputTemplate: this.inputTemplateRef,
+            buttonsLeftTemplate: this.countryBtnTemplateRef
+          }
+        );
+      }
+
       if (!this.defaultCountry) {
         this.defaultCountry = 'us';
       }
@@ -264,22 +290,22 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
     this.changeDetector.markForCheck();
   }
 
-  public countrySearchAnimationEnd() {
+  public countrySearchAnimationEnd(e: AnimationEvent) {
     if (!this.countrySearchShown) {
       this.phoneInputShown = true;
     } else {
-      this.adapterService.focusCountrySearchElement(this.countrySearchInput);
+      this.adapterService.focusCountrySearchElement(e.element);
     }
 
     this.changeDetector.markForCheck();
   }
 
-  public phoneInputAnimationEnd() {
+  public phoneInputAnimationEnd(e: AnimationEvent) {
     if (!this.phoneInputShown) {
       this.countrySearchShown = true;
     } else {
       if (this.phoneInputAnimationTriggered) {
-        this.adapterService.focusPhoneInput(this.elementRef);
+        this.adapterService.focusPhoneInput(e.element);
         this.phoneInputAnimationTriggered = false;
       }
     }

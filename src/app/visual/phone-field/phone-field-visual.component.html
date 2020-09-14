@@ -1,3 +1,7 @@
+<sky-docs-demo-control-panel-theme
+  (themeSettingsChange)="themeSettingsChange($event)"
+></sky-docs-demo-control-panel-theme>
+
 <h2
   class="sky-section-heading"
 >
@@ -46,3 +50,24 @@
 <p *ngIf="phoneControl.value">
   Entered phone number is {{ phoneControl.value }}
 </p>
+
+<div
+  id="screenshot-phone-field"
+  style="width: 50%; height: 100px; margin: 10px; padding: 10px;"
+  [@.disabled]="true"
+>
+  <sky-input-box>
+    <label
+      class="sky-control-label"
+    >
+      Input box
+    </label>
+    <sky-phone-field>
+      <input
+        class="sky-form-control"
+        [(ngModel)]="phoneNumber"
+        skyPhoneFieldInput
+      >
+    </sky-phone-field>
+  </sky-input-box>
+</div>
