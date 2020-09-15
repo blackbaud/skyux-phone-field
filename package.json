@@ -70,6 +70,7 @@
     "@skyux/lookup": "4.2.1",
     "@skyux/modals": "4.5.0",
     "@skyux/omnibar-interop": "4.0.1",
+    "@skyux/phone-field": "4.1.1",
     "@skyux/popovers": "4.2.0",
     "@skyux/router": "4.0.1",
     "@skyux/tabs": "4.3.2",

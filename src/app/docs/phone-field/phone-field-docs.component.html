@@ -8,6 +8,33 @@
     The phone field module creates a button, search input, and text input for entering and validating international phone numbers.
   </sky-docs-demo-page-summary>
 
+  <sky-docs-demo>
+    <form
+      class="phone-field-demo"
+      [formGroup]="phoneForm"
+    >
+      <sky-phone-field
+        [defaultCountry]="'us'"
+      >
+        <input
+          formControlName="phoneControl"
+          skyPhoneFieldInput
+        >
+      </sky-phone-field>
+    </form>
+  </sky-docs-demo>
+
+  <sky-docs-code-examples
+    [packageDependencies]="{
+      '@skyux/lookup': '*',
+      '@skyux/phone-field': '*'
+    }"
+  >
+    <sky-docs-code-example
+      sourceCodePath="src/app/public/plugin-resources/code-examples/phone-field/basic"
+    ></sky-docs-code-example>
+  </sky-docs-code-examples>
+
   <sky-docs-design-guidelines>
 
     <sky-docs-demo-page-section
