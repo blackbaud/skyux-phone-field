@@ -92,7 +92,7 @@ describe('Phone Field Component', () => {
     tick();
   }
 
-  function setCountry(countryName: string, compFixture: ComponentFixture<any>) {
+  function setCountry(countryName: string, compFixture: ComponentFixture<any>): void {
     const countryInput = getCountrySearchToggleButton(compFixture);
     countryInput.click();
     detectChangesAndTick(compFixture);
@@ -109,6 +109,21 @@ describe('Phone Field Component', () => {
       'mousedown'
     );
     detectChangesAndTick(compFixture);
+  }
+
+  function searchCountry(countryName: string, compFixture: ComponentFixture<any>): NodeListOf<HTMLElement> {
+    const countryInput = getCountrySearchToggleButton(compFixture);
+    countryInput.click();
+    detectChangesAndTick(compFixture);
+
+    let countrySearchInput: HTMLInputElement = compFixture.debugElement.query(By.css('textarea'))
+      .nativeElement;
+    countrySearchInput.value = countryName;
+
+    SkyAppTestUtility.fireDomEvent(countrySearchInput, 'keyup');
+    detectChangesAndTick(compFixture);
+
+    return document.querySelectorAll('.sky-autocomplete-result');
   }
 
   function blurInput(
@@ -193,6 +208,40 @@ describe('Phone Field Component', () => {
 
         expect(nativeElement.querySelector('input').placeholder)
           .toBe(component.phoneFieldComponent.countries.find(country => country.iso2 === 'de').exampleNumber);
+      }));
+
+      it('should initialize with given supported countries', fakeAsync(() => {
+        component.supportedCountryISOs = ['gb', 'uk', 'us'];
+        detectChangesAndTick(fixture);
+
+        expect(searchCountry('Un', fixture).length).toBe(2);
+      }));
+
+      it('should initialize without given supported countries', fakeAsync(() => {
+        detectChangesAndTick(fixture);
+
+        expect(searchCountry('Un', fixture).length).toBe(11);
+      }));
+
+      it(`should throw an error when the default country is not a supported country upon the
+      supported countries being set`, fakeAsync(() => {
+        component.defaultCountry = 'us';
+
+        detectChangesAndTick(fixture);
+        component.supportedCountryISOs = ['de', 'gb', 'uk'];
+
+        expect(() => detectChangesAndTick(fixture)).toThrow();
+      }));
+
+      it(`should throw an error when the default country is not a supported country upon the
+      default country being set`, fakeAsync(() => {
+        component.defaultCountry = 'us';
+        component.supportedCountryISOs = ['de', 'gb', 'uk', 'us'];
+
+        detectChangesAndTick(fixture);
+        component.defaultCountry = 'ca';
+
+        expect(() => detectChangesAndTick(fixture)).toThrow();
       }));
 
       it('should handle initializing with number', fakeAsync(() => {
@@ -833,6 +882,40 @@ describe('Phone Field Component', () => {
 
         expect(nativeElement.querySelector('input').placeholder)
           .toBe(component.phoneFieldComponent.countries.find(country => country.iso2 === 'de').exampleNumber);
+      }));
+
+      it('should initialize with given supported countries', fakeAsync(() => {
+        component.supportedCountryISOs = ['gb', 'uk', 'us'];
+        detectChangesAndTick(fixture);
+
+        expect(searchCountry('Un', fixture).length).toBe(2);
+      }));
+
+      it('should initialize without given supported countries', fakeAsync(() => {
+        detectChangesAndTick(fixture);
+
+        expect(searchCountry('Un', fixture).length).toBe(11);
+      }));
+
+      it(`should throw an error when the default country is not a supported country upon the
+      supported countries being set`, fakeAsync(() => {
+        component.defaultCountry = 'us';
+
+        detectChangesAndTick(fixture);
+        component.supportedCountryISOs = ['de', 'gb', 'uk'];
+
+        expect(() => detectChangesAndTick(fixture)).toThrow();
+      }));
+
+      it(`should throw an error when the default country is not a supported country upon the
+      default country being set`, fakeAsync(() => {
+        component.defaultCountry = 'us';
+        component.supportedCountryISOs = ['de', 'gb', 'uk', 'us'];
+
+        detectChangesAndTick(fixture);
+        component.defaultCountry = 'ca';
+
+        expect(() => detectChangesAndTick(fixture)).toThrow();
       }));
 
       it('should handle initializing with number', fakeAsync(() => {

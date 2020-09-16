@@ -116,11 +116,32 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
 
       this.defaultCountryData = this.countries
         .find(country => country.iso2 === this._defaultCountry);
+
+      if (this.supportedCountryISOs && this.supportedCountryISOs.indexOf(this.defaultCountry) < 0) {
+        throw 'The `supportedCountryISOs` do not include the given `defaultCountry`!';
+      }
     }
   }
 
   public get defaultCountry(): string {
     return this._defaultCountry;
+  }
+
+  /**
+   * Specifies the [International Organization for Standardization Alpha 2](https://www.nationsonline.org/oneworld/country_code_list.htm)
+   * country codes for the countries that users can select. By default, all countries are available.
+   */
+  @Input()
+  public set supportedCountryISOs(value: string[]) {
+    this._supportedCountryISOs = value;
+
+    if (this.defaultCountry && value && value.indexOf(this.defaultCountry) < 0) {
+      throw 'The `supportedCountryISOs` do not include the given `defaultCountry`!';
+    }
+  }
+
+  public get supportedCountryISOs(): string[] {
+    return this._supportedCountryISOs;
   }
 
   /**
@@ -181,6 +202,8 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
   private _defaultCountry: string;
 
   private _selectedCountry: SkyPhoneFieldCountry;
+
+  private _supportedCountryISOs: string[];
 
   constructor(
     private formBuilder: FormBuilder,
