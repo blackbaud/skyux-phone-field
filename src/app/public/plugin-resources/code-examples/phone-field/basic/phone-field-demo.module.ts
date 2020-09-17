@@ -11,6 +11,10 @@ import {
 } from '@angular/forms';
 
 import {
+  SkyStatusIndicatorModule
+} from '@skyux/indicators';
+
+import {
   SkyPhoneFieldModule
 } from '@skyux/phone-field';
 
@@ -25,7 +29,8 @@ import {
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    SkyPhoneFieldModule
+    SkyPhoneFieldModule,
+    SkyStatusIndicatorModule
   ],
   exports: [
     PhoneFieldDemoComponent
