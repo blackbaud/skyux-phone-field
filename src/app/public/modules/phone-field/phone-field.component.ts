@@ -127,8 +127,12 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
     return this._defaultCountry;
   }
 
+  /**
+   * Specifies the format for validated phone numbers.
+   * @default 'default'
+   */
   @Input()
-  public returnFormat: SkyPhoneFieldNumberReturnFormat = 'reactive';
+  public returnFormat: SkyPhoneFieldNumberReturnFormat = 'default';
 
   /**
    * Emits a `SkyPhoneFieldCountry` object when the selected country in the country search

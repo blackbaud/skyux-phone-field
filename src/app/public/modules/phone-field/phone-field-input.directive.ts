@@ -311,7 +311,7 @@ export class SkyPhoneFieldInputDirective implements OnInit, OnDestroy, AfterView
             return this.phoneUtils.format(numberObj, PhoneNumberFormat.INTERNATIONAL);
           case 'national':
             return this.phoneUtils.format(numberObj, PhoneNumberFormat.NATIONAL);
-          case 'reactive':
+          case 'default':
           default:
             if (this.phoneFieldComponent.selectedCountry.iso2 !== this.phoneFieldComponent.defaultCountry) {
               return this.phoneUtils.format(numberObj, PhoneNumberFormat.INTERNATIONAL);

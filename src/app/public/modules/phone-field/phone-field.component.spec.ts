@@ -287,8 +287,8 @@ describe('Phone Field Component', () => {
         expect(component.modelValue).toEqual('+61 2 1234 5678');
       }));
 
-      it('should correctly format a number on the default country when the reactive return format is given', fakeAsync(() => {
-        component.returnFormat = 'reactive';
+      it('should correctly format a number on the default country when the default return format is given', fakeAsync(() => {
+        component.returnFormat = 'default';
         detectChangesAndTick(fixture);
 
         setInput(nativeElement, '8675555309', fixture);
@@ -296,8 +296,8 @@ describe('Phone Field Component', () => {
         expect(component.modelValue).toEqual('(867) 555-5309');
       }));
 
-      it('should correctly format a number on a non-default country when the reactive return format is given', fakeAsync(() => {
-        component.returnFormat = 'reactive';
+      it('should correctly format a number on a non-default country when the default return format is given', fakeAsync(() => {
+        component.returnFormat = 'default';
         component.selectedCountry = {
           iso2: 'au',
           name: 'Australia'
@@ -1037,8 +1037,8 @@ describe('Phone Field Component', () => {
         expect(component.phoneControl.value).toEqual('+61 2 1234 5678');
       }));
 
-      it('should correctly format a number on the default country when the reactive return format is given', fakeAsync(() => {
-        component.returnFormat = 'reactive';
+      it('should correctly format a number on the default country when the default return format is given', fakeAsync(() => {
+        component.returnFormat = 'default';
         detectChangesAndTick(fixture);
 
         setInput(nativeElement, '8675555309', fixture);
@@ -1046,8 +1046,8 @@ describe('Phone Field Component', () => {
         expect(component.phoneControl.value).toEqual('(867) 555-5309');
       }));
 
-      it('should correctly format a number on a non-default country when the reactive return format is given', fakeAsync(() => {
-        component.returnFormat = 'reactive';
+      it('should correctly format a number on a non-default country when the default return format is given', fakeAsync(() => {
+        component.returnFormat = 'default';
         component.selectedCountry = {
           iso2: 'au',
           name: 'Australia'
