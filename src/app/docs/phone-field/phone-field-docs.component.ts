@@ -15,11 +15,11 @@ import {
 })
 export class PhoneFieldDocsComponent implements OnInit {
 
-  public phoneForm: FormGroup;
-
   public phoneControl: FormControl;
 
-  public ngOnInit() {
+  public phoneForm: FormGroup;
+
+  public ngOnInit(): void {
     this.phoneControl = new FormControl();
     this.phoneForm = new FormGroup({
       'phoneControl': this.phoneControl
