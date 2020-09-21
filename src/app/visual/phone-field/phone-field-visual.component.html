@@ -51,14 +51,21 @@
   Entered phone number is {{ phoneControl.value }}
 </p>
 
+<h2
+  class="sky-section-heading"
+>
+  Phone field inside input box
+</h2>
+
 <div
-  id="screenshot-phone-field"
-  style="width: 50%; height: 100px; margin: 10px; padding: 10px;"
+  id="screenshot-phone-field-input-box"
+  style="width: 50%; height: 160px; margin: 10px; padding: 10px;"
   [@.disabled]="true"
 >
   <sky-input-box>
     <label
       class="sky-control-label"
+      [for]="skyPhoneFieldInputBox.id"
     >
       Input box
     </label>
@@ -66,7 +73,9 @@
       <input
         class="sky-form-control"
         [(ngModel)]="phoneNumber"
+        skyId
         skyPhoneFieldInput
+        #skyPhoneFieldInputBox="skyId"
       >
     </sky-phone-field>
   </sky-input-box>

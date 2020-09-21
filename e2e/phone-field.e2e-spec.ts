@@ -1,6 +1,7 @@
 import {
   expect,
-  SkyHostBrowser
+  SkyHostBrowser,
+  SkyVisualThemeSelector
 } from '@skyux-sdk/e2e';
 
 import {
@@ -9,76 +10,133 @@ import {
 } from 'protractor';
 
 describe('Phone Field', () => {
+  let currentTheme: string;
+  let currentThemeMode: string;
 
-  it('should match previous phone field screenshot', (done) => {
-    SkyHostBrowser.get('visual/phone-field');
-    SkyHostBrowser.setWindowBreakpoint('lg');
-    expect('#screenshot-phone-field').toMatchBaselineScreenshot(done, {
-      screenshotName: 'phone-field'
+  async function selectTheme(theme: string, mode: string): Promise<void> {
+    currentTheme = theme;
+    currentThemeMode = mode;
+
+    return SkyVisualThemeSelector.selectTheme(theme, mode);
+  }
+
+  function getScreenshotName(name: string): string {
+    if (currentTheme) {
+      name += '-' + currentTheme;
+    }
+
+    if (currentThemeMode) {
+      name += '-' + currentThemeMode;
+    }
+
+    return name;
+  }
+
+  function runTests() {
+    it('should match previous phone field screenshot', (done) => {
+      expect('#screenshot-phone-field').toMatchBaselineScreenshot(done, {
+        screenshotName: getScreenshotName('phone-field')
+      });
     });
+
+    it('should match previous phone field screenshot (screen: xs)', async (done) => {
+      await SkyHostBrowser.setWindowBreakpoint('xs');
+
+      expect('#screenshot-phone-field').toMatchBaselineScreenshot(done, {
+        screenshotName: getScreenshotName('phone-field-xs')
+      });
+    });
+
+    it('should match previous phone field screenshot when touched', async (done) => {
+      await element(by.css('#screenshot-phone-field .sky-form-control')).click();
+
+      expect('#screenshot-phone-field').toMatchBaselineScreenshot(done, {
+        screenshotName: getScreenshotName('phone-field-touched')
+      });
+    });
+
+    it('should match previous phone field screenshot when invalid', async (done) => {
+      let inputElement = element(by.css('#screenshot-phone-field .sky-form-control'));
+
+      await inputElement.click();
+      await inputElement.sendKeys('1234');
+
+      await element(by.css('body')).click();
+
+      expect('#screenshot-phone-field').toMatchBaselineScreenshot(done, {
+        screenshotName: getScreenshotName('phone-field-invalid')
+      });
+    });
+
+    it('should match previous phone field screenshot when dropdown is open', async (done) => {
+      const countrySearchBtn = element(by.css(
+        '#screenshot-phone-field .sky-phone-field-country-btn .sky-btn-default'
+      ));
+
+      await countrySearchBtn.click();
+
+      const inputElement = element(by.css('#screenshot-phone-field textarea.sky-form-control'));
+
+      await inputElement.click();
+      await inputElement.sendKeys('arg');
+
+      await SkyHostBrowser.moveCursorOffScreen();
+
+      expect('#screenshot-phone-field').toMatchBaselineScreenshot(done, {
+        screenshotName: getScreenshotName('phone-field-country-search')
+      });
+    });
+
+    it('should match previous phone field screenshot with a default country', (done) => {
+      expect('#screenshot-phone-field-default').toMatchBaselineScreenshot(done, {
+        screenshotName: getScreenshotName('phone-field-default')
+      });
+    });
+
+    it(
+      'should match previous phone field screenshot with a default country (screen: xs)',
+        async (done) => {
+        await SkyHostBrowser.setWindowBreakpoint('xs');
+
+        expect('#screenshot-phone-field-default').toMatchBaselineScreenshot(done, {
+          screenshotName: getScreenshotName('phone-field-default-xs')
+        });
+      }
+    );
+
+    it('should match previous phone field screenshot inside input box', async (done) => {
+      await SkyHostBrowser.scrollTo('#screenshot-phone-field-input-box');
+
+      expect('#screenshot-phone-field-input-box').toMatchBaselineScreenshot(done, {
+        screenshotName: getScreenshotName('phone-field-input-box')
+      });
+    });
+  }
+
+  beforeEach(async () => {
+    currentTheme = undefined;
+    currentThemeMode = undefined;
+
+    await SkyHostBrowser.get('visual/phone-field');
+    await SkyHostBrowser.setWindowBreakpoint('lg');
   });
 
-  it('should match previous phone field screenshot (screen: xs)', (done) => {
-    SkyHostBrowser.get('visual/phone-field');
-    SkyHostBrowser.setWindowBreakpoint('xs');
-    expect('#screenshot-phone-field').toMatchBaselineScreenshot(done, {
-      screenshotName: 'phone-field-xs'
+  runTests();
+
+  describe('when modern theme', () => {
+    beforeEach(async () => {
+      await selectTheme('modern', 'light');
     });
+
+    runTests();
   });
 
-  it('should match previous phone field screenshot when touched', (done) => {
-    SkyHostBrowser.get('visual/phone-field');
-    SkyHostBrowser.setWindowBreakpoint('lg');
-    element(by.css('#screenshot-phone-field .sky-form-control')).click();
-    expect('#screenshot-phone-field').toMatchBaselineScreenshot(done, {
-      screenshotName: 'phone-field-touched'
+  describe('when modern theme in dark mode', () => {
+    beforeEach(async () => {
+      await selectTheme('modern', 'dark');
     });
+
+    runTests();
   });
 
-  it('should match previous phone field screenshot when invalid', (done) => {
-    SkyHostBrowser.get('visual/phone-field');
-    SkyHostBrowser.setWindowBreakpoint('lg');
-    let inputElement = element(by.css('#screenshot-phone-field .sky-form-control'));
-    inputElement.click();
-    inputElement.sendKeys('1234');
-    element(by.css('body')).click();
-    expect('#screenshot-phone-field').toMatchBaselineScreenshot(done, {
-      screenshotName: 'phone-field-invalid'
-    });
-  });
-
-  it('should match previous phone field screenshot when dropdown is open', (done) => {
-    SkyHostBrowser.get('visual/phone-field');
-    SkyHostBrowser.setWindowBreakpoint('lg');
-
-    const countrySearchBtn = element(by.css(
-      '#screenshot-phone-field .sky-phone-field-country-btn .sky-btn-default'
-    ));
-    countrySearchBtn.click();
-
-    const inputElement = element(by.css('#screenshot-phone-field textarea.sky-form-control'));
-    inputElement.click();
-    inputElement.sendKeys('arg');
-
-    SkyHostBrowser.moveCursorOffScreen();
-    expect('#screenshot-phone-field').toMatchBaselineScreenshot(done, {
-      screenshotName: 'phone-field-country-search'
-    });
-  });
-
-  it('should match previous phone field screenshot with a default country', (done) => {
-    SkyHostBrowser.get('visual/phone-field');
-    SkyHostBrowser.setWindowBreakpoint('lg');
-    expect('#screenshot-phone-field-default').toMatchBaselineScreenshot(done, {
-      screenshotName: 'phone-field-default'
-    });
-  });
-
-  it('should match previous phone field screenshot with a default country (screen: xs)', (done) => {
-    SkyHostBrowser.get('visual/phone-field');
-    SkyHostBrowser.setWindowBreakpoint('xs');
-    expect('#screenshot-phone-field-default').toMatchBaselineScreenshot(done, {
-      screenshotName: 'phone-field-default-xs'
-    });
-  });
 });

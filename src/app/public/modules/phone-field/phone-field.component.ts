@@ -1,7 +1,6 @@
 import {
   animate,
   AnimationEvent,
-  state,
   style,
   transition,
   trigger
@@ -68,6 +67,9 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     SkyPhoneFieldAdapterService,
+    // Prevents the embedded country field component from changing its behavior based on
+    // being inside an input box. The phone field itself will handle the required changes
+    // for input box.
     {
       provide: SkyInputBoxHostService,
       useValue: undefined
@@ -79,33 +81,38 @@ import {
     ]),
     trigger(
       'countrySearchAnimation', [
-        state('open', style({
-          display: 'flex',
-          opacity: 1,
-          width: '*'
-        })),
-        state('closed', style({
-          display: 'none',
-          opacity: 0,
-          width: 0
-        })),
-        transition('open <=> closed', [
-          animate('200ms ease-in')
+        transition(':enter', [
+          style({
+            opacity: 0,
+            width: 0
+          }),
+          animate('200ms ease-in', style({
+            opacity: 1,
+            width: '*'
+          }))
+        ]),
+        transition(':leave', [
+          animate('200ms ease-in', style({
+            opacity: 0,
+            width: 0
+          }))
         ])
       ]
     ),
     trigger(
       'phoneInputAnimation', [
-        state('open', style({
-          display: 'block',
-          opacity: 1
-        })),
-        state('closed', style({
-          display: 'none',
-          opacity: 0
-        })),
-        transition('open <=> closed', [
-          animate('150ms ease-in')
+        transition(':enter', [
+          style({
+            opacity: 0
+          }),
+          animate('150ms ease-in', style({
+            opacity: 1
+          }))
+        ]),
+        transition(':leave', [
+          animate('150ms ease-in', style({
+            opacity: 0
+          }))
         ])
       ]
     )

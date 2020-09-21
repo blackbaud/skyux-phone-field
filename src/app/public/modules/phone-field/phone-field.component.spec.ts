@@ -1437,9 +1437,9 @@ describe('Phone Field Component', () => {
 
       const inputGroupEl = inputBoxEl.querySelector('.sky-form-group > .sky-input-group');
       const countryBtnEl = inputGroupEl.children.item(0);
-      const inputEl = inputGroupEl.children.item(1);
+      const containerEl = inputGroupEl.children.item(1);
 
-      expect(inputEl).toHaveCssClass('sky-phone-field-container');
+      expect(containerEl).toHaveCssClass('sky-phone-field-container');
       expect(countryBtnEl).toHaveCssClass('sky-phone-field-country-btn');
     }));
   });
