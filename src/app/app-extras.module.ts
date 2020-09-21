@@ -14,6 +14,11 @@ import {
 import {
   SkyInputBoxModule
 } from '@skyux/forms';
+}
+
+import {
+  SkyStatusIndicatorModule
+} from '@skyux/indicators';
 
 import {
   SkyAppLinkModule
@@ -29,7 +34,8 @@ import {
     SkyDocsToolsModule,
     SkyIdModule,
     SkyInputBoxModule,
-    SkyPhoneFieldModule
+    SkyPhoneFieldModule,
+    SkyStatusIndicatorModule
   ],
   providers: [
     {
