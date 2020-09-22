@@ -14,7 +14,6 @@ import {
 import {
   SkyInputBoxModule
 } from '@skyux/forms';
-}
 
 import {
   SkyStatusIndicatorModule
