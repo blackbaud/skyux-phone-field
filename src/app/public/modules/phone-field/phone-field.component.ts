@@ -116,13 +116,19 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
   @Input()
   public set defaultCountry(value: string) {
     if (value && value !== this._defaultCountry) {
+      if (this.supportedCountryISOs && this._userSupportedCountryISOs.indexOf(this.defaultCountry) < 0) {
+        // NOTE: We need to use the private version here in order to not overwrite
+        // the user supplied countries.
+        this._supportedCountryISOs = this.supportedCountryISOs.filter(countryCode => countryCode !== this.defaultCountry);
+      }
+
       this._defaultCountry = value.toLowerCase();
 
       this.defaultCountryData = this.countries
         .find(country => country.iso2 === this._defaultCountry);
 
       if (this.supportedCountryISOs && this.supportedCountryISOs.indexOf(this.defaultCountry) < 0) {
-        throw 'The `supportedCountryISOs` do not include the given `defaultCountry`!';
+        this.supportedCountryISOs.push(this.defaultCountry);
       }
     }
   }
@@ -143,10 +149,12 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
    */
   @Input()
   public set supportedCountryISOs(value: string[]) {
-    this._supportedCountryISOs = value;
+    this._supportedCountryISOs = value ?
+      value.map(countryCode => { return countryCode.toLowerCase(); }) : undefined;
+    this._userSupportedCountryISOs = this._supportedCountryISOs?.slice();
 
     if (this.defaultCountry && value && value.indexOf(this.defaultCountry) < 0) {
-      throw 'The `supportedCountryISOs` do not include the given `defaultCountry`!';
+      this._supportedCountryISOs.push(this.defaultCountry);
     }
   }
 
@@ -214,6 +222,8 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
   private _selectedCountry: SkyPhoneFieldCountry;
 
   private _supportedCountryISOs: string[];
+
+  private _userSupportedCountryISOs: string[];
 
   constructor(
     private formBuilder: FormBuilder,

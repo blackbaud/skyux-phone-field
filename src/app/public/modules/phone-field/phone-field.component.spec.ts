@@ -223,25 +223,45 @@ describe('Phone Field Component', () => {
         expect(searchCountry('Un', fixture).length).toBe(11);
       }));
 
-      it(`should throw an error when the default country is not a supported country upon the
-      supported countries being set`, fakeAsync(() => {
+      it(`should include both the supported countries and the default country in the country search results when the supported countries are set second`, fakeAsync(() => {
         component.defaultCountry = 'us';
 
         detectChangesAndTick(fixture);
         component.supportedCountryISOs = ['de', 'gb', 'uk'];
 
-        expect(() => detectChangesAndTick(fixture)).toThrow();
+        detectChangesAndTick(fixture);
+
+        expect(searchCountry('Un', fixture).length).toBe(2);
       }));
 
-      it(`should throw an error when the default country is not a supported country upon the
-      default country being set`, fakeAsync(() => {
+      it(`should include both the supported countries and the default country in the country search results when the default country is set second`, fakeAsync(() => {
         component.defaultCountry = 'us';
-        component.supportedCountryISOs = ['de', 'gb', 'uk', 'us'];
+        component.supportedCountryISOs = ['de', 'va', 'uk', 'us'];
 
         detectChangesAndTick(fixture);
         component.defaultCountry = 'ca';
 
-        expect(() => detectChangesAndTick(fixture)).toThrow();
+        detectChangesAndTick(fixture);
+
+        expect(searchCountry('ca', fixture).length).toBe(2);
+      }));
+
+      it(`should remove a country from the country search results if it was only in the results due
+       to being the default country`, fakeAsync(() => {
+        component.defaultCountry = 'us';
+
+        detectChangesAndTick(fixture);
+        component.supportedCountryISOs = ['de', 'gb', 'uk'];
+
+        detectChangesAndTick(fixture);
+
+        expect(searchCountry('Un', fixture).length).toBe(2);
+        fixture.nativeElement.querySelector('.sky-phone-field-search-btn-dismiss').click();
+        component.defaultCountry = 'ca';
+
+        detectChangesAndTick(fixture);
+
+        expect(searchCountry('Un', fixture).length).toBe(1);
       }));
 
       it('should handle initializing with number', fakeAsync(() => {
@@ -987,25 +1007,45 @@ describe('Phone Field Component', () => {
         expect(searchCountry('Un', fixture).length).toBe(11);
       }));
 
-      it(`should throw an error when the default country is not a supported country upon the
-      supported countries being set`, fakeAsync(() => {
+      it(`should include both the supported countries and the default country in the country search results when the supported countries are set second`, fakeAsync(() => {
         component.defaultCountry = 'us';
 
         detectChangesAndTick(fixture);
         component.supportedCountryISOs = ['de', 'gb', 'uk'];
 
-        expect(() => detectChangesAndTick(fixture)).toThrow();
+        detectChangesAndTick(fixture);
+
+        expect(searchCountry('Un', fixture).length).toBe(2);
       }));
 
-      it(`should throw an error when the default country is not a supported country upon the
-      default country being set`, fakeAsync(() => {
+      it(`should include both the supported countries and the default country in the country search results when the default country is set second`, fakeAsync(() => {
         component.defaultCountry = 'us';
-        component.supportedCountryISOs = ['de', 'gb', 'uk', 'us'];
+        component.supportedCountryISOs = ['de', 'va', 'uk', 'us'];
 
         detectChangesAndTick(fixture);
         component.defaultCountry = 'ca';
 
-        expect(() => detectChangesAndTick(fixture)).toThrow();
+        detectChangesAndTick(fixture);
+
+        expect(searchCountry('ca', fixture).length).toBe(2);
+      }));
+
+      it(`should remove a country from the country search results if it was only in the results due
+       to being the default country`, fakeAsync(() => {
+        component.defaultCountry = 'us';
+
+        detectChangesAndTick(fixture);
+        component.supportedCountryISOs = ['de', 'gb', 'uk'];
+
+        detectChangesAndTick(fixture);
+
+        expect(searchCountry('Un', fixture).length).toBe(2);
+        fixture.nativeElement.querySelector('.sky-phone-field-search-btn-dismiss').click();
+        component.defaultCountry = 'ca';
+
+        detectChangesAndTick(fixture);
+
+        expect(searchCountry('Un', fixture).length).toBe(1);
       }));
 
       it('should handle initializing with number', fakeAsync(() => {
