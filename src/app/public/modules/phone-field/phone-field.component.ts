@@ -205,6 +205,12 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
   })
   private countryBtnTemplateRef: TemplateRef<any>;
 
+  @ViewChild('buttonsInsetTemplateRef', {
+    read: TemplateRef,
+    static: true
+  })
+  private buttonsInsetTemplateRef: TemplateRef<any>;
+
   private defaultCountryData: SkyPhoneFieldCountry;
 
   private phoneInputAnimationTriggered = false;
@@ -254,6 +260,7 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
         this.inputBoxHostSvc.populate(
           {
             inputTemplate: this.inputTemplateRef,
+            buttonsInsetTemplate: this.buttonsInsetTemplateRef,
             buttonsLeftTemplate: this.countryBtnTemplateRef
           }
         );

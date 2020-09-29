@@ -7,11 +7,9 @@
 }
 
 .sky-phone-field-country-btn {
-
   .sky-btn {
     border-radius: 0;
   }
-
 }
 
 .sky-phone-field-container {
@@ -42,30 +40,23 @@
   }
 }
 
+.sky-input-box {
+  .sky-phone-field-search-btn-dismiss .fa-lg {
+    vertical-align: -10%;
+  }
+}
+
 .sky-theme-modern {
   .sky-input-box {
-    .sky-country-field-input {
+    .sky-phone-field-country-search .sky-country-field-input {
       background-color: transparent;
     }
 
-    .sky-input-group-btn.sky-phone-field-country-btn .sky-btn {
+    .sky-phone-field-country-btn.sky-input-group-btn .sky-btn {
       padding: 0 17px 0 18px;
     }
 
     .sky-phone-field-search-btn-dismiss {
-      background-color: transparent;
-      margin-top: -22px;
-      height: 53px;
-      width: 53px;
-      margin-right: 1px;
-      padding: 0;
-      z-index: 2;
-      position: relative;
-
-      &:not(:active):not(:focus):not(:hover) {
-        border: none;
-      }
-
       .sky-phone-field-search-close-icon-default {
         display: none;
       }

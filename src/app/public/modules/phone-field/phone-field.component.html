@@ -5,6 +5,7 @@
   >
     <ng-container *ngTemplateOutlet="countryBtnTemplateRef"></ng-container>
     <ng-container *ngTemplateOutlet="inputTemplateRef"></ng-container>
+    <ng-container *ngTemplateOutlet="buttonsInsetTemplateRef"></ng-container>
   </div>
 </ng-container>
 
@@ -60,35 +61,40 @@
       >
       </sky-country-field>
     </div>
-    <div
-      class="sky-search-item-dismiss"
-    >
-      <button
-        class="sky-btn sky-phone-field-search-btn-dismiss"
-        type="button"
-        [attr.title]="'skyux_phone_field_country_search_dismiss' | skyLibResources"
-        [ngClass]="{
-          'sky-btn-default':
-            (themeSvc?.settingsChange | async)?.currentSettings?.theme?.name === 'modern'
-        }"
-        (click)="toggleCountrySearch(false)"
-      >
-        <sky-icon
-          class="sky-phone-field-search-close-icon-default"
-          icon="chevron-circle-left"
-          size="lg"
-        >
-        </sky-icon>
-        <sky-icon
-          class="sky-phone-field-search-close-icon-modern"
-          icon="close"
-          iconType="skyux"
-          size="2x"
-        >
-        </sky-icon>
-      </button>
-    </div>
   </span>
+</ng-template>
+
+<ng-template
+  #buttonsInsetTemplateRef
+>
+  <div *ngIf="countrySearchShown"
+    class="sky-input-group-btn sky-input-box-btn-inset sky-search-item-dismiss"
+  >
+    <button
+      class="sky-btn sky-phone-field-search-btn-dismiss"
+      type="button"
+      [attr.title]="'skyux_phone_field_country_search_dismiss' | skyLibResources"
+      [ngClass]="{
+        'sky-btn-default':
+          (themeSvc?.settingsChange | async)?.currentSettings?.theme?.name === 'modern'
+      }"
+      (click)="toggleCountrySearch(false)"
+    >
+      <sky-icon
+        class="sky-phone-field-search-close-icon-default"
+        icon="chevron-circle-left"
+        size="lg"
+      >
+      </sky-icon>
+      <sky-icon
+        class="sky-phone-field-search-close-icon-modern"
+        icon="close"
+        iconType="skyux"
+        size="2x"
+      >
+      </sky-icon>
+    </button>
+  </div>
 </ng-template>
 
 <ng-template
