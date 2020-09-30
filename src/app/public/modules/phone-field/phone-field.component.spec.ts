@@ -622,6 +622,47 @@ describe('Phone Field Component', () => {
           });
         });
       }));
+
+      it('should validate properly when a valid number with an extension is given and extensions are allowed', async(() => {
+        component.modelValue = '867-555-5309ext3';
+        component.defaultCountry = 'us';
+        fixture.detectChanges();
+        fixture.whenStable().then(() => {
+          fixture.detectChanges();
+
+          expect(nativeElement.querySelector('input').value).toBe('867-555-5309ext3');
+
+          expect(component.modelValue)
+            .toBe('(867) 555-5309 ext. 3');
+
+          expect(ngModel.valid).toBe(true);
+          expect(ngModel.errors).toBeNull();
+          expect(ngModel.touched).toBe(false);
+        });
+      }));
+
+      it('should validate properly when a valid number with an extension is given and extensions are not allowed', async(() => {
+        component.modelValue = '867-555-5309ext3';
+        component.allowExtensions = false;
+        component.defaultCountry = 'us';
+        fixture.detectChanges();
+        fixture.whenStable().then(() => {
+          fixture.detectChanges();
+
+          expect(nativeElement.querySelector('input').value).toBe('867-555-5309ext3');
+
+          expect(component.modelValue)
+            .toBe('(867) 555-5309 ext. 3');
+
+          expect(ngModel.valid).toBe(false);
+          expect(ngModel.errors).toEqual({
+            'skyPhoneField': {
+              invalid: '(867) 555-5309 ext. 3'
+            }
+          });
+          expect(ngModel.touched).toBe(true);
+        });
+      }));
     });
 
     describe('disabled state', () => {
@@ -1334,6 +1375,47 @@ describe('Phone Field Component', () => {
 
         expect(component.phoneControl.valid).toBe(true);
         expect(component.phoneControl.errors).toBeNull();
+      }));
+
+      it('should validate properly when a valid number with an extension is given and extensions are allowed', async(() => {
+        component.initialValue = '867-555-5309ext3';
+        component.defaultCountry = 'us';
+        fixture.detectChanges();
+        fixture.whenStable().then(() => {
+          fixture.detectChanges();
+
+          expect(nativeElement.querySelector('input').value).toBe('867-555-5309ext3');
+
+          expect(component.phoneControl.value)
+            .toBe('(867) 555-5309 ext. 3');
+
+          expect(component.phoneControl.valid).toBe(true);
+          expect(component.phoneControl.errors).toBeNull();
+          expect(component.phoneControl.touched).toBe(false);
+        });
+      }));
+
+      it('should validate properly when a valid number with an extension is given and extensions are not allowed', async(() => {
+        component.initialValue = '867-555-5309ext3';
+        component.allowExtensions = false;
+        component.defaultCountry = 'us';
+        fixture.detectChanges();
+        fixture.whenStable().then(() => {
+          fixture.detectChanges();
+
+          expect(nativeElement.querySelector('input').value).toBe('867-555-5309ext3');
+
+          expect(component.phoneControl.value)
+            .toBe('(867) 555-5309 ext. 3');
+
+          expect(component.phoneControl.valid).toBe(false);
+          expect(component.phoneControl.errors).toEqual({
+            'skyPhoneField': {
+              invalid: '(867) 555-5309 ext. 3'
+            }
+          });
+          expect(component.phoneControl.touched).toBe(true);
+        });
       }));
     });
 
