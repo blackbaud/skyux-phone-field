@@ -21,6 +21,8 @@ export class PhoneFieldVisualComponent implements OnInit {
 
   public phoneNumber: string;
 
+  public phoneNumberInputBox: string;
+
   public phoneForm: FormGroup;
 
   public phoneControl: FormControl;
