@@ -25,7 +25,7 @@
     "@angular/common": "^9.1.9",
     "@angular/core": "^9.1.9",
     "@angular/forms": "^9.1.9",
-    "@skyux/forms": "^4.13.1",
+    "@skyux/forms": "^4.13.2",
     "@skyux/i18n": "^4.0.0",
     "@skyux/indicators": "^4.0.0",
     "@skyux/lookup": "^4.5.0",
