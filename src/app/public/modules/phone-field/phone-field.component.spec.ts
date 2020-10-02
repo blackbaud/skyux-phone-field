@@ -7,6 +7,7 @@ import {
 } from '@angular/core/testing';
 
 import {
+  FormControl,
   FormsModule,
   NgModel,
   ReactiveFormsModule
@@ -138,6 +139,35 @@ describe('Phone Field Component', () => {
     if (!isAsync) {
       tick();
     }
+  }
+
+  function validateInputAndModel(
+    modelValue: string,
+    formattedValue: string,
+    isValid: boolean,
+    isTouched: boolean,
+    model: NgModel | FormControl,
+    fixture: ComponentFixture<any>
+  ) {
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('input').value).toBe(modelValue);
+
+    expect(model.value)
+      .toBe(formattedValue);
+
+    expect(model.valid).toBe(isValid);
+
+    if (isValid) {
+      expect(model.errors).toBeNull();
+    } else {
+      expect(model.errors).toEqual({
+        'skyPhoneField': {
+          invalid: formattedValue
+        }
+      });
+    }
+
+    expect(model.touched).toBe(isTouched);
   }
   // #endregion
 
@@ -401,22 +431,7 @@ describe('Phone Field Component', () => {
             setInput(nativeElement, '123', fixture, true);
             fixture.detectChanges();
             fixture.whenStable().then(() => {
-              fixture.detectChanges();
-
-              expect(nativeElement.querySelector('input').value).toBe('123');
-
-              expect(component.modelValue)
-                .toBe('123');
-
-              expect(ngModel.valid).toBe(false);
-              expect(ngModel.errors).toEqual({
-                'skyPhoneField': {
-                  invalid: '123'
-                }
-              });
-
-              expect(ngModel.pristine).toBe(false);
-              expect(ngModel.touched).toBe(true);
+              validateInputAndModel('123', '123', false, true, ngModel, fixture);
             });
           });
         }));
@@ -428,33 +443,12 @@ describe('Phone Field Component', () => {
         fixture.whenStable().then(() => {
           fixture.detectChanges();
 
-          expect(nativeElement.querySelector('input').value).toBe('1234');
-
-          expect(component.modelValue)
-            .toBe('1234');
-
-          expect(ngModel.valid).toBe(false);
-          expect(ngModel.errors).toEqual({
-            'skyPhoneField': {
-              invalid: '1234'
-            }
-          });
-
-          expect(ngModel.touched).toBe(true);
+          validateInputAndModel('1234', '1234', false, true, ngModel, fixture);
 
           blurInput(fixture.nativeElement, fixture, true);
-          fixture.detectChanges();
+
           fixture.whenStable().then(() => {
-            fixture.detectChanges();
-
-            expect(ngModel.valid).toBe(false);
-            expect(ngModel.errors).toEqual({
-              'skyPhoneField': {
-                invalid: '1234'
-              }
-            });
-
-            expect(ngModel.touched).toBe(true);
+            validateInputAndModel('1234', '1234', false, true, ngModel, fixture);
           });
         });
       }));
@@ -466,28 +460,12 @@ describe('Phone Field Component', () => {
         fixture.whenStable().then(() => {
           fixture.detectChanges();
 
-          expect(nativeElement.querySelector('input').value).toBe('867-555-530');
-
-          expect(component.modelValue)
-            .toBe('867-555-530');
-
-          expect(ngModel.valid).toBe(false);
-
-          expect(ngModel.touched).toBe(true);
+          validateInputAndModel('867-555-530', '867-555-530', false, true, ngModel, fixture);
 
           blurInput(fixture.nativeElement, fixture, true);
-          fixture.detectChanges();
+
           fixture.whenStable().then(() => {
-            fixture.detectChanges();
-
-            expect(ngModel.valid).toBe(false);
-            expect(ngModel.errors).toEqual({
-              'skyPhoneField': {
-                invalid: '867-555-530'
-              }
-            });
-
-            expect(ngModel.touched).toBe(true);
+            validateInputAndModel('867-555-530', '867-555-530', false, true, ngModel, fixture);
           });
         });
       }));
@@ -499,23 +477,12 @@ describe('Phone Field Component', () => {
         fixture.whenStable().then(() => {
           fixture.detectChanges();
 
-          expect(nativeElement.querySelector('input').value).toBe('867-555-5309');
-
-          expect(component.modelValue)
-            .toBe('(867) 555-5309');
-
-          expect(ngModel.valid).toBe(true);
-          expect(ngModel.errors).toBeNull();
-
-          expect(ngModel.touched).toBe(false);
+          validateInputAndModel('867-555-5309', '(867) 555-5309', true, false, ngModel, fixture);
 
           blurInput(fixture.nativeElement, fixture, true);
-          fixture.detectChanges();
+
           fixture.whenStable().then(() => {
-            fixture.detectChanges();
-            expect(ngModel.valid).toBe(true);
-            expect(ngModel.errors).toBeNull();
-            expect(ngModel.touched).toBe(true);
+            validateInputAndModel('867-555-5309', '(867) 555-5309', true, true, ngModel, fixture);
           });
         });
       }));
@@ -530,19 +497,7 @@ describe('Phone Field Component', () => {
 
           fixture.detectChanges();
           fixture.whenStable().then(() => {
-            fixture.detectChanges();
-
-            expect(nativeElement.querySelector('input').value).toBe('1234');
-
-            expect(component.modelValue)
-              .toBe('1234');
-
-            expect(ngModel.valid).toBe(false);
-            expect(ngModel.errors).toEqual({
-              'skyPhoneField': {
-                invalid: '1234'
-              }
-            });
+            validateInputAndModel('1234', '1234', false, true, ngModel, fixture);
           });
         });
       }));
@@ -559,17 +514,10 @@ describe('Phone Field Component', () => {
             fixture.detectChanges();
 
             setInput(fixture.nativeElement, '', fixture, true);
+
             fixture.detectChanges();
             fixture.whenStable().then(() => {
-              fixture.detectChanges();
-
-              expect(nativeElement.querySelector('input').value).toBe('');
-
-              expect(component.modelValue)
-                .toBe('');
-
-              expect(ngModel.valid).toBe(true);
-              expect(ngModel.errors).toBeNull();
+              validateInputAndModel('', '', true, true, ngModel, fixture);
             });
           });
         });
@@ -585,16 +533,10 @@ describe('Phone Field Component', () => {
             fixture.detectChanges();
 
             setInput(fixture.nativeElement, '8675555309', fixture, true);
+
+            fixture.detectChanges();
             fixture.whenStable().then(() => {
-              fixture.detectChanges();
-
-              expect(nativeElement.querySelector('input').value).toBe('8675555309');
-
-              expect(component.modelValue)
-                .toEqual('(867) 555-5309');
-
-              expect(ngModel.valid).toBe(true);
-              expect(ngModel.errors).toBeNull();
+              validateInputAndModel('8675555309', '(867) 555-5309', true, true, ngModel, fixture);
             });
           });
         });
@@ -608,59 +550,30 @@ describe('Phone Field Component', () => {
           fixture.detectChanges();
 
           setInput(fixture.nativeElement, '1234', fixture, true);
+
           fixture.detectChanges();
           fixture.whenStable().then(() => {
-            fixture.detectChanges();
-
-            expect(nativeElement.querySelector('input').value).toBe('1234');
-
-            expect(component.modelValue)
-              .toBe('1234');
-
-            expect(ngModel.valid).toBe(true);
-            expect(ngModel.errors).toBeNull();
+            validateInputAndModel('1234', '1234', true, false, ngModel, fixture);
           });
         });
       }));
 
       it('should validate properly when a valid number with an extension is given and extensions are allowed', async(() => {
         component.modelValue = '867-555-5309ext3';
-        component.defaultCountry = 'us';
         fixture.detectChanges();
+
         fixture.whenStable().then(() => {
-          fixture.detectChanges();
-
-          expect(nativeElement.querySelector('input').value).toBe('867-555-5309ext3');
-
-          expect(component.modelValue)
-            .toBe('(867) 555-5309 ext. 3');
-
-          expect(ngModel.valid).toBe(true);
-          expect(ngModel.errors).toBeNull();
-          expect(ngModel.touched).toBe(false);
+          validateInputAndModel('867-555-5309ext3', '(867) 555-5309 ext. 3', true, false, ngModel, fixture);
         });
       }));
 
       it('should validate properly when a valid number with an extension is given and extensions are not allowed', async(() => {
-        component.modelValue = '867-555-5309ext3';
         component.allowExtensions = false;
-        component.defaultCountry = 'us';
+        component.modelValue = '867-555-5309ext3';
         fixture.detectChanges();
+
         fixture.whenStable().then(() => {
-          fixture.detectChanges();
-
-          expect(nativeElement.querySelector('input').value).toBe('867-555-5309ext3');
-
-          expect(component.modelValue)
-            .toBe('(867) 555-5309 ext. 3');
-
-          expect(ngModel.valid).toBe(false);
-          expect(ngModel.errors).toEqual({
-            'skyPhoneField': {
-              invalid: '(867) 555-5309 ext. 3'
-            }
-          });
-          expect(ngModel.touched).toBe(true);
+          validateInputAndModel('867-555-5309ext3', '(867) 555-5309 ext. 3', false, true, ngModel, fixture);
         });
       }));
     });
@@ -738,17 +651,11 @@ describe('Phone Field Component', () => {
         component.modelValue = '8675555309';
         detectChangesAndTick(fixture);
 
-        expect(ngModel.valid).toBe(true);
-        expect(ngModel.errors).toBeNull();
+        validateInputAndModel('8675555309', '(867) 555-5309', true, false, ngModel, fixture);
 
         setCountry('Albania', fixture);
 
-        expect(ngModel.valid).toBe(false);
-        expect(ngModel.errors).toEqual({
-          'skyPhoneField': {
-            invalid: '8675555309'
-          }
-        });
+        validateInputAndModel('8675555309', '8675555309', false, true, ngModel, fixture);
       }));
 
       it('should change to a new country based on a passed in dial code on a model change',
@@ -765,8 +672,7 @@ describe('Phone Field Component', () => {
           fixture.detectChanges();
           tick();
 
-          expect(ngModel.valid).toBe(true);
-          expect(ngModel.errors).toBeNull();
+          validateInputAndModel('8675555309', '(867) 555-5309', true, false, ngModel, fixture);
 
           component.modelValue = '+3558675555309';
           fixture.detectChanges();
@@ -775,12 +681,7 @@ describe('Phone Field Component', () => {
           tick();
 
           expect(component.phoneFieldComponent.selectedCountry.iso2).toBe('al');
-          expect(ngModel.valid).toBe(false);
-          expect(ngModel.errors).toEqual({
-            'skyPhoneField': {
-              invalid: '+3558675555309'
-            }
-          });
+          validateInputAndModel('+3558675555309', '+3558675555309', false, true, ngModel, fixture);
         }));
 
       it('should change to a new country based on a passed in dial code on a input change',
@@ -794,19 +695,13 @@ describe('Phone Field Component', () => {
           component.modelValue = '8675555309';
           detectChangesAndTick(fixture);
 
-          expect(ngModel.valid).toBe(true);
-          expect(ngModel.errors).toBeNull();
+          validateInputAndModel('8675555309', '(867) 555-5309', true, false, ngModel, fixture);
 
           setInput(nativeElement, '+3558675555309', fixture);
           detectChangesAndTick(fixture);
 
           expect(component.phoneFieldComponent.selectedCountry.iso2).toBe('al');
-          expect(ngModel.valid).toBe(false);
-          expect(ngModel.errors).toEqual({
-            'skyPhoneField': {
-              invalid: '+3558675555309'
-            }
-          });
+          validateInputAndModel('+3558675555309', '+3558675555309', false, true, ngModel, fixture);
         }));
 
       it('should not change to a new country when the dial code is not found',
@@ -823,8 +718,7 @@ describe('Phone Field Component', () => {
           fixture.detectChanges();
           tick();
 
-          expect(ngModel.valid).toBe(true);
-          expect(ngModel.errors).toBeNull();
+          validateInputAndModel('8675555309', '(867) 555-5309', true, false, ngModel, fixture);
 
           setInput(nativeElement, '+1118675555309', fixture);
           fixture.detectChanges();
@@ -833,12 +727,7 @@ describe('Phone Field Component', () => {
           tick();
 
           expect(component.phoneFieldComponent.selectedCountry.iso2).toBe('us');
-          expect(ngModel.valid).toBe(false);
-          expect(ngModel.errors).toEqual({
-            'skyPhoneField': {
-              invalid: '+1118675555309'
-            }
-          });
+          validateInputAndModel('+1118675555309', '+1118675555309', false, true, ngModel, fixture);
         }));
 
       it('should change to a new country and not error when only the dial code is given',
@@ -855,8 +744,7 @@ describe('Phone Field Component', () => {
           fixture.detectChanges();
           tick();
 
-          expect(ngModel.valid).toBe(true);
-          expect(ngModel.errors).toBeNull();
+          validateInputAndModel('8675555309', '(867) 555-5309', true, false, ngModel, fixture);
 
           setInput(nativeElement, '+61', fixture);
           fixture.detectChanges();
@@ -865,12 +753,8 @@ describe('Phone Field Component', () => {
           tick();
 
           expect(component.phoneFieldComponent.selectedCountry.iso2).toBe('au');
-          expect(ngModel.valid).toBe(false);
-          expect(ngModel.errors).toEqual({
-            'skyPhoneField': {
-              invalid: '+61'
-            }
-          });
+
+          validateInputAndModel('+61', '+61', false, true, ngModel, fixture);
         }));
 
       it('should validate correctly after country is changed', fakeAsync(() => {
@@ -883,23 +767,16 @@ describe('Phone Field Component', () => {
         component.modelValue = '8675555309';
         detectChangesAndTick(fixture);
 
-        expect(ngModel.valid).toBe(true);
-        expect(ngModel.errors).toBeNull();
+        validateInputAndModel('8675555309', '(867) 555-5309', true, false, ngModel, fixture);
 
         setCountry('Albania', fixture);
 
-        expect(ngModel.valid).toBe(false);
-        expect(ngModel.errors).toEqual({
-          'skyPhoneField': {
-            invalid: '8675555309'
-          }
-        });
+        validateInputAndModel('8675555309', '8675555309', false, true, ngModel, fixture);
 
         component.modelValue = '024569874';
         detectChangesAndTick(fixture);
 
-        expect(ngModel.valid).toBe(true);
-        expect(ngModel.errors).toBeNull();
+        validateInputAndModel('024569874', '+355 24 569 874', true, true, ngModel, fixture);
       }));
 
       it('should add the country code to non-default country data', fakeAsync(() => {
@@ -912,17 +789,14 @@ describe('Phone Field Component', () => {
         fixture.detectChanges();
         tick();
 
-        expect(ngModel.valid).toBe(true);
-        expect(ngModel.errors).toBeNull();
+        validateInputAndModel('', '', true, false, ngModel, fixture);
 
         setCountry('Albania', fixture);
 
         component.modelValue = '024569874';
         detectChangesAndTick(fixture);
 
-        expect(ngModel.value).toBe('+355 24 569 874');
-        expect(ngModel.valid).toBe(true);
-        expect(ngModel.errors).toBeNull();
+        validateInputAndModel('024569874', '+355 24 569 874', true, false, ngModel, fixture);
       }));
 
     });
@@ -1197,22 +1071,7 @@ describe('Phone Field Component', () => {
           setInput(nativeElement, '123', fixture);
           fixture.detectChanges();
 
-          expect(nativeElement.querySelector('input').value).toBe('123');
-
-          expect(component.phoneControl.value)
-            .toBe('123');
-
-          expect(component.phoneControl.valid).toBe(false);
-
-          expect(component.phoneControl.errors).toEqual({
-            'skyPhoneField': {
-              invalid: '123'
-            }
-          });
-
-          expect(component.phoneControl.pristine).toBe(false);
-          expect(component.phoneControl.touched).toBe(true);
-
+          validateInputAndModel('123', '123', false, true, component.phoneControl, fixture);
         }));
 
       it('should validate properly when invalid number on initialization', fakeAsync(() => {
@@ -1220,31 +1079,11 @@ describe('Phone Field Component', () => {
         component.defaultCountry = 'us';
         detectChangesAndTick(fixture);
 
-        expect(nativeElement.querySelector('input').value).toBe('1234');
-
-        expect(component.phoneControl.value)
-          .toBe('1234');
-
-        expect(component.phoneControl.valid).toBe(false);
-
-        expect(component.phoneControl.errors).toEqual({
-          'skyPhoneField': {
-            invalid: '1234'
-          }
-        });
-
-        expect(component.phoneControl.touched).toBe(true);
+        validateInputAndModel('1234', '1234', false, true, component.phoneControl, fixture);
 
         blurInput(fixture.nativeElement, fixture);
-        expect(component.phoneControl.valid).toBe(false);
 
-        expect(component.phoneControl.errors).toEqual({
-          'skyPhoneField': {
-            invalid: '1234'
-          }
-        });
-
-        expect(component.phoneControl.touched).toBe(true);
+        validateInputAndModel('1234', '1234', false, true, component.phoneControl, fixture);
       }));
 
       it('should validate properly when invalid number format on initialization', fakeAsync(() => {
@@ -1252,52 +1091,22 @@ describe('Phone Field Component', () => {
         component.defaultCountry = 'us';
         detectChangesAndTick(fixture);
 
-        expect(nativeElement.querySelector('input').value).toBe('867-555-530');
-
-        expect(component.phoneControl.value)
-          .toBe('867-555-530');
-
-        expect(component.phoneControl.valid).toBe(false);
-
-        expect(component.phoneControl.errors).toEqual({
-          'skyPhoneField': {
-            invalid: '867-555-530'
-          }
-        });
-
-        expect(component.phoneControl.touched).toBe(true);
+        validateInputAndModel('867-555-530', '867-555-530', false, true, component.phoneControl, fixture);
 
         blurInput(fixture.nativeElement, fixture);
-        expect(component.phoneControl.valid).toBe(false);
 
-        expect(component.phoneControl.errors).toEqual({
-          'skyPhoneField': {
-            invalid: '867-555-530'
-          }
-        });
-
-        expect(component.phoneControl.touched).toBe(true);
+        validateInputAndModel('867-555-530', '867-555-530', false, true, component.phoneControl, fixture);
       }));
 
       it('should validate properly when valid number format on initialization', fakeAsync(() => {
         component.initialValue = '867-555-5309';
         component.defaultCountry = 'us';
         detectChangesAndTick(fixture);
-
-        expect(nativeElement.querySelector('input').value).toBe('867-555-5309');
-
-        expect(component.phoneControl.value)
-          .toBe('(867) 555-5309');
-
-        expect(component.phoneControl.valid).toBe(true);
-        expect(component.phoneControl.errors).toBeNull();
-
-        expect(component.phoneControl.touched).toBe(false);
+        validateInputAndModel('867-555-5309', '(867) 555-5309', true, false, component.phoneControl, fixture);
 
         blurInput(fixture.nativeElement, fixture);
-        expect(component.phoneControl.valid).toBe(true);
-        expect(component.phoneControl.errors).toBeNull();
-        expect(component.phoneControl.touched).toBe(true);
+
+        validateInputAndModel('867-555-5309', '(867) 555-5309', true, true, component.phoneControl, fixture);
       }));
 
       it('should validate properly when invalid number on model change', fakeAsync(() => {
@@ -1308,19 +1117,7 @@ describe('Phone Field Component', () => {
 
         detectChangesAndTick(fixture);
 
-        expect(nativeElement.querySelector('input').value).toBe('1234');
-
-        expect(component.phoneControl.value)
-          .toBe('1234');
-
-        expect(component.phoneControl.valid).toBe(false);
-
-        expect(component.phoneControl.errors).toEqual({
-          'skyPhoneField': {
-            invalid: '1234'
-          }
-        });
-
+        validateInputAndModel('1234', '1234', false, true, component.phoneControl, fixture);
       }));
 
       it('should validate properly when input changed to empty string', fakeAsync(() => {
@@ -1331,13 +1128,7 @@ describe('Phone Field Component', () => {
 
         setInput(fixture.nativeElement, '', fixture);
 
-        expect(nativeElement.querySelector('input').value).toBe('');
-
-        expect(component.phoneControl.value)
-          .toBe('');
-
-        expect(component.phoneControl.valid).toBe(true);
-        expect(component.phoneControl.errors).toBeNull();
+        validateInputAndModel('', '', true, true, component.phoneControl, fixture);
       }));
 
       it('should handle invalid and then valid number', fakeAsync(() => {
@@ -1350,13 +1141,7 @@ describe('Phone Field Component', () => {
 
         detectChangesAndTick(fixture);
 
-        expect(nativeElement.querySelector('input').value).toBe('8675555309');
-
-        expect(component.phoneControl.value)
-          .toEqual('(867) 555-5309');
-
-        expect(component.phoneControl.valid).toBe(true);
-        expect(component.phoneControl.errors).toBeNull();
+        validateInputAndModel('8675555309', '(867) 555-5309', true, true, component.phoneControl, fixture);
       }));
 
       it('should handle noValidate property', fakeAsync(() => {
@@ -1368,53 +1153,25 @@ describe('Phone Field Component', () => {
 
         detectChangesAndTick(fixture);
 
-        expect(nativeElement.querySelector('input').value).toBe('1234');
-
-        expect(component.phoneControl.value)
-          .toBe('1234');
-
-        expect(component.phoneControl.valid).toBe(true);
-        expect(component.phoneControl.errors).toBeNull();
+        validateInputAndModel('1234', '1234', true, false, component.phoneControl, fixture);
       }));
 
       it('should validate properly when a valid number with an extension is given and extensions are allowed', async(() => {
         component.initialValue = '867-555-5309ext3';
-        component.defaultCountry = 'us';
         fixture.detectChanges();
+
         fixture.whenStable().then(() => {
-          fixture.detectChanges();
-
-          expect(nativeElement.querySelector('input').value).toBe('867-555-5309ext3');
-
-          expect(component.phoneControl.value)
-            .toBe('(867) 555-5309 ext. 3');
-
-          expect(component.phoneControl.valid).toBe(true);
-          expect(component.phoneControl.errors).toBeNull();
-          expect(component.phoneControl.touched).toBe(false);
+          validateInputAndModel('867-555-5309ext3', '(867) 555-5309 ext. 3', true, false, component.phoneControl, fixture);
         });
       }));
 
       it('should validate properly when a valid number with an extension is given and extensions are not allowed', async(() => {
         component.initialValue = '867-555-5309ext3';
         component.allowExtensions = false;
-        component.defaultCountry = 'us';
         fixture.detectChanges();
+
         fixture.whenStable().then(() => {
-          fixture.detectChanges();
-
-          expect(nativeElement.querySelector('input').value).toBe('867-555-5309ext3');
-
-          expect(component.phoneControl.value)
-            .toBe('(867) 555-5309 ext. 3');
-
-          expect(component.phoneControl.valid).toBe(false);
-          expect(component.phoneControl.errors).toEqual({
-            'skyPhoneField': {
-              invalid: '(867) 555-5309 ext. 3'
-            }
-          });
-          expect(component.phoneControl.touched).toBe(true);
+          validateInputAndModel('867-555-5309ext3', '(867) 555-5309 ext. 3', false, true, component.phoneControl, fixture);
         });
       }));
     });
@@ -1502,17 +1259,11 @@ describe('Phone Field Component', () => {
         component.phoneControl.setValue('8675555309');
         detectChangesAndTick(fixture);
 
-        expect(component.phoneControl.valid).toBe(true);
-        expect(component.phoneControl.errors).toBeNull();
+        validateInputAndModel('8675555309', '(867) 555-5309', true, false, component.phoneControl, fixture);
 
         setCountry('Albania', fixture);
 
-        expect(component.phoneControl.valid).toBe(false);
-        expect(component.phoneControl.errors).toEqual({
-          'skyPhoneField': {
-            invalid: '8675555309'
-          }
-        });
+        validateInputAndModel('8675555309', '8675555309', false, true, component.phoneControl, fixture);
       }));
 
       it('should change to a new country based on a passed in dial code on a model change',
@@ -1526,8 +1277,7 @@ describe('Phone Field Component', () => {
           fixture.detectChanges();
           tick();
 
-          expect(component.phoneControl.valid).toBe(true);
-          expect(component.phoneControl.errors).toBeNull();
+          validateInputAndModel('8675555309', '(867) 555-5309', true, false, component.phoneControl, fixture);
 
           component.phoneControl.setValue('+3558675555309');
           fixture.detectChanges();
@@ -1536,12 +1286,7 @@ describe('Phone Field Component', () => {
           tick();
 
           expect(component.phoneFieldComponent.selectedCountry.iso2).toBe('al');
-          expect(component.phoneControl.valid).toBe(false);
-          expect(component.phoneControl.errors).toEqual({
-            'skyPhoneField': {
-              invalid: '+3558675555309'
-            }
-          });
+          validateInputAndModel('+3558675555309', '+3558675555309', false, true, component.phoneControl, fixture);
         }));
 
       it('should change to a new country based on a passed in dial code on a input change',
@@ -1555,8 +1300,7 @@ describe('Phone Field Component', () => {
           fixture.detectChanges();
           tick();
 
-          expect(component.phoneControl.valid).toBe(true);
-          expect(component.phoneControl.errors).toBeNull();
+          validateInputAndModel('8675555309', '(867) 555-5309', true, false, component.phoneControl, fixture);
 
           setInput(nativeElement, '+3558675555309', fixture);
           fixture.detectChanges();
@@ -1565,12 +1309,7 @@ describe('Phone Field Component', () => {
           tick();
 
           expect(component.phoneFieldComponent.selectedCountry.iso2).toBe('al');
-          expect(component.phoneControl.valid).toBe(false);
-          expect(component.phoneControl.errors).toEqual({
-            'skyPhoneField': {
-              invalid: '+3558675555309'
-            }
-          });
+          validateInputAndModel('+3558675555309', '+3558675555309', false, true, component.phoneControl, fixture);
         }));
 
       it('should not change to a new country when the dial code is not found',
@@ -1584,19 +1323,13 @@ describe('Phone Field Component', () => {
           fixture.detectChanges();
           tick();
 
-          expect(component.phoneControl.valid).toBe(true);
-          expect(component.phoneControl.errors).toBeNull();
+          validateInputAndModel('8675555309', '(867) 555-5309', true, false, component.phoneControl, fixture);
 
           setInput(nativeElement, '+1118675555309', fixture);
           detectChangesAndTick(fixture);
 
           expect(component.phoneFieldComponent.selectedCountry.iso2).toBe('us');
-          expect(component.phoneControl.valid).toBe(false);
-          expect(component.phoneControl.errors).toEqual({
-            'skyPhoneField': {
-              invalid: '+1118675555309'
-            }
-          });
+          validateInputAndModel('+1118675555309', '+1118675555309', false, true, component.phoneControl, fixture);
         }));
 
       it('should change to a new country and not error when only the dial code is given',
@@ -1611,19 +1344,13 @@ describe('Phone Field Component', () => {
           fixture.detectChanges();
           tick();
 
-          expect(component.phoneControl.valid).toBe(true);
-          expect(component.phoneControl.errors).toBeNull();
+          validateInputAndModel('8675555309', '(867) 555-5309', true, false, component.phoneControl, fixture);
 
           setInput(nativeElement, '+61', fixture);
           detectChangesAndTick(fixture);
 
           expect(component.phoneFieldComponent.selectedCountry.iso2).toBe('au');
-          expect(component.phoneControl.valid).toBe(false);
-          expect(component.phoneControl.errors).toEqual({
-            'skyPhoneField': {
-              invalid: '+61'
-            }
-          });
+          validateInputAndModel('+61', '+61', false, true, component.phoneControl, fixture);
         }));
 
       it('should validate correctly after country is changed', fakeAsync(() => {
@@ -1633,23 +1360,16 @@ describe('Phone Field Component', () => {
         component.phoneControl.setValue('8675555309');
         detectChangesAndTick(fixture);
 
-        expect(component.phoneControl.valid).toBe(true);
-        expect(component.phoneControl.errors).toBeNull();
+        validateInputAndModel('8675555309', '(867) 555-5309', true, false, component.phoneControl, fixture);
 
         setCountry('Albania', fixture);
 
-        expect(component.phoneControl.valid).toBe(false);
-        expect(component.phoneControl.errors).toEqual({
-          'skyPhoneField': {
-            invalid: '8675555309'
-          }
-        });
+        validateInputAndModel('8675555309', '8675555309', false, true, component.phoneControl, fixture);
 
         component.phoneControl.setValue('024569874');
         detectChangesAndTick(fixture);
 
-        expect(component.phoneControl.valid).toBe(true);
-        expect(component.phoneControl.errors).toBeNull();
+        validateInputAndModel('024569874', '+355 24 569 874', true, true, component.phoneControl, fixture);
       }));
 
       it('should add the country code to non-default country data', fakeAsync(() => {
@@ -1662,9 +1382,7 @@ describe('Phone Field Component', () => {
         component.phoneControl.setValue('024569874');
         detectChangesAndTick(fixture);
 
-        expect(component.phoneControl.value).toBe('+355 24 569 874');
-        expect(component.phoneControl.valid).toBe(true);
-        expect(component.phoneControl.errors).toBeNull();
+        validateInputAndModel('024569874', '+355 24 569 874', true, false, component.phoneControl, fixture);
       }));
 
     });
