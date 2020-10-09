@@ -598,6 +598,30 @@ describe('Phone Field Component', () => {
           validateInputAndModel('867-555-5309ext3', '(867) 555-5309 ext. 3', false, true, ngModel, fixture);
         });
       }));
+
+      it('should not mark the input dirty when validation fails while the field is still active', async(() => {
+        component.defaultCountry = 'us';
+        fixture.detectChanges();
+        fixture.whenStable().then(() => {
+
+          const phoneFieldInput = getPhoneFieldInput(fixture);
+          phoneFieldInput.focus();
+          setInput(fixture.nativeElement, '1234', fixture, true);
+
+          fixture.detectChanges();
+          fixture.whenStable().then(() => {
+
+            validateInputAndModel('1234', '1234', false, false, ngModel, fixture);
+
+            blurInput(fixture.nativeElement, fixture, true);
+
+            fixture.detectChanges();
+            fixture.whenStable().then(() => {
+              validateInputAndModel('1234', '1234', false, true, ngModel, fixture);
+            });
+          });
+        });
+      }));
     });
 
     describe('disabled state', () => {
@@ -1195,6 +1219,25 @@ describe('Phone Field Component', () => {
         fixture.whenStable().then(() => {
           validateInputAndModel('867-555-5309ext3', '(867) 555-5309 ext. 3', false, true, component.phoneControl, fixture);
         });
+      }));
+
+      it('should not mark the input dirty when validation fails while the field is still active', fakeAsync(() => {
+        component.defaultCountry = 'us';
+        detectChangesAndTick(fixture);
+
+        const phoneFieldInput = getPhoneFieldInput(fixture);
+        phoneFieldInput.focus();
+        setInput(fixture.nativeElement, '1234', fixture);
+
+        detectChangesAndTick(fixture);
+
+        validateInputAndModel('1234', '1234', false, false, component.phoneControl, fixture);
+
+        blurInput(fixture.nativeElement, fixture);
+
+        detectChangesAndTick(fixture);
+
+        validateInputAndModel('1234', '1234', false, true, component.phoneControl, fixture);
       }));
     });
 
