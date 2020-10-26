@@ -451,6 +451,7 @@ describe('Phone Field Component', () => {
           fixture.whenStable().then(() => {
             fixture.detectChanges();
             setInput(nativeElement, '123', fixture, true);
+            blurInput(nativeElement, fixture, true);
             fixture.detectChanges();
             fixture.whenStable().then(() => {
               validateInputAndModel('123', '123', false, true, ngModel, fixture);
@@ -530,12 +531,14 @@ describe('Phone Field Component', () => {
         fixture.whenStable().then(() => {
           fixture.detectChanges();
 
-          setInput(fixture.nativeElement, '1234', fixture, true);
+          setInput(nativeElement, '1234', fixture, true);
+          blurInput(nativeElement, fixture, true);
           fixture.detectChanges();
           fixture.whenStable().then(() => {
             fixture.detectChanges();
 
             setInput(fixture.nativeElement, '', fixture, true);
+            blurInput(nativeElement, fixture, true);
 
             fixture.detectChanges();
             fixture.whenStable().then(() => {
@@ -551,10 +554,12 @@ describe('Phone Field Component', () => {
         fixture.whenStable().then(() => {
 
           setInput(fixture.nativeElement, '1234', fixture, true);
+          blurInput(nativeElement, fixture, true);
           fixture.whenStable().then(() => {
             fixture.detectChanges();
 
             setInput(fixture.nativeElement, '8675555309', fixture, true);
+            blurInput(nativeElement, fixture, true);
 
             fixture.detectChanges();
             fixture.whenStable().then(() => {
@@ -744,6 +749,7 @@ describe('Phone Field Component', () => {
           validateInputAndModel('8675555309', '(867) 555-5309', true, false, ngModel, fixture);
 
           setInput(nativeElement, '+3558675555309', fixture);
+          blurInput(nativeElement, fixture);
           detectChangesAndTick(fixture);
 
           expect(component.phoneFieldComponent.selectedCountry.iso2).toBe('al');
@@ -767,6 +773,7 @@ describe('Phone Field Component', () => {
           validateInputAndModel('8675555309', '(867) 555-5309', true, false, ngModel, fixture);
 
           setInput(nativeElement, '+1118675555309', fixture);
+          blurInput(nativeElement, fixture);
           fixture.detectChanges();
           tick();
           fixture.detectChanges();
@@ -793,6 +800,7 @@ describe('Phone Field Component', () => {
           validateInputAndModel('8675555309', '(867) 555-5309', true, false, ngModel, fixture);
 
           setInput(nativeElement, '+61', fixture);
+          blurInput(nativeElement, fixture);
           fixture.detectChanges();
           tick();
           fixture.detectChanges();
@@ -1115,6 +1123,7 @@ describe('Phone Field Component', () => {
           fixture.detectChanges();
           tick();
           setInput(nativeElement, '123', fixture);
+          blurInput(nativeElement, fixture);
           fixture.detectChanges();
 
           validateInputAndModel('123', '123', false, true, component.phoneControl, fixture);
@@ -1171,8 +1180,10 @@ describe('Phone Field Component', () => {
         detectChangesAndTick(fixture);
 
         setInput(fixture.nativeElement, '1234', fixture);
+        blurInput(nativeElement, fixture);
 
         setInput(fixture.nativeElement, '', fixture);
+        blurInput(nativeElement, fixture);
 
         validateInputAndModel('', '', true, true, component.phoneControl, fixture);
       }));
@@ -1182,8 +1193,10 @@ describe('Phone Field Component', () => {
         detectChangesAndTick(fixture);
 
         setInput(fixture.nativeElement, '1234', fixture);
+        blurInput(nativeElement, fixture);
 
         setInput(fixture.nativeElement, '8675555309', fixture);
+        blurInput(nativeElement, fixture);
 
         detectChangesAndTick(fixture);
 
@@ -1368,6 +1381,7 @@ describe('Phone Field Component', () => {
           validateInputAndModel('8675555309', '(867) 555-5309', true, false, component.phoneControl, fixture);
 
           setInput(nativeElement, '+3558675555309', fixture);
+          blurInput(nativeElement, fixture);
           fixture.detectChanges();
           tick();
           fixture.detectChanges();
@@ -1391,6 +1405,7 @@ describe('Phone Field Component', () => {
           validateInputAndModel('8675555309', '(867) 555-5309', true, false, component.phoneControl, fixture);
 
           setInput(nativeElement, '+1118675555309', fixture);
+          blurInput(nativeElement, fixture);
           detectChangesAndTick(fixture);
 
           expect(component.phoneFieldComponent.selectedCountry.iso2).toBe('us');
@@ -1412,6 +1427,7 @@ describe('Phone Field Component', () => {
           validateInputAndModel('8675555309', '(867) 555-5309', true, false, component.phoneControl, fixture);
 
           setInput(nativeElement, '+61', fixture);
+          blurInput(nativeElement, fixture);
           detectChangesAndTick(fixture);
 
           expect(component.phoneFieldComponent.selectedCountry.iso2).toBe('au');

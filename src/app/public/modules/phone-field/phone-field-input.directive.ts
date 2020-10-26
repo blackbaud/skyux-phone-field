@@ -262,7 +262,7 @@ export class SkyPhoneFieldInputDirective implements OnInit, OnDestroy, AfterView
 
     if (this.phoneFieldComponent.selectedCountry && !this.validateNumber(value)) {
 
-      if (document.activeElement !== this.elRef.nativeElement) {
+      if (!this.textChanges) {
         // Mark the invalid control as touched so that the input's invalid CSS styles appear.
         // (This is only required when the invalid value is set by the FormControl constructor.)
         // We don't do this if the input is the active element so that we don't show validation
