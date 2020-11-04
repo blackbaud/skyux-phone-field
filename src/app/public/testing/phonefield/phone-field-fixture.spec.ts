@@ -4,22 +4,25 @@ import {
 
 import {
   ComponentFixture,
-  fakeAsync,
   TestBed
 } from '@angular/core/testing';
 
 import {
-  expect,
-  SkyAppTestUtility
+  FormsModule,
+  ReactiveFormsModule
+} from '@angular/forms';
+
+import {
+  SkyStatusIndicatorModule
+} from '@skyux/indicators';
+
+import {
+  expect
 } from '@skyux-sdk/testing';
 
 import {
-  SkyCountryFieldCountry
-} from '@skyux/lookup';
-
-import {
-  SkyPhoneFieldNumberReturnFormat,
-  SkyPhoneFieldCountry
+  SkyPhoneFieldCountry,
+  SkyPhoneFieldNumberReturnFormat
 } from '@skyux/phone-field';
 
 import {
@@ -30,15 +33,15 @@ import {
   SkyPhoneFieldTestingModule
 } from './phone-field-testing.module';
 
-const COUNTRY_AU: SkyCountryFieldCountry = {
-  iso2: 'au',
+const COUNTRY_AU: SkyPhoneFieldCountry = {
   name: 'Australia',
-  dialCode: '61'
+  iso2: 'au',
+  dialCode: '+61'
 };
-const COUNTRY_US: SkyCountryFieldCountry = {
+const COUNTRY_US: SkyPhoneFieldCountry = {
   name: 'United States',
   iso2: 'us',
-  dialCode: '1'
+  dialCode: '+1'
 };
 const DATA_SKY_ID = 'test-phone-field';
 const VALID_AU_NUMBER = '0212345678';
@@ -48,30 +51,31 @@ const VALID_US_NUMBER = '8675555309';
 @Component({
   selector: 'phone-field-test',
   template: `
-<div>
-  <sky-phone-field
-    data-sky-id="${DATA_SKY_ID}"
-    [allowExtensions]="allowExtensions"
-    [defaultCountry]="defaultCountry"
-    [returnFormat]="returnFormat"
-    [supportedCountryISOs]="supportedCountryISOs"
-    [(selectedCountry)]="selectedCountry"
-  >
-    <input
-      [disabled]="isDisabled"
-      skyPhoneFieldInput
-      [skyPhoneFieldNoValidate]="noValidate"
-      [(ngModel)]="modelValue"
-    />
-  </sky-phone-field>
+  <div>
+    <sky-phone-field
+      data-sky-id="${DATA_SKY_ID}"
+      [allowExtensions]="allowExtensions"
+      [defaultCountry]="defaultCountry"
+      [returnFormat]="returnFormat"
+      [supportedCountryISOs]="supportedCountryISOs"
+      [(selectedCountry)]="selectedCountry"
+      (selectedCountryChange)="selectedCountryChange($event)"
+    >
+      <input
+        [disabled]="isDisabled"
+        skyPhoneFieldInput
+        [skyPhoneFieldNoValidate]="noValidate"
+        [(ngModel)]="modelValue"
+      />
+    </sky-phone-field>
 
-  <div *ngIf="showInvalidDirective">
-    <input
-      type="text"
-      skyPhoneFieldInput
-    />
+    <div *ngIf="showInvalidDirective">
+      <input
+        type="text"
+        skyPhoneFieldInput
+      />
+    </div>
   </div>
-</div>
 `
 })
 class PhoneFieldTestComponent {
@@ -84,10 +88,12 @@ class PhoneFieldTestComponent {
   public selectedCountry: SkyPhoneFieldCountry;
   public showInvalidDirective: boolean = false;
   public supportedCountryISOs: string[];
+
+  public selectedCountryChange(query: string) { }
 }
 //#endregion Test component
 
-describe('PhoneField fixture', () => {
+fdescribe('PhoneField fixture', () => {
   let fixture: ComponentFixture<PhoneFieldTestComponent>;
   let testComponent: PhoneFieldTestComponent;
   let phonefieldFixture: SkyPhoneFieldFixture;
@@ -99,30 +105,33 @@ describe('PhoneField fixture', () => {
   // }
   //#endregion
 
-  beforeEach(() => {
+  beforeEach(async () => {
     TestBed.configureTestingModule({
       declarations: [
         PhoneFieldTestComponent
       ],
       imports: [
-        SkyPhoneFieldTestingModule
+        FormsModule,
+        ReactiveFormsModule,
+        SkyPhoneFieldTestingModule,
+        SkyStatusIndicatorModule
       ]
     });
 
+    // create the fixture, waiting until it's stable since it selects a country on init
     fixture = TestBed.createComponent(
       PhoneFieldTestComponent
     );
     testComponent = fixture.componentInstance;
-    fixture.detectChanges();
     phonefieldFixture = new SkyPhoneFieldFixture(fixture, DATA_SKY_ID);
   });
 
-  it('should expose phone field default values', fakeAsync(async () => {
+  it('should expose phone field default values', async () => {
     // expect all values to be undefined since the popover element does not exist
-    expect(phonefieldFixture.countrySearchText).toEqual('');
-  }));
+    // expect(phonefieldFixture.countrySearchText).toEqual('');
+  });
 
-  it('should expose phone field properties', fakeAsync(async () => {
+  it('should expose phone field properties', async () => {
     // give properties non-default values
     testComponent.defaultCountry = 'gb';
     fixture.detectChanges();
@@ -132,20 +141,38 @@ describe('PhoneField fixture', () => {
     // expect(SkyAppTestUtility.getText(popoverFixture.body)).toEqual(testComponent.popoverBody);
     // expect(popoverFixture.alignment).toEqual(testComponent.popoverAlignment);
     // expect(popoverFixture.position).toEqual(testComponent.popoverPlacement);
-  }));
+  });
 
-  it('should use selected country dial code', fakeAsync(async () => {
-    // enter a valid phone number (the default country is 'us')
-    phonefieldFixture.setInputText(VALID_US_NUMBER);
+  it('should use selected country', async () => {
+    // enter a valid phone number for the default country
+    await phonefieldFixture.setInputText(VALID_US_NUMBER);
 
     // expect the model to use the proper dial code and format
     expect(phonefieldFixture.inputText).toBe(VALID_US_NUMBER);
     expect(testComponent.modelValue).toEqual('(867) 555-5309');
-  }));
+  });
 
-  it('should use newly selected country dial code', fakeAsync(async () => { }));
+  it('should use newly selected country', async () => {
+    const selectedCountryChangeSpy = spyOn(fixture.componentInstance, 'selectedCountryChange');
 
-  it('should allow extensions by default', fakeAsync(async () => { }));
+    // change the country
+    await phonefieldFixture.selectCountry(COUNTRY_AU.name);
 
-  it('should honor allow extensions flag', fakeAsync(async () => { }));
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(testComponent.selectedCountry.name).toBe(COUNTRY_AU.name);
+    expect(selectedCountryChangeSpy).toHaveBeenCalledWith(jasmine.objectContaining(COUNTRY_AU));
+
+    // enter a valid phone number for the new country
+    await phonefieldFixture.setInputText(VALID_AU_NUMBER);
+
+    // expect the model to use the proper dial code and format
+    expect(phonefieldFixture.inputText).toBe(VALID_AU_NUMBER);
+    expect(testComponent.modelValue).toEqual('+61 2 1234 5678');
+  });
+
+  it('should allow extensions by default', async () => { });
+
+  it('should honor allow extensions flag', async () => { });
 });

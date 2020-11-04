@@ -3,8 +3,7 @@ import {
 } from '@angular/core';
 
 import {
-  ComponentFixture,
-  tick
+  ComponentFixture
 } from '@angular/core/testing';
 
 import {
@@ -30,7 +29,11 @@ export class SkyPhoneFieldFixture {
   ) {
     this._debugEl = SkyAppTestUtility
       .getDebugElementByTestId(fixture, skyTestId, 'sky-phone-field');
-      this._countryFixture = new SkyCountryFieldFixture(fixture, skyTestId);
+    this._countryFixture = new SkyCountryFieldFixture(fixture);
+
+    // The country selection needs extra time to initialize.
+    // Consumers shouldn't need to work around this so we do an extra detect here
+    fixture.detectChanges();
   }
 
   /**
@@ -38,13 +41,6 @@ export class SkyPhoneFieldFixture {
    */
   public get inputText(): string {
     return this.phoneFieldInput.value;
-  }
-
-  /**
-   * The value of the input field for country selection.
-   */
-  public get countrySearchText(): string {
-    return this._countryFixture.searchText;
   }
 
   /**
@@ -68,21 +64,46 @@ export class SkyPhoneFieldFixture {
    * @param searchText The name of the country to select.
    */
   public async searchCountry(searchText: string): Promise<NodeListOf<HTMLElement>> {
-    return this._countryFixture.search(searchText); // handles detectChanges
+    await this.openCountrySelection();
+    const results = await this._countryFixture.search(searchText);
+
+    this.fixture.detectChanges();
+    await this.fixture.whenStable();
+
+    return results;
   }
 
   /**
    * Enters the search text into the input field and selects the first result (if any).
    * @param searchText The name of the country to select.
    */
-  public selectCountry(searchText: string): Promise<any> {
-    return this._countryFixture.select(searchText); // handles detectChanges
+  public async selectCountry(searchText: string): Promise<any> {
+    await this.openCountrySelection();
+    await this._countryFixture.select(searchText);
+
+    this.fixture.detectChanges();
+    await  this.fixture.whenStable();
   }
 
   //#region helpers
 
   private get phoneFieldInput(): HTMLInputElement {
     return this._debugEl.query(By.css('input[skyPhoneFieldInput]')).nativeElement;
+  }
+
+  private get countryFlagButton(): HTMLInputElement {
+    return this._debugEl.query(By.css('.sky-phone-field-country-btn .sky-btn')).nativeElement;
+  }
+
+  private async openCountrySelection(): Promise<any> {
+    this.countryFlagButton.click();
+
+    // any country selection needs extra time to complete
+    this.fixture.detectChanges();
+    await  this.fixture.whenStable();
+
+    this.fixture.detectChanges();
+    return this.fixture.whenStable();
   }
 
   //#endregion
@@ -94,13 +115,13 @@ export class SkyPhoneFieldFixture {
  * Allows interaction with a SKY UX country field component.
  */
 export class SkyCountryFieldFixture {
-  private debugEl: DebugElement;
+  // private debugEl: DebugElement;
 
   constructor(
-    private fixture: ComponentFixture<any>,
-    skyTestId: string
+    private fixture: ComponentFixture<any>
+    // ,skyTestId: string
   ) {
-    this.debugEl = SkyAppTestUtility.getDebugElementByTestId(fixture, skyTestId, 'sky-country-field');
+    // this.debugEl = SkyAppTestUtility.getDebugElementByTestId(fixture, skyTestId, 'sky-country-field');
   }
 
   /**
@@ -165,8 +186,8 @@ export class SkyCountryFieldFixture {
 
   //#region helpers
 
-  private getCountryFlag(): DebugElement {
-    return this.debugEl.query(By.css('.sky-country-field-flag'));
+  private getCountryFlag(): HTMLElement {
+    return document.querySelector('.sky-country-field-flag');
   }
 
   private getAutocompleteElement(): HTMLElement {
@@ -174,8 +195,7 @@ export class SkyCountryFieldFixture {
   }
 
   private getInputElement(): HTMLTextAreaElement {
-    const debugEl = this.debugEl.query(By.css('textarea'));
-    return debugEl.nativeElement as HTMLTextAreaElement;
+    return document.querySelector('textarea') as HTMLTextAreaElement;
   }
 
   private blurInput(fixture: ComponentFixture<any>): Promise<any> {
