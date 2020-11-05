@@ -243,8 +243,8 @@ export class SkyCountryFieldFixture {
 
   //#region helpers
 
-  private getCountryFlag(): HTMLElement {
-    return document.querySelector('.sky-country-field-flag');
+  private getCountryFlag(): DebugElement {
+    return this.debugEl.query(By.css('.sky-country-field-flag'));
   }
 
   private getAutocompleteElement(): HTMLElement {
@@ -252,7 +252,8 @@ export class SkyCountryFieldFixture {
   }
 
   private getInputElement(): HTMLTextAreaElement {
-    return document.querySelector('textarea') as HTMLTextAreaElement;
+    const debugEl = this.debugEl.query(By.css('textarea'));
+    return debugEl.nativeElement as HTMLTextAreaElement;
   }
 
   private blurInput(fixture: ComponentFixture<any>): Promise<any> {

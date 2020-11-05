@@ -1,6 +1,12 @@
 import {
-  Component
+  Component,
+  OnInit
 } from '@angular/core';
+
+import {
+  FormControl,
+  FormGroup
+} from '@angular/forms';
 
 import {
   ComponentFixture,
@@ -51,7 +57,10 @@ const VALID_US_NUMBER = '8675555309';
 @Component({
   selector: 'phone-field-test',
   template: `
-  <div>
+  <form
+    class='phone-field-demo'
+    [formGroup]="phoneForm"
+  >
     <sky-phone-field
       data-sky-id="${DATA_SKY_ID}"
       [allowExtensions]="allowExtensions"
@@ -62,34 +71,41 @@ const VALID_US_NUMBER = '8675555309';
       (selectedCountryChange)="selectedCountryChange($event)"
     >
       <input
-        [disabled]="isDisabled"
+        formControlName="phoneControl"
         skyPhoneFieldInput
         [skyPhoneFieldNoValidate]="noValidate"
-        [(ngModel)]="modelValue"
-      />
+      >
     </sky-phone-field>
 
-    <div *ngIf="showInvalidDirective">
-      <input
-        type="text"
-        skyPhoneFieldInput
-      />
-    </div>
-  </div>
+    <sky-status-indicator *ngIf="!phoneControl.valid"
+      descriptionType="none"
+      indicatorType="danger"
+    >
+      Enter a phone number matching the format for the selected country.
+    </sky-status-indicator>
+  </form>
 `
 })
-class PhoneFieldTestComponent {
+class PhoneFieldTestComponent implements OnInit {
   public allowExtensions: boolean = true;
   public defaultCountry: string;
-  public isDisabled: boolean = false;
-  public modelValue: string;
   public noValidate: boolean = false;
   public returnFormat: SkyPhoneFieldNumberReturnFormat;
   public selectedCountry: SkyPhoneFieldCountry;
   public showInvalidDirective: boolean = false;
   public supportedCountryISOs: string[];
 
+  public phoneControl: FormControl;
+  public phoneForm: FormGroup;
+
   public selectedCountryChange(query: string) { }
+
+  public ngOnInit(): void {
+    this.phoneControl = new FormControl();
+    this.phoneForm = new FormGroup({
+      'phoneControl': this.phoneControl
+    });
+  }
 }
 //#endregion Test component
 
@@ -124,7 +140,7 @@ fdescribe('PhoneField fixture', () => {
 
     const returnFormat = testComponent.returnFormat;
 
-    // give properties non-default values
+    // change the default country
     testComponent.defaultCountry = COUNTRY_AU.iso2;
     fixture.detectChanges();
     await fixture.whenStable();
@@ -141,6 +157,32 @@ fdescribe('PhoneField fixture', () => {
     expect(testComponent.modelValue).toEqual('+61 2 1234 5678');
   });
   */
+  it('should allow exensions by default', async () => {
+    // enter a valid phone number for the default country
+    const validNumberWithExt = `${COUNTRY_US.dialCode} ${VALID_US_NUMBER} ext 4`;
+    await phonefieldFixture.setInputText(validNumberWithExt);
+
+    // expect the model to contain the extension and be valid
+    expect(phonefieldFixture.inputText).toBe(validNumberWithExt);
+    expect(testComponent.phoneControl.value).toEqual('(867) 555-5309 ext. 4');
+    expect(testComponent.phoneForm.valid).toBeTrue();
+  });
+
+  it('should honor allowExtensions flag', async () => {
+    // turn off extensions
+    testComponent.allowExtensions = false;
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    // enter a valid phone number for the default country
+    const validNumberWithExt = `${COUNTRY_US.dialCode} ${VALID_US_NUMBER} ext 4`;
+    await phonefieldFixture.setInputText(validNumberWithExt);
+
+    // expect the model to contain the extension, but be invalid
+    expect(phonefieldFixture.inputText).toBe(validNumberWithExt);
+    expect(testComponent.phoneControl.value).toEqual('(867) 555-5309 ext. 4');
+    expect(testComponent.phoneForm.valid).toBeFalse();
+  });
 
   it('should use selected country', async () => {
     // enter a valid phone number for the default country
@@ -148,7 +190,7 @@ fdescribe('PhoneField fixture', () => {
 
     // expect the model to use the proper dial code and format
     expect(phonefieldFixture.inputText).toBe(VALID_US_NUMBER);
-    expect(testComponent.modelValue).toEqual('(867) 555-5309');
+    expect(testComponent.phoneControl.value).toEqual('(867) 555-5309');
   });
 
   it('should use newly selected country', async () => {
@@ -168,6 +210,6 @@ fdescribe('PhoneField fixture', () => {
 
     // expect the model to use the proper dial code and format
     expect(phonefieldFixture.inputText).toBe(VALID_AU_NUMBER);
-    expect(testComponent.modelValue).toEqual('+61 2 1234 5678');
+    expect(testComponent.phoneControl.value).toEqual('+61 2 1234 5678');
   });
 });
