@@ -29,6 +29,13 @@ export class SkyPhoneFieldFixture {
   // this property is lazy loaded and should be accessed via the private countryFixture property
   private _countryFixture: SkyCountryFieldFixture;
 
+  /**
+   * The value of the input field for the phone field.
+   */
+  public get inputText(): string {
+    return this.phoneFieldInput.value;
+  }
+
   constructor(
     private fixture: ComponentFixture<any>,
     private skyTestId: string
@@ -39,13 +46,6 @@ export class SkyPhoneFieldFixture {
     // The country selector needs extra time to initialize.
     // Consumers shouldn't need to work around this so we do an extra detect here
     fixture.detectChanges();
-  }
-
-  /**
-   * The value of the input field for the phone field.
-   */
-  public get inputText(): string {
-    return this.phoneFieldInput.value;
   }
 
   /**
