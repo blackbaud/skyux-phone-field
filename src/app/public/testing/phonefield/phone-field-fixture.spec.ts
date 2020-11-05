@@ -151,7 +151,7 @@ fdescribe('PhoneField fixture', () => {
     expect(testComponent.modelValue).toEqual('(867) 555-5309');
   });
 
-  fit('should use newly selected country', async () => {
+  it('should use newly selected country', async () => {
     const selectedCountryChangeSpy = spyOn(fixture.componentInstance, 'selectedCountryChange');
 
     // change the country

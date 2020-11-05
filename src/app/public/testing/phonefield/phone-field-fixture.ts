@@ -31,7 +31,7 @@ export class SkyPhoneFieldFixture {
   ) {
     this._debugEl = SkyAppTestUtility
       .getDebugElementByTestId(fixture, skyTestId, 'sky-phone-field');
-    this._countryFixture = new SkyCountryFieldFixture(fixture);
+    // this._countryFixture = new SkyCountryFieldFixture(fixture);
 
     /*
       This doesn't work because the phone-field only has commented out child elements
@@ -131,15 +131,15 @@ export class SkyPhoneFieldFixture {
 
   private async getCountryFixture(): Promise<SkyCountryFieldFixture> {
     if (this._countryFixture === undefined) {
-      // // tag the country field with a sky test id
-      // const countrySkyTestId = `${this.skyTestId}-country`;
-      // this.setSkyTestId(this.countryElement, countrySkyTestId);
+      // tag the country field with a sky test id
+      const countrySkyTestId = `${this.skyTestId}-country`;
+      this.setSkyTestId(this.countryElement, countrySkyTestId);
 
-      // // initialize the country fixture
-      // this._countryFixture = new SkyCountryFieldFixture(this.fixture, countrySkyTestId);
+      // initialize the country fixture
+      this._countryFixture = new SkyCountryFieldFixture(this.fixture, countrySkyTestId);
 
-      // this.fixture.detectChanges();
-      // await this.fixture.whenStable();
+      this.fixture.detectChanges();
+      await this.fixture.whenStable();
     }
 
     return this._countryFixture;
@@ -175,10 +175,10 @@ export class SkyCountryFieldFixture {
   private debugEl: DebugElement;
 
   constructor(
-    private fixture: ComponentFixture<any>
-    // ,skyTestId: string
+    private fixture: ComponentFixture<any>,
+    skyTestId: string
   ) {
-    // this.debugEl = SkyAppTestUtility.getDebugElementByTestId(fixture, skyTestId, 'sky-country-field');
+    this.debugEl = SkyAppTestUtility.getDebugElementByTestId(fixture, skyTestId, 'sky-country-field');
   }
 
   /**
