@@ -15,21 +15,50 @@ import {
 } from '@skyux-sdk/testing';
 
 /**
- * Provides information for and interaction with a SKY UX popover component.
+ * Provides information for and interaction with a SKY UX phone field component.
  * By using the fixture API, a test insulates itself against updates to the internals
  * of a component, such as changing its DOM structure.
  */
 export class SkyPhoneFieldFixture {
   private _debugEl: DebugElement;
+
+  // this property is lazy loaded and should be accessed via the private countryFixture property
   private _countryFixture: SkyCountryFieldFixture;
 
   constructor(
     private fixture: ComponentFixture<any>,
-    skyTestId: string
+    private skyTestId: string
   ) {
     this._debugEl = SkyAppTestUtility
       .getDebugElementByTestId(fixture, skyTestId, 'sky-phone-field');
     this._countryFixture = new SkyCountryFieldFixture(fixture);
+
+    /*
+      This doesn't work because the phone-field only has commented out child elements
+     */
+    // // tag the country field with a sky test id
+    // const countrySkyTestId = `${skyTestId}-country`;
+    // this.setSkyTestId(this.countryElement, countrySkyTestId);
+
+    // // grab the country field
+    // this._countryFixture = new SkyCountryFieldFixture(fixture, countrySkyTestId);
+
+    /*
+      This doesn't work because the country-field is not visible until the country button is
+      clicked. Plus, it probably introduces a race condition when trying to access the country
+      element will throw a null reference.
+     */
+    // fixture.detectChanges();
+    // fixture.whenStable().then(() => {
+    //   const debugEl = this._debugEl;
+
+    //   // tag the country field with a sky test id
+    //   const countrySkyTestId = `${skyTestId}-country`;
+    //   this.setSkyTestId(this.countryElement, countrySkyTestId);
+
+    //   // grab the country field
+    //   this._countryFixture = new SkyCountryFieldFixture(fixture, countrySkyTestId);
+    // });
 
     // The country selection needs extra time to initialize.
     // Consumers shouldn't need to work around this so we do an extra detect here
@@ -44,7 +73,7 @@ export class SkyPhoneFieldFixture {
   }
 
   /**
-   * The value of the input field for the phone field.
+   * Sets the value of the input field for the phone field.
    */
   public async setInputText(inputText: string): Promise<any> {
     const inputEl = this.phoneFieldInput;
@@ -60,47 +89,75 @@ export class SkyPhoneFieldFixture {
   }
 
   /**
-   * Enters the search text into the input field displaying search results, but making no selection.
+   * Opens country selection, peforms a search, but makes no selection.
    * @param searchText The name of the country to select.
    */
   public async searchCountry(searchText: string): Promise<NodeListOf<HTMLElement>> {
     await this.openCountrySelection();
-    const results = await this._countryFixture.search(searchText);
 
-    this.fixture.detectChanges();
-    await this.fixture.whenStable();
+    const countryFixture = await this.getCountryFixture();
+    const results = await countryFixture.search(searchText);
 
+    await this.waitForCountrySelection();
     return results;
   }
 
   /**
-   * Enters the search text into the input field and selects the first result (if any).
+   * Opens country selection, performs a search, and selects the first result (if any).
    * @param searchText The name of the country to select.
    */
   public async selectCountry(searchText: string): Promise<any> {
     await this.openCountrySelection();
-    await this._countryFixture.select(searchText);
 
-    this.fixture.detectChanges();
-    await  this.fixture.whenStable();
+    const countryFixture = await this.getCountryFixture();
+    await countryFixture.select(searchText);
+
+    return this.waitForCountrySelection();
   }
 
   //#region helpers
 
-  private get phoneFieldInput(): HTMLInputElement {
-    return this._debugEl.query(By.css('input[skyPhoneFieldInput]')).nativeElement;
+  private get countryElement(): HTMLInputElement {
+    return this._debugEl.query(By.css('sky-country-field')).nativeElement;
   }
 
   private get countryFlagButton(): HTMLInputElement {
     return this._debugEl.query(By.css('.sky-phone-field-country-btn .sky-btn')).nativeElement;
   }
 
+  private get phoneFieldInput(): HTMLInputElement {
+    return this._debugEl.query(By.css('input[skyPhoneFieldInput]')).nativeElement;
+  }
+
+  private async getCountryFixture(): Promise<SkyCountryFieldFixture> {
+    if (this._countryFixture === undefined) {
+      // // tag the country field with a sky test id
+      // const countrySkyTestId = `${this.skyTestId}-country`;
+      // this.setSkyTestId(this.countryElement, countrySkyTestId);
+
+      // // initialize the country fixture
+      // this._countryFixture = new SkyCountryFieldFixture(this.fixture, countrySkyTestId);
+
+      // this.fixture.detectChanges();
+      // await this.fixture.whenStable();
+    }
+
+    return this._countryFixture;
+  }
+
   private async openCountrySelection(): Promise<any> {
     this.countryFlagButton.click();
+    return this.waitForCountrySelection();
+  }
 
+  private setSkyTestId(element: HTMLElement, skyTestId: string) {
+    element.setAttribute('data-sky-id', skyTestId);
+  }
+
+  private async waitForCountrySelection(): Promise<any> {
     // any country selection needs extra time to complete
     this.fixture.detectChanges();
-    await  this.fixture.whenStable();
+    await this.fixture.whenStable();
 
     this.fixture.detectChanges();
     return this.fixture.whenStable();
@@ -115,7 +172,7 @@ export class SkyPhoneFieldFixture {
  * Allows interaction with a SKY UX country field component.
  */
 export class SkyCountryFieldFixture {
-  // private debugEl: DebugElement;
+  private debugEl: DebugElement;
 
   constructor(
     private fixture: ComponentFixture<any>

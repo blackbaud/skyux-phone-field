@@ -98,13 +98,6 @@ fdescribe('PhoneField fixture', () => {
   let testComponent: PhoneFieldTestComponent;
   let phonefieldFixture: SkyPhoneFieldFixture;
 
-  //#region helpers
-  // function detectChangesFakeAsync(): void {
-  //   fixture.detectChanges();
-  //   tick();
-  // }
-  //#endregion
-
   beforeEach(async () => {
     TestBed.configureTestingModule({
       declarations: [
@@ -126,22 +119,28 @@ fdescribe('PhoneField fixture', () => {
     phonefieldFixture = new SkyPhoneFieldFixture(fixture, DATA_SKY_ID);
   });
 
-  it('should expose phone field default values', async () => {
-    // expect all values to be undefined since the popover element does not exist
-    // expect(phonefieldFixture.countrySearchText).toEqual('');
-  });
+  /* --> Doesn't work because of default format initialization
+  it('should allow changing default country', async () => {
 
-  it('should expose phone field properties', async () => {
+    const returnFormat = testComponent.returnFormat;
+
     // give properties non-default values
-    testComponent.defaultCountry = 'gb';
+    testComponent.defaultCountry = COUNTRY_AU.iso2;
     fixture.detectChanges();
+    await fixture.whenStable();
 
-    // expect all values to be undefined since the popover element does not exist
-    // expect(popoverFixture.title).toEqual(testComponent.popoverTitle);
-    // expect(SkyAppTestUtility.getText(popoverFixture.body)).toEqual(testComponent.popoverBody);
-    // expect(popoverFixture.alignment).toEqual(testComponent.popoverAlignment);
-    // expect(popoverFixture.position).toEqual(testComponent.popoverPlacement);
+    // verify selected country
+    expect(testComponent.selectedCountry.name).toBe(COUNTRY_AU.name);
+    expect(testComponent.returnFormat).toEqual(returnFormat);
+
+    // enter a valid phone number for the default country
+    await phonefieldFixture.setInputText(VALID_AU_NUMBER);
+
+    // expect the model to use the proper dial code and format
+    expect(phonefieldFixture.inputText).toBe(VALID_AU_NUMBER);
+    expect(testComponent.modelValue).toEqual('+61 2 1234 5678');
   });
+  */
 
   it('should use selected country', async () => {
     // enter a valid phone number for the default country
@@ -152,7 +151,7 @@ fdescribe('PhoneField fixture', () => {
     expect(testComponent.modelValue).toEqual('(867) 555-5309');
   });
 
-  it('should use newly selected country', async () => {
+  fit('should use newly selected country', async () => {
     const selectedCountryChangeSpy = spyOn(fixture.componentInstance, 'selectedCountryChange');
 
     // change the country
@@ -171,8 +170,4 @@ fdescribe('PhoneField fixture', () => {
     expect(phonefieldFixture.inputText).toBe(VALID_AU_NUMBER);
     expect(testComponent.modelValue).toEqual('+61 2 1234 5678');
   });
-
-  it('should allow extensions by default', async () => { });
-
-  it('should honor allow extensions flag', async () => { });
 });
