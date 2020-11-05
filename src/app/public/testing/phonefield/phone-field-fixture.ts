@@ -31,36 +31,8 @@ export class SkyPhoneFieldFixture {
   ) {
     this._debugEl = SkyAppTestUtility
       .getDebugElementByTestId(fixture, skyTestId, 'sky-phone-field');
-    // this._countryFixture = new SkyCountryFieldFixture(fixture);
 
-    /*
-      This doesn't work because the phone-field only has commented out child elements
-     */
-    // // tag the country field with a sky test id
-    // const countrySkyTestId = `${skyTestId}-country`;
-    // this.setSkyTestId(this.countryElement, countrySkyTestId);
-
-    // // grab the country field
-    // this._countryFixture = new SkyCountryFieldFixture(fixture, countrySkyTestId);
-
-    /*
-      This doesn't work because the country-field is not visible until the country button is
-      clicked. Plus, it probably introduces a race condition when trying to access the country
-      element will throw a null reference.
-     */
-    // fixture.detectChanges();
-    // fixture.whenStable().then(() => {
-    //   const debugEl = this._debugEl;
-
-    //   // tag the country field with a sky test id
-    //   const countrySkyTestId = `${skyTestId}-country`;
-    //   this.setSkyTestId(this.countryElement, countrySkyTestId);
-
-    //   // grab the country field
-    //   this._countryFixture = new SkyCountryFieldFixture(fixture, countrySkyTestId);
-    // });
-
-    // The country selection needs extra time to initialize.
+    // The country selector needs extra time to initialize.
     // Consumers shouldn't need to work around this so we do an extra detect here
     fixture.detectChanges();
   }
@@ -89,7 +61,7 @@ export class SkyPhoneFieldFixture {
   }
 
   /**
-   * Opens country selection, peforms a search, but makes no selection.
+   * Opens the country selector, peforms a search, but makes no selection.
    * @param searchText The name of the country to select.
    */
   public async searchCountry(searchText: string): Promise<NodeListOf<HTMLElement>> {
@@ -103,7 +75,7 @@ export class SkyPhoneFieldFixture {
   }
 
   /**
-   * Opens country selection, performs a search, and selects the first result (if any).
+   * Opens the country selector, performs a search, and selects the first result (if any).
    * @param searchText The name of the country to select.
    */
   public async selectCountry(searchText: string): Promise<any> {
@@ -166,7 +138,7 @@ export class SkyPhoneFieldFixture {
   //#endregion
 }
 
-// TODO: REMOVE ME!!!!!
+// TODO: REMOVE ME ONCE WE PUBLISH THE COUNTRY FIELD!!!!!
 
 /**
  * Allows interaction with a SKY UX country field component.

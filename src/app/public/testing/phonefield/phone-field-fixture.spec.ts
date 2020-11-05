@@ -135,28 +135,6 @@ fdescribe('PhoneField fixture', () => {
     phonefieldFixture = new SkyPhoneFieldFixture(fixture, DATA_SKY_ID);
   });
 
-  /* --> Doesn't work because of default format initialization
-  it('should allow changing default country', async () => {
-
-    const returnFormat = testComponent.returnFormat;
-
-    // change the default country
-    testComponent.defaultCountry = COUNTRY_AU.iso2;
-    fixture.detectChanges();
-    await fixture.whenStable();
-
-    // verify selected country
-    expect(testComponent.selectedCountry.name).toBe(COUNTRY_AU.name);
-    expect(testComponent.returnFormat).toEqual(returnFormat);
-
-    // enter a valid phone number for the default country
-    await phonefieldFixture.setInputText(VALID_AU_NUMBER);
-
-    // expect the model to use the proper dial code and format
-    expect(phonefieldFixture.inputText).toBe(VALID_AU_NUMBER);
-    expect(testComponent.modelValue).toEqual('+61 2 1234 5678');
-  });
-  */
   it('should allow exensions by default', async () => {
     // enter a valid phone number for the default country
     const validNumberWithExt = `${COUNTRY_US.dialCode} ${VALID_US_NUMBER} ext 4`;
