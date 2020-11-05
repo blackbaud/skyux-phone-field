@@ -146,13 +146,6 @@ export class SkyPhoneFieldFixture {
 export class SkyCountryFieldFixture {
   private debugEl: DebugElement;
 
-  constructor(
-    private fixture: ComponentFixture<any>,
-    skyTestId: string
-  ) {
-    this.debugEl = SkyAppTestUtility.getDebugElementByTestId(fixture, skyTestId, 'sky-country-field');
-  }
-
   /**
    * The value of the input field's autocomplete attribute.
    */
@@ -182,6 +175,13 @@ export class SkyCountryFieldFixture {
    */
   public get searchText(): string {
     return this.getInputElement().value;
+  }
+
+  constructor(
+    private fixture: ComponentFixture<any>,
+    skyTestId: string
+  ) {
+    this.debugEl = SkyAppTestUtility.getDebugElementByTestId(fixture, skyTestId, 'sky-country-field');
   }
 
   /**

@@ -109,7 +109,7 @@ class PhoneFieldTestComponent implements OnInit {
 }
 //#endregion Test component
 
-fdescribe('PhoneField fixture', () => {
+describe('PhoneField fixture', () => {
   let fixture: ComponentFixture<PhoneFieldTestComponent>;
   let testComponent: PhoneFieldTestComponent;
   let phonefieldFixture: SkyPhoneFieldFixture;
