@@ -98,7 +98,7 @@ class PhoneFieldTestComponent implements OnInit {
   public phoneControl: FormControl;
   public phoneForm: FormGroup;
 
-  public selectedCountryChange(query: string) { }
+  public selectedCountryChange(query: string): void { }
 
   public ngOnInit(): void {
     this.phoneControl = new FormControl();
