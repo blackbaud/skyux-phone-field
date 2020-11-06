@@ -30,10 +30,7 @@ import {
 export class SkyPhoneFieldFixture {
 
   private _adapterService: SkyPhoneFieldFixtureAdapterService;
-
-  // this property is lazy loaded and should be accessed via the private countryFixture property
   private _countryFixture: SkyCountryFieldFixture;
-
   private _debugEl: DebugElement;
 
   /**
