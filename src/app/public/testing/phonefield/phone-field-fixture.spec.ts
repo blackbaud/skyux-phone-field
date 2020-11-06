@@ -163,4 +163,16 @@ describe('PhoneField fixture', () => {
     expect(phonefieldFixture.inputText).toBe(VALID_AU_NUMBER);
     expect(testComponent.phoneControl.value).toEqual('+61 2 1234 5678');
   });
+
+  it('should not have constructor race condition', async () => {
+    // There is some concern that the delayed instantiation of the country field in the fixture's
+    // constructor will cause a race condition. We attempt to access the country field as early as
+    // possible here to try and trigger any race condition.
+    await phonefieldFixture.selectCountry(COUNTRY_US.name);
+
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(testComponent.selectedCountry.name).toBe(COUNTRY_US.name);
+  });
 });
