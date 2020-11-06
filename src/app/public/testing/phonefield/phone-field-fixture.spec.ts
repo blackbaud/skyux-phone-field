@@ -135,33 +135,6 @@ describe('PhoneField fixture', () => {
     phonefieldFixture = new SkyPhoneFieldFixture(fixture, DATA_SKY_ID);
   });
 
-  it('should allow exensions by default', async () => {
-    // enter a valid phone number for the default country
-    const validNumberWithExt = `${COUNTRY_US.dialCode} ${VALID_US_NUMBER} ext 4`;
-    await phonefieldFixture.setInputText(validNumberWithExt);
-
-    // expect the model to contain the extension and be valid
-    expect(phonefieldFixture.inputText).toBe(validNumberWithExt);
-    expect(testComponent.phoneControl.value).toEqual('(867) 555-5309 ext. 4');
-    expect(testComponent.phoneForm.valid).toBeTrue();
-  });
-
-  it('should honor allowExtensions flag', async () => {
-    // turn off extensions
-    testComponent.allowExtensions = false;
-    fixture.detectChanges();
-    await fixture.whenStable();
-
-    // enter a valid phone number for the default country
-    const validNumberWithExt = `${COUNTRY_US.dialCode} ${VALID_US_NUMBER} ext 4`;
-    await phonefieldFixture.setInputText(validNumberWithExt);
-
-    // expect the model to contain the extension, but be invalid
-    expect(phonefieldFixture.inputText).toBe(validNumberWithExt);
-    expect(testComponent.phoneControl.value).toEqual('(867) 555-5309 ext. 4');
-    expect(testComponent.phoneForm.valid).toBeFalse();
-  });
-
   it('should use selected country', async () => {
     // enter a valid phone number for the default country
     await phonefieldFixture.setInputText(VALID_US_NUMBER);

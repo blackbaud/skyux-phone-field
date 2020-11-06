@@ -43,6 +43,40 @@ export class SkyPhoneFieldFixture {
     this._debugEl = SkyAppTestUtility
       .getDebugElementByTestId(fixture, skyTestId, 'sky-phone-field');
 
+    /* Attempt #1:
+      This doesn't work because the phone-field only has commented out child elements
+      */
+    // // tag the country field with a sky test id
+    // const countrySkyTestId = `${skyTestId}-country`;
+    // this.setSkyTestId(this.countryElement, countrySkyTestId);
+
+    // // grab the country field
+    // this._countryFixture = new SkyCountryFieldFixture(fixture, countrySkyTestId);
+
+    /* Attempt #2:
+      This doesn't work because the country-field takes too long to initialize.
+      It introduces a race condition when trying to access the country element will throw a null reference.
+      */
+    // fixture.detectChanges();
+    // fixture.whenStable().then(() => {
+    //   const debugEl = this._debugEl;
+
+    //   // tag the country field with a sky test id
+    //   const countrySkyTestId = `${skyTestId}-country`;
+    //   this.setSkyTestId(this.countryElement, countrySkyTestId);
+
+    //   // grab the country field
+    //   this._countryFixture = new SkyCountryFieldFixture(fixture, countrySkyTestId);
+    // });
+
+    /* Attempt #3:
+      This works because of the extra delay, but it still has the possible race condition where
+      trying to access the country element too quickly will throw a null reference.
+      */
+    // this.waitForCountrySelection().then(() => {
+    //   this.getCountryFixture();
+    // });
+
     // The country selector needs extra time to initialize.
     // Consumers shouldn't need to work around this so we do an extra detect here
     fixture.detectChanges();
@@ -105,6 +139,11 @@ export class SkyPhoneFieldFixture {
     return this._debugEl.query(By.css('input[skyPhoneFieldInput]')).nativeElement;
   }
 
+  /**
+   * The country-field can take a really long time to initialize. Since we can't perform an await
+   * in our constructor, it's safest to do a lazy load of the country field to avoid any race
+   * conditions where a test tries to access the sky-country-field element too quickly.
+   */
   private async getCountryFixture(): Promise<SkyCountryFieldFixture> {
     if (this._countryFixture === undefined) {
       // tag the country field with a sky test id
