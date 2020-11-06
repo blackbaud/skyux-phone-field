@@ -18,18 +18,12 @@ import {
   SkyCountryFieldFixture
 } from '@skyux/lookup/testing';
 
-import {
-  SkyPhoneFieldFixtureAdapterService
-} from './phone-field-fixture-adapter.service';
-
 /**
  * Provides information for and interaction with a SKY UX phone field component.
  * By using the fixture API, a test insulates itself against updates to the internals
  * of a component, such as changing its DOM structure.
  */
 export class SkyPhoneFieldFixture {
-
-  private _adapterService: SkyPhoneFieldFixtureAdapterService;
   private _countryFixture: SkyCountryFieldFixture;
   private _debugEl: DebugElement;
 
@@ -125,7 +119,6 @@ export class SkyPhoneFieldFixture {
     // tag the country field with a sky test id
     const countrySkyTestId = `${this.skyTestId}-country`;
     this.setSkyTestId(this.countryElement, countrySkyTestId);
-    // this._adapterService.setSkyTestId(this.countryElement, countrySkyTestId);
 
     return new SkyCountryFieldFixture(this.fixture, countrySkyTestId);
   }
@@ -135,7 +128,6 @@ export class SkyPhoneFieldFixture {
     return this.waitForCountrySelection();
   }
 
-  // TODO: Remove this and use the adapter
   private setSkyTestId(element: HTMLElement, skyTestId: string) {
     element.setAttribute('data-sky-id', skyTestId);
   }
