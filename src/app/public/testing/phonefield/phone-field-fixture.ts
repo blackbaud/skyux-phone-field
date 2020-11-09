@@ -24,6 +24,7 @@ import {
  * of a component, such as changing its DOM structure.
  */
 export class SkyPhoneFieldFixture {
+  // this property is lazy loaded and should be accessed via the private countryFixture property
   private _countryFixture: SkyCountryFieldFixture;
   private _debugEl: DebugElement;
 
@@ -38,21 +39,12 @@ export class SkyPhoneFieldFixture {
     private fixture: ComponentFixture<any>,
     private skyTestId: string
   ) {
-
-    // can't inject this guy?
-    // this._adapterService = new SkyPhoneFieldFixtureAdapterService(new Renderer2);
-
     this._debugEl = SkyAppTestUtility
       .getDebugElementByTestId(fixture, skyTestId, 'sky-phone-field');
 
-    /*
-     * Country field takes a long time to initialize, so we need to delay a bit.
-     * This could potentially create a race condition if the country element is accessed before
-     * the promise completes.
-     */
-    this.waitForCountrySelection().then(() => {
-      this._countryFixture = this.getCountryFixture();
-    });
+    // The country selector needs extra time to initialize.
+    // Consumers shouldn't need to work around this so we do an extra detect here
+    fixture.detectChanges();
   }
 
   /**
@@ -78,7 +70,8 @@ export class SkyPhoneFieldFixture {
   public async searchCountry(searchText: string): Promise<NodeListOf<HTMLElement>> {
     await this.openCountrySelection();
 
-    const results = await this._countryFixture.search(searchText);
+    const countryFixture = await this.getCountryFixture();
+    const results = await countryFixture.search(searchText);
 
     await this.waitForCountrySelection();
     return results;
@@ -91,7 +84,8 @@ export class SkyPhoneFieldFixture {
   public async selectCountry(searchText: string): Promise<any> {
     await this.openCountrySelection();
 
-    await this._countryFixture.searchAndSelectFirstResult(searchText);
+    const countryFixture = await this.getCountryFixture();
+    await countryFixture.searchAndSelectFirstResult(searchText);
 
     return this.waitForCountrySelection();
   }
@@ -115,12 +109,20 @@ export class SkyPhoneFieldFixture {
    * in our constructor, it's safest to do a lazy load of the country field to avoid any race
    * conditions where a test tries to access the sky-country-field element too quickly.
    */
-  private getCountryFixture(): SkyCountryFieldFixture {
-    // tag the country field with a sky test id
-    const countrySkyTestId = `${this.skyTestId}-country`;
-    this.setSkyTestId(this.countryElement, countrySkyTestId);
+  private async getCountryFixture(): Promise<SkyCountryFieldFixture> {
+    if (this._countryFixture === undefined) {
+      // tag the country field with a sky test id
+      const countrySkyTestId = `${this.skyTestId}-country`;
+      this.setSkyTestId(this.countryElement, countrySkyTestId);
 
-    return new SkyCountryFieldFixture(this.fixture, countrySkyTestId);
+      // initialize the country fixture
+      this._countryFixture = new SkyCountryFieldFixture(this.fixture, countrySkyTestId);
+
+      this.fixture.detectChanges();
+      await this.fixture.whenStable();
+    }
+
+    return this._countryFixture;
   }
 
   private async openCountrySelection(): Promise<any> {
