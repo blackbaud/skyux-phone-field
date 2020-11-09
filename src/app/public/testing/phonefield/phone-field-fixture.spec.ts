@@ -4,27 +4,24 @@ import {
 } from '@angular/core';
 
 import {
-  FormControl,
-  FormGroup
-} from '@angular/forms';
-
-import {
   ComponentFixture,
   TestBed
 } from '@angular/core/testing';
 
 import {
+  FormControl,
+  FormGroup,
   FormsModule,
   ReactiveFormsModule
 } from '@angular/forms';
 
 import {
-  SkyStatusIndicatorModule
-} from '@skyux/indicators';
-
-import {
   expect
 } from '@skyux-sdk/testing';
+
+import {
+  SkyStatusIndicatorModule
+} from '@skyux/indicators';
 
 import {
   SkyPhoneFieldCountry,

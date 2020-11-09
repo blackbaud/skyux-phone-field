@@ -50,7 +50,7 @@ export class SkyPhoneFieldFixture {
   /**
    * Sets the value of the input field for the phone field.
    */
-  public async setInputText(inputText: string): Promise<any> {
+  public async setInputText(inputText: string): Promise<void> {
     const inputEl = this.phoneFieldInput;
     inputEl.value = inputText;
 
@@ -81,7 +81,7 @@ export class SkyPhoneFieldFixture {
    * Opens the country selector, performs a search, and selects the first result (if any).
    * @param searchText The name of the country to select.
    */
-  public async selectCountry(searchText: string): Promise<any> {
+  public async selectCountry(searchText: string): Promise<void> {
     await this.openCountrySelection();
 
     const countryFixture = await this.getCountryFixture();
@@ -125,16 +125,16 @@ export class SkyPhoneFieldFixture {
     return this._countryFixture;
   }
 
-  private async openCountrySelection(): Promise<any> {
+  private async openCountrySelection(): Promise<void> {
     this.countryFlagButton.click();
     return this.waitForCountrySelection();
   }
 
-  private setSkyTestId(element: HTMLElement, skyTestId: string) {
+  private setSkyTestId(element: HTMLElement, skyTestId: string): void {
     element.setAttribute('data-sky-id', skyTestId);
   }
 
-  private async waitForCountrySelection(): Promise<any> {
+  private async waitForCountrySelection(): Promise<void> {
     // any country selection needs extra time to complete
     this.fixture.detectChanges();
     await this.fixture.whenStable();
