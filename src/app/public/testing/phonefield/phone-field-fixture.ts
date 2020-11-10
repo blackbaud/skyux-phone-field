@@ -66,8 +66,9 @@ export class SkyPhoneFieldFixture {
   /**
    * Opens the country selector, peforms a search, but makes no selection.
    * @param searchText The name of the country to select.
+   * @returns The list of country names matching the search text.
    */
-  public async searchCountry(searchText: string): Promise<NodeListOf<HTMLElement>> {
+  public async searchCountry(searchText: string): Promise<string[]> {
     await this.openCountrySelection();
 
     const countryFixture = await this.getCountryFixture();

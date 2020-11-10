@@ -161,6 +161,27 @@ describe('PhoneField fixture', () => {
     expect(testComponent.phoneControl.value).toEqual('+61 2 1234 5678');
   });
 
+  it('should return expected country search results', async () => {
+
+    // wait for initial country selection to finish before setting up the spy
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const selectedCountryChangeSpy = spyOn(fixture.componentInstance, 'selectedCountryChange');
+
+    // search for a country by name
+    const results = await phonefieldFixture.searchCountry(COUNTRY_AU.name);
+
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    // ensure no country selection has taken place yet
+    expect(selectedCountryChangeSpy).toHaveBeenCalledTimes(0);
+
+    // verify the country search results match the country
+    expect(results.length).toBe(1);
+    expect(results[0]).toBe(COUNTRY_AU.name);
+  });
+
   it('should not have constructor race condition', async () => {
     // There is some concern that the delayed instantiation of the country field in the fixture's
     // constructor will cause a race condition. We attempt to access the country field as early as
