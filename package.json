@@ -1,6 +1,6 @@
 {
   "name": "@skyux/phone-field",
-  "version": "4.4.1",
+  "version": "4.5.0",
   "description": "SKY UX Phone Field",
   "scripts": {
     "build": "skyux build-public-library",
