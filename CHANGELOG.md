@@ -1,6 +1,6 @@
 # 4.5.0 (2020-11-11)
 
-- Added a phone field field testing fixture. [#77](https://github.com/blackbaud/skyux-phone-field/pull/77)
+- Added a phone field testing fixture. [#77](https://github.com/blackbaud/skyux-phone-field/pull/77)
 
 # 4.4.1 (2020-10-26)
 
