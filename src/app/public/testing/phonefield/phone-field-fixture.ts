@@ -18,15 +18,16 @@ import {
   SkyCountryFieldFixture
 } from '@skyux/lookup/testing';
 
+import {
+  SkyPhoneFieldComponent
+} from '../../modules/phone-field/phone-field.component';
+
 /**
  * Provides information for and interaction with a SKY UX phone field component.
  * By using the fixture API, a test insulates itself against updates to the internals
  * of a component, such as changing its DOM structure.
  */
 export class SkyPhoneFieldFixture {
-  // this property is lazy loaded and should be accessed via the private countryFixture property
-  private _countryFixture: SkyCountryFieldFixture;
-  private _debugEl: DebugElement;
 
   /**
    * The value of the input field for the phone field.
@@ -35,12 +36,22 @@ export class SkyPhoneFieldFixture {
     return this.phoneFieldInput.value;
   }
 
+  /**
+   * This property is lazy loaded and should be accessed via the private countryFixture property.
+   */
+  private _countryFixture: SkyCountryFieldFixture;
+
+  private _debugEl: DebugElement;
+
+  private _phoneFieldComponent: SkyPhoneFieldComponent;
+
   constructor(
     private fixture: ComponentFixture<any>,
     private skyTestId: string
   ) {
     this._debugEl = SkyAppTestUtility
       .getDebugElementByTestId(fixture, skyTestId, 'sky-phone-field');
+    this._phoneFieldComponent = this._debugEl.componentInstance;
 
     // The country selector needs extra time to initialize.
     // Consumers shouldn't need to work around this so we do an extra detect here
@@ -91,7 +102,41 @@ export class SkyPhoneFieldFixture {
     return this.waitForCountrySelection();
   }
 
-  //#region helpers
+  /**
+   * Gets a boolean promise indicating if the phone field is disabled.
+   */
+  public async isDisabled(): Promise<boolean> {
+    const disabled = this.phoneFieldInput.getAttribute('disabled');
+    return this.coerceBooleanProperty(await disabled);
+  }
+
+  /**
+   * Gets a boolean promise indicating if the phone field is valid.
+   */
+  public async isValid(): Promise<boolean> {
+    if (!await this.hasFormControl()) {
+      throw new Error(`Form control not found.`);
+    }
+    return this.phoneFieldInput.classList.contains('ng-valid');
+  }
+
+  /**
+   * Blurs the select and returns a void promise that indicates when the action is complete.
+   */
+  public async blur(): Promise<void> {
+    SkyAppTestUtility.fireDomEvent(this.phoneFieldInput, 'blur');
+    this.fixture.detectChanges();
+    return this.fixture.whenStable();
+  }
+
+  public async getValue(): Promise<any> {
+    return await this._phoneFieldComponent.phoneInputShown;
+  }
+
+  private async setValue(): Promise<void> {
+    await this.fixture.whenStable();
+    return;
+  }
 
   private get countryElement(): HTMLInputElement {
     return this._debugEl.query(By.css('sky-country-field')).nativeElement;
@@ -102,6 +147,11 @@ export class SkyPhoneFieldFixture {
   }
 
   private get phoneFieldInput(): HTMLInputElement {
+    return this._debugEl.query(By.css('input[skyPhoneFieldInput]')).nativeElement;
+  }
+
+  private async getInputElement(): Promise<HTMLInputElement> {
+    await this.fixture.whenStable();
     return this._debugEl.query(By.css('input[skyPhoneFieldInput]')).nativeElement;
   }
 
@@ -144,5 +194,20 @@ export class SkyPhoneFieldFixture {
     return this.fixture.whenStable();
   }
 
-  //#endregion
+  /**
+   * Checks whether the form-field control has set up a form control.
+   */
+  private async hasFormControl(): Promise<boolean> {
+    // If no form "NgControl" is bound to the form-field control, the form-field
+    // is not able to forward any control status classes. Therefore if either the
+    // "ng-touched" or "ng-untouched" class is set, we know that it has a form control.
+    const isTouched = this.phoneFieldInput.classList.contains('ng-touched');
+    const isUntouched = this.phoneFieldInput.classList.contains('ng-untouched');
+    return isTouched || isUntouched;
+  }
+
+  private coerceBooleanProperty(value: any): boolean {
+    // tslint:disable-next-line: no-null-keyword
+    return value != null && `${value}` !== 'false';
+  }
 }
