@@ -129,15 +129,6 @@ export class SkyPhoneFieldFixture {
     return this.fixture.whenStable();
   }
 
-  public async getValue(): Promise<any> {
-    return await this._phoneFieldComponent.phoneInputShown;
-  }
-
-  private async setValue(): Promise<void> {
-    await this.fixture.whenStable();
-    return;
-  }
-
   private get countryElement(): HTMLInputElement {
     return this._debugEl.query(By.css('sky-country-field')).nativeElement;
   }
@@ -147,11 +138,6 @@ export class SkyPhoneFieldFixture {
   }
 
   private get phoneFieldInput(): HTMLInputElement {
-    return this._debugEl.query(By.css('input[skyPhoneFieldInput]')).nativeElement;
-  }
-
-  private async getInputElement(): Promise<HTMLInputElement> {
-    await this.fixture.whenStable();
     return this._debugEl.query(By.css('input[skyPhoneFieldInput]')).nativeElement;
   }
 
