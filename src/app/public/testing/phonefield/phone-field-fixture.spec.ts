@@ -25,6 +25,7 @@ import {
 
 import {
   SkyPhoneFieldCountry,
+  SkyPhoneFieldModule,
   SkyPhoneFieldNumberReturnFormat
 } from '@skyux/phone-field';
 
@@ -35,6 +36,10 @@ import {
 import {
   SkyPhoneFieldTestingModule
 } from './phone-field-testing.module';
+
+import {
+  SkyPhoneFieldModule as LocalSkyPhoneFieldModule
+} from '../../modules/phone-field/phone-field.module';
 
 const COUNTRY_AU: SkyPhoneFieldCountry = {
   name: 'Australia',
@@ -122,7 +127,14 @@ describe('PhoneField fixture', () => {
         SkyPhoneFieldTestingModule,
         SkyStatusIndicatorModule
       ]
-    });
+    }).overrideModule(SkyPhoneFieldTestingModule, {
+      remove: {
+        exports: [SkyPhoneFieldModule]
+      },
+      add: {
+        exports: [LocalSkyPhoneFieldModule]
+      }
+    }).compileComponents();
 
     // create the fixture, waiting until it's stable since it selects a country on init
     fixture = TestBed.createComponent(
