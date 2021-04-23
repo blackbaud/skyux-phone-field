@@ -15,7 +15,6 @@ import {
   ReactiveFormsModule,
   Validators
 } from '@angular/forms';
-import { SkyAppTestUtility } from '@skyux-sdk/testing';
 
 import {
   SkyStatusIndicatorModule
@@ -153,13 +152,12 @@ describe('PhoneField fixture', () => {
     expect(await phonefieldFixture.isValid()).toBe(false);
   });
 
-  fit('should be able to get the value of the phone field', async () => {
-    expect(await phonefieldFixture.getValue()).toBe('');
+  it('should return the selected country', async () => {
+    const selectedCountry = await phonefieldFixture.getSelectedCountry();
 
-    await phonefieldFixture.setInputText('867-5309');
-    await phonefieldFixture.blur();
-
-    expect(await phonefieldFixture.getValue()).toBe('foo');
+    expect(selectedCountry.name).toBe(COUNTRY_US.name);
+    expect(selectedCountry.iso2).toBe(COUNTRY_US.iso2);
+    expect(selectedCountry.dialCode).toBe(COUNTRY_US.dialCode);
   });
 
   it('should use selected country', async () => {

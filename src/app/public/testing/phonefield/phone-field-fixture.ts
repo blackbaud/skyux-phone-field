@@ -15,6 +15,10 @@ import {
 } from '@skyux-sdk/testing';
 
 import {
+  SkyCountryFieldCountry
+} from '@skyux/lookup';
+
+import {
   SkyCountryFieldFixture
 } from '@skyux/lookup/testing';
 
@@ -100,6 +104,15 @@ export class SkyPhoneFieldFixture {
     await countryFixture.searchAndSelectFirstResult(searchText);
 
     return this.waitForCountrySelection();
+  }
+
+  /**
+   * Returns the selected country.
+   */
+  public async getSelectedCountry(): Promise<SkyCountryFieldCountry> {
+    // Wait for the country field to initialize.
+    await this.fixture.whenStable();
+    return this._phoneFieldComponent.selectedCountry;
   }
 
   /**
