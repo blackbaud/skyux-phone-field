@@ -15,16 +15,8 @@ import {
 } from '@skyux-sdk/testing';
 
 import {
-  SkyCountryFieldCountry
-} from '@skyux/lookup';
-
-import {
   SkyCountryFieldFixture
 } from '@skyux/lookup/testing';
-
-import {
-  SkyPhoneFieldComponent
-} from '../../modules/phone-field/phone-field.component';
 
 /**
  * Provides information for and interaction with a SKY UX phone field component.
@@ -47,19 +39,43 @@ export class SkyPhoneFieldFixture {
 
   private _debugEl: DebugElement;
 
-  private _phoneFieldComponent: SkyPhoneFieldComponent;
-
   constructor(
     private fixture: ComponentFixture<any>,
     private skyTestId: string
   ) {
     this._debugEl = SkyAppTestUtility
       .getDebugElementByTestId(fixture, skyTestId, 'sky-phone-field');
-    this._phoneFieldComponent = this._debugEl.componentInstance;
 
     // The country selector needs extra time to initialize.
     // Consumers shouldn't need to work around this so we do an extra detect here
     fixture.detectChanges();
+  }
+
+  /**
+   * Blurs the select and returns a void promise that indicates when the action is complete.
+   */
+  public async blur(): Promise<void> {
+    SkyAppTestUtility.fireDomEvent(this.phoneFieldInput, 'blur');
+    this.fixture.detectChanges();
+    return this.fixture.whenStable();
+  }
+
+  /**
+   * Returns the selected country iso2 code.
+   */
+  public async getSelectedCountryIso2(): Promise<string> {
+    // Wait for the country field to initialize.
+    await this.fixture.whenStable();
+    return this.countryFlagButtonContainer.getAttribute('data-sky-test-iso2');
+  }
+
+  /**
+   * Returns the selected country name.
+   */
+  public async getSelectedCountryName(): Promise<string> {
+    // Wait for the country field to initialize.
+    await this.fixture.whenStable();
+    return this.countryFlagButtonContainer.getAttribute('data-sky-test-name');
   }
 
   /**
@@ -107,15 +123,6 @@ export class SkyPhoneFieldFixture {
   }
 
   /**
-   * Returns the selected country.
-   */
-  public async getSelectedCountry(): Promise<SkyCountryFieldCountry> {
-    // Wait for the country field to initialize.
-    await this.fixture.whenStable();
-    return this._phoneFieldComponent.selectedCountry;
-  }
-
-  /**
    * Gets a boolean promise indicating if the phone field is disabled.
    */
   public async isDisabled(): Promise<boolean> {
@@ -133,17 +140,12 @@ export class SkyPhoneFieldFixture {
     return this.phoneFieldInput.classList.contains('ng-valid');
   }
 
-  /**
-   * Blurs the select and returns a void promise that indicates when the action is complete.
-   */
-  public async blur(): Promise<void> {
-    SkyAppTestUtility.fireDomEvent(this.phoneFieldInput, 'blur');
-    this.fixture.detectChanges();
-    return this.fixture.whenStable();
-  }
-
   private get countryElement(): HTMLInputElement {
     return this._debugEl.query(By.css('sky-country-field')).nativeElement;
+  }
+
+  private get countryFlagButtonContainer(): HTMLInputElement {
+    return this._debugEl.query(By.css('.sky-phone-field-country-btn')).nativeElement;
   }
 
   private get countryFlagButton(): HTMLInputElement {

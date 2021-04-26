@@ -152,14 +152,6 @@ describe('PhoneField fixture', () => {
     expect(await phonefieldFixture.isValid()).toBe(false);
   });
 
-  it('should return the selected country', async () => {
-    const selectedCountry = await phonefieldFixture.getSelectedCountry();
-
-    expect(selectedCountry.name).toBe(COUNTRY_US.name);
-    expect(selectedCountry.iso2).toBe(COUNTRY_US.iso2);
-    expect(selectedCountry.dialCode).toBe(COUNTRY_US.dialCode);
-  });
-
   it('should use selected country', async () => {
     // enter a valid phone number for the default country
     await phonefieldFixture.setInputText(VALID_US_NUMBER);
