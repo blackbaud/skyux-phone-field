@@ -67,7 +67,7 @@ const VALID_US_NUMBER = '8675555309';
       <input
         formControlName="phoneControl"
         skyPhoneFieldInput
-        [disabled]="disabled"
+        [attr.disabled]="disabled"
         [skyPhoneFieldNoValidate]="noValidate"
       >
     </sky-phone-field>
