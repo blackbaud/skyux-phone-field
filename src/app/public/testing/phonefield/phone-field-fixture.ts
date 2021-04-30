@@ -52,7 +52,7 @@ export class SkyPhoneFieldFixture {
   }
 
   /**
-   * Blurs the select and returns a void promise that indicates when the action is complete.
+   * Blurs the phone field input and returns a promise that indicates when the action is complete.
    */
   public async blur(): Promise<void> {
     SkyAppTestUtility.fireDomEvent(this.phoneFieldInput, 'blur');
