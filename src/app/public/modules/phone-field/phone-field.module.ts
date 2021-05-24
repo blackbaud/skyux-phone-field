@@ -12,10 +12,6 @@ import {
 } from '@angular/forms';
 
 import {
-  BrowserAnimationsModule
-} from '@angular/platform-browser/animations';
-
-import {
   SkyIconModule
 } from '@skyux/indicators';
 
@@ -45,7 +41,6 @@ import {
     SkyPhoneFieldInputDirective
   ],
   imports: [
-    BrowserAnimationsModule,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
