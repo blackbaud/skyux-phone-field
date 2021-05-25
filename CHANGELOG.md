@@ -1,3 +1,7 @@
+# 5.0.0-alpha.0 (2021-05-24)
+
+- Removed `BrowserAnimationsModule` from the `imports` section of `SkyPhoneFieldModule` to support lazy-loading. Consumers of `SkyPhoneFieldModule` must now import `BrowserAnimationsModule` into their application's root module. [#91](https://github.com/blackbaud/skyux-phone-field/pull/91)
+
 # 4.6.0 (2021-05-03)
 
 - Added methods to the phone field testing fixture. [#88](https://github.com/blackbaud/skyux-phone-field/pull/88)
