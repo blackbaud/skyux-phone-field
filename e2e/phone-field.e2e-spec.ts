@@ -111,6 +111,21 @@ describe('Phone Field', () => {
         screenshotName: getScreenshotName('phone-field-input-box')
       });
     });
+
+    it('should match previous phone field screenshot when in country search mode when inside input box', async (done) => {
+      await SkyHostBrowser.scrollTo('#screenshot-phone-field-input-box');
+      const countrySearchBtn = element(by.css(
+        '#screenshot-phone-field-input-box .sky-phone-field-country-btn .sky-btn-default'
+      ));
+
+      await countrySearchBtn.click();
+
+      await SkyHostBrowser.moveCursorOffScreen();
+
+      expect('#screenshot-phone-field-input-box').toMatchBaselineScreenshot(done, {
+        screenshotName: getScreenshotName('phone-field-country-search-input-box')
+      });
+    });
   }
 
   beforeEach(async () => {
