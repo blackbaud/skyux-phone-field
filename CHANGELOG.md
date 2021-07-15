@@ -1,7 +1,7 @@
 # 5.0.0-beta.0 (2021-07-15)
 
 - Initial beta release.
-- Added support for `5.0.0-beta.*` versions of SKY UX component libraries. [#60](https://github.com/blackbaud/skyux-split-view/pull/60)
+- Added support for `5.0.0-beta.*` versions of SKY UX component libraries. [#96](https://github.com/blackbaud/skyux-phone-field/pull/96)
 
 # 4.6.1 (2021-06-03)
 
