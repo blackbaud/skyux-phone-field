@@ -1,4 +1,4 @@
-# 5.0.0-beta.0 (2021-07-15)
+# 5.0.0-beta.0 (2021-07-16)
 
 - Initial beta release.
 - Added support for `5.0.0-beta.*` versions of SKY UX component libraries. [#96](https://github.com/blackbaud/skyux-phone-field/pull/96)
