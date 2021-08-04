@@ -366,7 +366,7 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
         .find(country => country.dialCode === dialCode && country.priority === 0);
 
       if (foundCountry) {
-        // Ensure that the country that was found in one of our supported countries
+        // Ensure that the country that was found is one of the supported countries
         if (this.supportedCountryISOs && this.supportedCountryISOs
           .findIndex(isoCode => isoCode.toUpperCase() === foundCountry.iso2.toUpperCase()) < 0) {
             foundCountry = undefined;
