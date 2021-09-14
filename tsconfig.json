@@ -1,9 +1,31 @@
 {
-  "extends": "./node_modules/@skyux-sdk/builder/tsconfig",
+  "compileOnSave": false,
   "compilerOptions": {
-    "module": "commonjs"
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es2017",
+    "paths": {
+      "phone-field": [
+        "dist/phone-field/phone-field",
+        "dist/phone-field"
+      ],
+      "@skyux/phone-field": [
+        "projects/phone-field/src/public-api.ts"
+      ]
+    },
+    "module": "es2020",
+    "lib": [
+      "es2018",
+      "dom"
+    ]
   },
-  "exclude": [
-    "node_modules"
-  ]
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false
+  }
 }
