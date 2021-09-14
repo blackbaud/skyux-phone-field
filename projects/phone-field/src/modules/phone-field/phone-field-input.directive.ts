@@ -344,5 +344,6 @@ export class SkyPhoneFieldInputDirective implements OnInit, OnDestroy, AfterView
   /* istanbul ignore next */
   private onTouched = () => { };
 
+  /* istanbul ignore next */
   private validatorChange = () => { };
 }
