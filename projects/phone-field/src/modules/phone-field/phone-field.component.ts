@@ -190,7 +190,7 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
   @Input()
   public set selectedCountry(newCountry: SkyPhoneFieldCountry) {
     if (newCountry && (!this._selectedCountry || this._selectedCountry.iso2 !== newCountry.iso2)) {
-      this._selectedCountry = newCountry ? this.countries.find(country => country.iso2 === newCountry.iso2) : undefined;
+      this._selectedCountry = this.countries.find(country => country.iso2 === newCountry.iso2);
 
       if (!this._selectedCountry.exampleNumber) {
         const numberObj = this.phoneUtils.getExampleNumberForType(newCountry.iso2,

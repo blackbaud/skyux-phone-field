@@ -67,6 +67,8 @@ export class SkyPhoneFieldAdapterService implements OnDestroy {
   }
 
   public setAriaLabel(element: ElementRef): void {
+    /* Sanity check */
+    /* istanbul ignore else */
     if (!element.nativeElement.getAttribute('aria-label')) {
       this.resourcesService.getString('skyux_phone_field_default_label')
         .pipe(takeUntil(this.ngUnsubscribe))

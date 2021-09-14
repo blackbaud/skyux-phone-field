@@ -1355,6 +1355,11 @@ describe('Phone Field Component', () => {
 
         expect(nativeElement.querySelector('input').placeholder)
           .toBe(originalCountryData.find(country => country.name === 'Canada').exampleNumber);
+
+        setCountry('United States', fixture);
+
+        expect(nativeElement.querySelector('input').placeholder)
+          .toBe(originalCountryData.find(country => country.name === 'United States').exampleNumber); setCountry('United States', fixture);
       }));
 
       it('should revalidate after the country is changed', fakeAsync(() => {
