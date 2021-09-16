@@ -1,6 +1,6 @@
 {
   "name": "@skyux/phone-field",
-  "version": "5.0.0-beta.0",
+  "version": "5.0.0-beta.1",
   "peerDependencies": {
     "@angular/animations": "^12.2.0",
     "@angular/common": "^12.2.0",

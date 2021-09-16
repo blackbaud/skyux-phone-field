@@ -1,3 +1,7 @@
+# 5.0.0-beta.1 (2021-09-16)
+
+- Adopt Angular CLI. [#100](https://github.com/blackbaud/skyux-phone-field/pull/100)
+
 # 4.6.2 (2021-08-04)
 
 - Fixed the phone field component to only switch to supported countries via dial code when using the `supportedCountryISOs` input. [#97](https://github.com/blackbaud/skyux-phone-field/pull/97)
