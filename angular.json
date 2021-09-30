@@ -32,7 +32,8 @@
             "karmaConfig": "projects/phone-field/karma.conf.js",
             "codeCoverage": true,
             "codeCoverageExclude": [
-              "**/fixtures/**"
+              "**/fixtures/**",
+              "projects/phone-field/src/test.ts"
             ],
             "styles": [
               "@skyux/theme/css/sky.css",
