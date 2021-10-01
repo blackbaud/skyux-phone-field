@@ -13,7 +13,6 @@
     "@skyux/theme": "^5.0.0"
   },
   "dependencies": {
-    "@types/google-libphonenumber": "7.4.21",
     "google-libphonenumber": "3.2.21",
     "intl-tel-input": "14.1.0",
     "tslib": "^2.3.1"
