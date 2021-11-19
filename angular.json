@@ -10,7 +10,7 @@
       "prefix": "sky",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "builder": "@skyux-sdk/angular-builders:ng-packagr",
           "options": {
             "project": "projects/phone-field/ng-package.json"
           },
@@ -168,9 +168,7 @@
               "projects/phone-field-showcase/src/favicon.ico",
               "projects/phone-field-showcase/src/assets"
             ],
-            "styles": [
-              "projects/phone-field-showcase/src/styles.scss"
-            ],
+            "styles": ["projects/phone-field-showcase/src/styles.scss"],
             "scripts": []
           }
         },

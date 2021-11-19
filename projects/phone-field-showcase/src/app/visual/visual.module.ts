@@ -9,13 +9,8 @@ import { PhoneFieldVisualComponent } from './phone-field/phone-field-visual.comp
 import { VisualComponent } from './visual.component';
 import { SkyIdModule } from '@skyux/core';
 
-
-
 @NgModule({
-  declarations: [
-    PhoneFieldVisualComponent,
-    VisualComponent
-  ],
+  declarations: [PhoneFieldVisualComponent, VisualComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -24,7 +19,7 @@ import { SkyIdModule } from '@skyux/core';
     SkyE2eThemeSelectorModule,
     SkyIdModule,
     SkyInputBoxModule,
-    SkyPhoneFieldModule
-  ]
+    SkyPhoneFieldModule,
+  ],
 })
-export class VisualModule { }
+export class VisualModule {}
