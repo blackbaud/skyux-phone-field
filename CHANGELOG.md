@@ -1,6 +1,6 @@
 # 5.0.2 (2021-12-21)
 
-- Fix Stackblitz demo. []()
+- Fix Stackblitz demo. [#105](https://github.com/blackbaud/skyux-phone-field/pull/105)
 
 # 5.0.1 (2021-11-19)
 
