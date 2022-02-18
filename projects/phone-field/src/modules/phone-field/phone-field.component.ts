@@ -144,7 +144,7 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
 
   /**
    * Specifies the format for validated phone numbers.
-   * Options include: `default`, `international`, and `national`.
+   * Options include: `"default"`, `"international"`, and `"national"`.
    * @default "default"
    */
   @Input()
@@ -269,7 +269,7 @@ export class SkyPhoneFieldComponent implements OnDestroy, OnInit {
 
   public ngOnInit(): void {
     // The timeout here is needed to avoid a change before checked error when a user specifies
-    // a selected country on intialization of the component.
+    // a selected country on initialization of the component.
     setTimeout(() => {
       if (this.inputBoxHostSvc) {
         this.inputBoxHostSvc.populate({
