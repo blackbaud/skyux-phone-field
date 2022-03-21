@@ -68,7 +68,7 @@ const SKY_PHONE_FIELD_VALIDATOR = {
  * button displays a flag icon for the default country, and the phone number input
  * displays a sample of the correct phone number format. When users select the country
  * selector button, they expose the country search input, which is
- * [an autocomplete input](https://developer.blackbaud.com/skyux/components/autocomplete)
+ * [an autocomplete input](https://developer.blackbaud.com/skyux-v4/components/autocomplete)
  * that allows them to select different countries. When users enter `+` followed by an
  * international dial code in the phone number input, the country automatically switches
  * to the country associated with the dial code.
